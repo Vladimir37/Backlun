@@ -1,0 +1,15 @@
+body {
+    font-family: Arial;
+    background: #FFA100;
+}
+
+main {
+    width: 940px;
+    padding: 20px;
+    margin: 40px auto;
+    background: #FFCB73;
+}
+
+h1 {
+    text-align: center;
+}
