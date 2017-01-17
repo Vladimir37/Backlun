@@ -45,7 +45,9 @@ func Start(args []string) {
 		path := strings.Split(c.Request.URL.Path, "/")
 		if (path[1] != "") && (path[1] == "api") {
 			c.JSON(404, gin.H{
-				"status": 10,
+				"status":  10,
+				"message": "Not found",
+				"body":    nil,
 			})
 		} else {
 			c.HTML(http.StatusOK, "index.html", "")
@@ -57,5 +59,14 @@ func Start(args []string) {
 }
 
 func getApiRouter(baseRouter *gin.Engine) {
-	//
+	api := baseRouter.Group("/api")
+	{
+		tasks := api.Group("/tasks")
+		{
+			tasks.GET("/get_all", GetAllTasks)
+			tasks.POST("/add", AddNewTask)
+			tasks.POST("/edit", EditTask)
+			tasks.POST("/delete", DeleteTask)
+		}
+	}
 }

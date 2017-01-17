@@ -1,18 +1,32 @@
 package todo
 
-type ToDo struct {
-	id       int
-	title    string
-	text     string
-	category int
-	status   bool
+type IDRequest struct {
+	ID int `form:"id" binding:"required"`
 }
 
-type Category struct {
-	id    int
-	name  string
-	color string
+type ToDoStruct struct {
+	ID       int    `form:"id"`
+	Title    string `form:"title" binding:"required"`
+	Text     string `form:"text" binding:"required"`
+	Category int    `form:"category" binding:"required"`
+	Status   bool   `form:"status"`
 }
 
-var TasksList []ToDo
-var CategoriesList []Category
+type ToDoStructEdit struct {
+	ID       int    `form:"id" binding:"required"`
+	Title    string `form:"title"`
+	Text     string `form:"text"`
+	Category int    `form:"category"`
+	Status   bool   `form:"status"`
+}
+
+type CategoryStruct struct {
+	ID    int    `form:"id"`
+	Name  string `form:"name" binding:"required"`
+	Color string `form:"color" binding:"required"`
+}
+
+var TasksList []ToDoStruct
+var CategoriesList []CategoryStruct
+var CurrentTaskID int = 1
+var CurrentCategoryID int = 1
