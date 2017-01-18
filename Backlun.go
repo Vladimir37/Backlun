@@ -9,7 +9,7 @@ import (
 
 func main() {
 	args := os.Args
-	if len(args) >= 3 && args[1] == "start" {
+	if len(args) == 3 && args[1] == "start" {
 		startServer(args)
 	} else if len(args) == 3 && args[1] == "help" {
 		printPlatformHelp(args[2])

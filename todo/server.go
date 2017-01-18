@@ -15,23 +15,9 @@ func Start(args []string) {
 		port = args[3]
 	}
 
-	// Selecting language
-	lang := "en"
-	if len(args) >= 5 {
-		lang = args[4]
-	}
-	if (lang != "en") && (lang != "ru") {
-		fmt.Println("---------------")
-		fmt.Println("ERROR")
-		fmt.Println("Incorrect language - must be \"en\" or \"ru\"")
-		fmt.Println("---------------")
-		return
-	}
-
 	// Info
 	fmt.Println("---------------")
 	fmt.Println("Selected port: " + port)
-	fmt.Println("Selected language: " + lang)
 	fmt.Println("---------------")
 
 	// Creating router
@@ -67,6 +53,14 @@ func getApiRouter(baseRouter *gin.Engine) {
 			tasks.POST("/add", AddNewTask)
 			tasks.POST("/edit", EditTask)
 			tasks.POST("/delete", DeleteTask)
+		}
+
+		categories := api.Group("/categories")
+		{
+			categories.GET("/get_all", GetAllCategory)
+			categories.POST("/add", AddNewCatergory)
+			categories.POST("/edit", EditCategory)
+			categories.POST("/delete", DeleteCategory)
 		}
 	}
 }
