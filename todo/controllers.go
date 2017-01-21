@@ -77,9 +77,11 @@ func EditTask(c *gin.Context) {
 	}
 
 	founded := false
+	var targetIndex int
 
 	for index, task := range TasksList {
 		if task.ID == request.ID {
+			targetIndex = index
 			TasksList[index].Title = request.Title
 			TasksList[index].Text = request.Text
 			TasksList[index].Category = request.Category
@@ -92,7 +94,7 @@ func EditTask(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"status":  0,
 			"message": "Success",
-			"body":    nil,
+			"body":    TasksList[targetIndex],
 		})
 	} else {
 		c.JSON(400, gin.H{
@@ -190,9 +192,11 @@ func EditCategory(c *gin.Context) {
 	}
 
 	founded := false
+	var targetIndex int
 
 	for index, category := range CategoriesList {
 		if category.ID == request.ID {
+			targetIndex = index
 			CategoriesList[index].Name = request.Name
 			CategoriesList[index].Color = request.Color
 			founded = true
@@ -203,7 +207,7 @@ func EditCategory(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"status":  0,
 			"message": "Success",
-			"body":    nil,
+			"body":    CategoriesList[targetIndex],
 		})
 	} else {
 		c.JSON(400, gin.H{

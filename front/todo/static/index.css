@@ -1,15 +1,38 @@
 body {
     font-family: Arial;
-    background: #FFA100;
 }
 
 main {
     width: 940px;
     padding: 20px;
     margin: 40px auto;
-    background: #FFCB73;
 }
 
-h1 {
-    text-align: center;
+h1.main-title {
+    margin-top: 0;
+    font-size: 45px;
+}
+
+h2.main-title {
+    font-size: 30px;
+}
+
+p.main-text {
+    font-size: 16px;
+}
+
+.param-type {
+    color: blue;
+}
+
+.response-obj {
+    color: mediumvioletred;
+}
+
+.obj-panel {
+    width: 40%;
+    margin: 10px;
+    padding: 10px;
+    background: white;
+    border: 1px solid #dddddd;
 }
