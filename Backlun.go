@@ -4,12 +4,13 @@ import (
 	"fmt"
 	"os"
 
-	"Backlun/todo"
+	"Backlun/back/blog"
+	"Backlun/back/todo"
 )
 
 func main() {
 	args := os.Args
-	if len(args) == 3 && args[1] == "start" {
+	if ((len(args) == 3) || (len(args) == 4)) && args[1] == "start" {
 		startServer(args)
 	} else if len(args) == 3 && args[1] == "help" {
 		printPlatformHelp(args[2])
@@ -55,7 +56,7 @@ func startServer(args []string) {
 	case "todo":
 		todo.Start(args)
 	case "blog":
-		//
+		blog.Start(args)
 	case "market":
 		//
 	case "forum":

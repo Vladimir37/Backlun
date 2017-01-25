@@ -11,7 +11,7 @@ import (
 func Start(args []string) {
 	// Selecting port
 	port := "8000"
-	if len(args) >= 4 {
+	if len(args) == 3 {
 		port = args[3]
 	}
 
