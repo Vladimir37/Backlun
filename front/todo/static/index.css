@@ -21,6 +21,13 @@ p.main-text {
     font-size: 16px;
 }
 
+.main-addr {
+    padding: 2px 3px;
+    font-family: monospace;
+    background: white;
+    border: 1px solid brown;
+}
+
 .param-type {
     color: blue;
 }
