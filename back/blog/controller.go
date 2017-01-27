@@ -1,0 +1,5 @@
+package blog
+
+func GetAllPosts() {
+	//
+}
