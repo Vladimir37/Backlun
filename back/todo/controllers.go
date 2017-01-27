@@ -273,6 +273,8 @@ func DeleteCategory(c *gin.Context) {
 	}
 }
 
+// Utility
+
 func categoryExist(num int) bool {
 	founded := false
 

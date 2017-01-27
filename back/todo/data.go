@@ -1,21 +1,9 @@
 package todo
 
-type IDRequest struct {
-	ID int `form:"id" binding:"required"`
-}
-
 type ToDoStruct struct {
 	ID       int    `form:"id"`
 	Title    string `form:"title" binding:"required"`
 	Text     string `form:"text" binding:"required"`
-	Category int    `form:"category"`
-	Status   bool   `form:"status"`
-}
-
-type ToDoStructEdit struct {
-	ID       int    `form:"id" binding:"required"`
-	Title    string `form:"title"`
-	Text     string `form:"text"`
 	Category int    `form:"category"`
 	Status   bool   `form:"status"`
 }
@@ -26,11 +14,27 @@ type CategoryStruct struct {
 	Color string `form:"color" binding:"required"`
 }
 
+// Requests
+
+type IDRequest struct {
+	ID int `form:"id" binding:"required"`
+}
+
+type ToDoStructEdit struct {
+	ID       int    `form:"id" binding:"required"`
+	Title    string `form:"title"`
+	Text     string `form:"text"`
+	Category int    `form:"category"`
+	Status   bool   `form:"status"`
+}
+
 type CategoryStructEdit struct {
 	ID    int    `form:"id" binding:"required"`
 	Name  string `form:"name"`
 	Color string `form:"color"`
 }
+
+// Current
 
 var TasksList []ToDoStruct
 var CategoriesList []CategoryStruct
