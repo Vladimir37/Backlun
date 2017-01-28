@@ -39,6 +39,10 @@ type TokenReq struct {
 	Token string `form:"token" binding:"required"`
 }
 
+type TagReq struct {
+	Tag string `form:"tag" binding:"required"`
+}
+
 type IDReq struct {
 	ID int `form:"id" binding:"required"`
 }
