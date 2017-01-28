@@ -39,6 +39,21 @@ type TokenReq struct {
 	Token string `form:"token" binding:"required"`
 }
 
+type PostStructReq struct {
+	Token string `form:"token" binding:"required"`
+	Title string `form:"title" binding:"required"`
+	Tags  string `form:"tags"`
+	Text  string `form:"text" binding:"required"`
+}
+
+type PostStructEditReq struct {
+	ID    int    `form:"token" binding:"required"`
+	Token string `form:"token" binding:"required"`
+	Title string `form:"title" binding:"required"`
+	Tags  string `form:"tags"`
+	Text  string `form:"text" binding:"required"`
+}
+
 // Current
 
 var CurrentAuthData AuthData = AuthData{

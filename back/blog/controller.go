@@ -5,6 +5,8 @@ import (
 	"math/rand"
 	"time"
 
+	"strings"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -120,7 +122,107 @@ func CheckToken(c *gin.Context) {
 }
 
 func CreatePost(c *gin.Context) {
-	//
+	var request PostStructReq
+	err := c.Bind(&request)
+
+	if err != nil {
+		fmt.Println(err)
+		c.JSON(400, gin.H{
+			"status":  1,
+			"message": "Incorrect data",
+			"body":    nil,
+		})
+		return
+	}
+
+	if !checkTokenUtility(request.Token) {
+		c.JSON(403, gin.H{
+			"status":  11,
+			"message": "Incorrect token",
+			"body":    nil,
+		})
+		return
+	}
+
+	var tags []string
+	if len(request.Tags) > 0 {
+		tags = strings.Split(request.Tags, " ")
+	}
+
+	var emptyComments []CommentStruct
+
+	newPost := PostStruct{
+		ID:               CurrentPostID,
+		Title:            request.Title,
+		Date:             time.Now(),
+		Tags:             tags,
+		Text:             request.Text,
+		CurrentCommentID: 1,
+		Comments:         emptyComments,
+	}
+	CurrentPostID++
+
+	PostList = append(PostList, newPost)
+	c.JSON(200, gin.H{
+		"status":  0,
+		"message": "Success",
+		"body":    newPost,
+	})
+}
+
+func EditPost(c *gin.Context) {
+	var request PostStructEditReq
+	err := c.Bind(&request)
+
+	if err != nil {
+		fmt.Println(err)
+		c.JSON(400, gin.H{
+			"status":  1,
+			"message": "Incorrect data",
+			"body":    nil,
+		})
+		return
+	}
+
+	if !checkTokenUtility(request.Token) {
+		c.JSON(403, gin.H{
+			"status":  11,
+			"message": "Incorrect token",
+			"body":    nil,
+		})
+		return
+	}
+
+	var founded bool = false
+	var targetIndex int
+
+	for index, post := range PostList {
+		if post.ID == request.ID {
+			founded = true
+			targetIndex = index
+		}
+	}
+
+	if founded {
+		var tags []string
+		if len(request.Tags) > 0 {
+			tags = strings.Split(request.Tags, " ")
+		}
+		PostList[targetIndex].Title = request.Title
+		PostList[targetIndex].Tags = tags
+		PostList[targetIndex].Text = request.Text
+		c.JSON(200, gin.H{
+			"status":  0,
+			"message": "Success",
+			"body":    PostList[targetIndex],
+		})
+	} else {
+		c.JSON(400, gin.H{
+			"status":  3,
+			"message": "Post not found",
+			"body":    nil,
+		})
+	}
 }
 
 // Utility
