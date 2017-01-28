@@ -39,6 +39,21 @@ type TokenReq struct {
 	Token string `form:"token" binding:"required"`
 }
 
+type IDReq struct {
+	ID int `form:"id" binding:"required"`
+}
+
+type IDTokenReq struct {
+	ID    int    `form:"id" binding:"required"`
+	Token string `form:"token" binding:"required"`
+}
+
+type CommentTokenReq struct {
+	Post    int    `form:"post" binding:"required"`
+	Comment int    `form:"comment" binding:"required"`
+	Token   string `form:"token" binding:"required"`
+}
+
 type PostStructReq struct {
 	Token string `form:"token" binding:"required"`
 	Title string `form:"title" binding:"required"`
@@ -47,11 +62,17 @@ type PostStructReq struct {
 }
 
 type PostStructEditReq struct {
-	ID    int    `form:"token" binding:"required"`
+	ID    int    `form:"id" binding:"required"`
 	Token string `form:"token" binding:"required"`
 	Title string `form:"title" binding:"required"`
 	Tags  string `form:"tags"`
 	Text  string `form:"text" binding:"required"`
+}
+
+type CommentStructReq struct {
+	Post int    `form:"post" binding:"required"`
+	Name string `form:"name"`
+	Text string `form:"text" binding:"required"`
 }
 
 // Current

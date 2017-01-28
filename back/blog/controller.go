@@ -18,6 +18,45 @@ func GetAllPosts(c *gin.Context) {
 	})
 }
 
+func GetOnePost(c *gin.Context) {
+	var request IDReq
+	err := c.Bind(&request)
+
+	if err != nil {
+		fmt.Println(err)
+		c.JSON(400, gin.H{
+			"status":  1,
+			"message": "Incorrect data",
+			"body":    nil,
+		})
+		return
+	}
+
+	var founded bool = false
+	var targetIndex int
+
+	for index, post := range PostList {
+		if post.ID == request.ID {
+			founded = true
+			targetIndex = index
+		}
+	}
+
+	if founded {
+		c.JSON(200, gin.H{
+			"status":  0,
+			"message": "Success",
+			"body":    PostList[targetIndex],
+		})
+	} else {
+		c.JSON(400, gin.H{
+			"status":  3,
+			"message": "Post not found",
+			"body":    nil,
+		})
+	}
+}
+
 func GetAuthData(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"status":  0,
@@ -222,6 +261,173 @@ func EditPost(c *gin.Context) {
 			"message": "Post not found",
 			"body":    nil,
 		})
+	}
+}
+
+func DeletePost(c *gin.Context) {
+	var request IDTokenReq
+	err := c.Bind(&request)
+
+	if err != nil {
+		fmt.Println(err)
+		c.JSON(400, gin.H{
+			"status":  1,
+			"message": "Incorrect data",
+			"body":    nil,
+		})
+		return
+	}
+
+	if !checkTokenUtility(request.Token) {
+		c.JSON(403, gin.H{
+			"status":  11,
+			"message": "Incorrect token",
+			"body":    nil,
+		})
+		return
+	}
+
+	var founded bool = false
+	var targetIndex int
+
+	for index, post := range PostList {
+		if post.ID == request.ID {
+			founded = true
+			targetIndex = index
+		}
+	}
+
+	if founded {
+		PostList = append(PostList[:targetIndex], PostList[targetIndex+1:]...)
+		c.JSON(200, gin.H{
+			"status":  0,
+			"message": "Success",
+			"body":    nil,
+		})
+	} else {
+		c.JSON(400, gin.H{
+			"status":  3,
+			"message": "Post not found",
+			"body":    nil,
+		})
+	}
+}
+
+func CreateComment(c *gin.Context) {
+	var request CommentStructReq
+	err := c.Bind(&request)
+
+	if err != nil {
+		fmt.Println(err)
+		c.JSON(400, gin.H{
+			"status":  1,
+			"message": "Incorrect data",
+			"body":    nil,
+		})
+		return
+	}
+
+	var founded bool = false
+	var targetIndex int
+
+	for index, post := range PostList {
+		if post.ID == request.Post {
+			founded = true
+			targetIndex = index
+		}
+	}
+
+	if founded {
+		newComment := CommentStruct{
+			ID:   PostList[targetIndex].CurrentCommentID,
+			Name: request.Name,
+			Date: time.Now(),
+			Text: request.Text,
+		}
+		PostList[targetIndex].CurrentCommentID++
+		PostList[targetIndex].Comments = append(PostList[targetIndex].Comments, newComment)
+		c.JSON(200, gin.H{
+			"status":  0,
+			"message": "Success",
+			"body":    newComment,
+		})
+		return
+	} else {
+		c.JSON(400, gin.H{
+			"status":  3,
+			"message": "Post not found",
+			"body":    nil,
+		})
+	}
+}
+
+func DeleteComment(c *gin.Context) {
+	var request CommentTokenReq
+	err := c.Bind(&request)
+
+	if err != nil {
+		fmt.Println(err)
+		c.JSON(400, gin.H{
+			"status":  1,
+			"message": "Incorrect data",
+			"body":    nil,
+		})
+		return
+	}
+
+	if !checkTokenUtility(request.Token) {
+		c.JSON(403, gin.H{
+			"status":  11,
+			"message": "Incorrect token",
+			"body":    nil,
+		})
+		return
+	}
+
+	var foundedPost bool = false
+	var foundedComment bool = false
+	var targetPostIndex int
+	var targetCommentIndex int
+
+	for index, post := range PostList {
+		if post.ID == request.Post {
+			foundedPost = true
+			targetPostIndex = index
+		}
+	}
+
+	if !foundedPost {
+		c.JSON(400, gin.H{
+			"status":  3,
+			"message": "Post not found",
+			"body":    nil,
+		})
+		return
+	}
+
+	for index, post := range PostList[targetPostIndex].Comments {
+		if post.ID == request.Comment {
+			foundedComment = true
+			targetCommentIndex = index
+		}
+	}
+
+	PostList[targetPostIndex].Comments = append(PostList[targetPostIndex].Comments[:targetCommentIndex], PostList[targetPostIndex].Comments[targetCommentIndex+1:]...)
+
+	if foundedPost && foundedComment {
+		c.JSON(200, gin.H{
+			"status":  0,
+			"message": "Success",
+			"body":    nil,
+		})
+		return
+	} else {
+		c.JSON(400, gin.H{
+			"status":  3,
+			"message": "Post not found",
+			"body":    nil,
+		})
+		return
 	}
 }
 
