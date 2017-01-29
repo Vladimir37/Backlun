@@ -395,6 +395,10 @@ func CreateComment(c *gin.Context) {
 		return
 	}
 
+	if len(request.Name) == 0 {
+		request.Name = "Anonymous"
+	}
+
 	var founded bool = false
 	var targetIndex int
 

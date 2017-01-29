@@ -50,9 +50,9 @@ func getApiRouter(baseRouter *gin.Engine) {
 		auth := api.Group("/auth")
 		{
 			auth.GET("/get", GetAuthData)
+			auth.GET("/check", CheckToken)
 			auth.POST("/login", Login)
 			auth.POST("/logout", Logout)
-			auth.POST("/check", CheckToken)
 		}
 
 		get := api.Group("/get")
