@@ -89,6 +89,42 @@ func SearchTag(c *gin.Context) {
 	})
 }
 
+func SearchText(c *gin.Context) {
+	var request TextSearchReq
+	err := c.Bind(&request)
+
+	if err != nil {
+		fmt.Println(err)
+		c.JSON(400, gin.H{
+			"status":  1,
+			"message": "Incorrect data",
+			"body":    nil,
+		})
+		return
+	}
+
+	var searchedPosts []PostStruct
+
+	for _, post := range PostList {
+		title_i := strings.Index(post.Title, request.Text)
+		if title_i > -1 {
+			searchedPosts = append(searchedPosts, post)
+			continue
+		}
+
+		text_i := strings.Index(post.Text, request.Text)
+		if text_i > -1 {
+			searchedPosts = append(searchedPosts, post)
+		}
+	}
+
+	c.JSON(200, gin.H{
+		"status":  0,
+		"message": "Success",
+		"body":    searchedPosts,
+	})
+}
+
 func GetAuthData(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"status":  0,

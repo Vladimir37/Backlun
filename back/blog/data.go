@@ -43,6 +43,10 @@ type TagReq struct {
 	Tag string `form:"tag" binding:"required"`
 }
 
+type TextSearchReq struct {
+	Text string `form:"text" binding:"required"`
+}
+
 type IDReq struct {
 	ID int `form:"id" binding:"required"`
 }
