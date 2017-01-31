@@ -1,6 +1,7 @@
 package blog
 
 import (
+	"math/rand"
 	"time"
 
 	"github.com/Pallinder/go-randomdata"
@@ -92,3 +93,19 @@ var CurrentAuthData AuthData = AuthData{
 var AuthToken string = GenerateToken(12)
 var CurrentPostID int = 1
 var PostList []PostStruct
+
+// Utility
+
+func checkTokenUtility(token string) bool {
+	return token == AuthToken
+}
+
+func GenerateToken(strlen int) string {
+	rand.Seed(time.Now().UTC().UnixNano())
+	const chars = "abcdefghijklmnopqrstuvwxyz0123456789"
+	result := make([]byte, strlen)
+	for i := 0; i < strlen; i++ {
+		result[i] = chars[rand.Intn(len(chars))]
+	}
+	return string(result)
+}
