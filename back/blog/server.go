@@ -45,8 +45,8 @@ func Start(args []string) {
 }
 
 func getApiRouter(baseRouter *gin.Engine) {
-	api := baseRouter.Group("/api")
-	{
-		//
-	}
+	// api := baseRouter.Group("/api")
+	// {
+	// //
+	// }
 }
