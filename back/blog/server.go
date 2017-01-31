@@ -45,8 +45,47 @@ func Start(args []string) {
 }
 
 func getApiRouter(baseRouter *gin.Engine) {
+<<<<<<< HEAD
 	// api := baseRouter.Group("/api")
 	// {
 	// //
 	// }
+||||||| merged common ancestors
+	api := baseRouter.Group("/api")
+	{
+		//
+	}
+=======
+	api := baseRouter.Group("/api")
+	{
+		auth := api.Group("/auth")
+		{
+			auth.GET("/get", GetAuthData)
+			auth.GET("/check", CheckToken)
+			auth.POST("/login", Login)
+			auth.POST("/logout", Logout)
+		}
+
+		get := api.Group("/get")
+		{
+			get.GET("/all", GetAllPosts)
+			get.GET("/one", GetOnePost)
+			get.GET("/search_tag", SearchTag)
+			get.GET("/search_text", SearchText)
+		}
+
+		posts := api.Group("/posts")
+		{
+			posts.POST("/create", CreatePost)
+			posts.POST("/edit", EditPost)
+			posts.POST("/delete", DeletePost)
+		}
+
+		comments := api.Group("/comments")
+		{
+			comments.POST("/create", CreateComment)
+			comments.POST("/delete", DeleteComment)
+		}
+	}
+>>>>>>> 7aa38dffc299f1550e346f1ad5a6b217f257402f
 }

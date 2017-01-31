@@ -2,7 +2,6 @@ package blog
 
 import (
 	"fmt"
-	"math/rand"
 	"time"
 
 	"strings"
@@ -79,6 +78,42 @@ func SearchTag(c *gin.Context) {
 				searchedPosts = append(searchedPosts, post)
 				break
 			}
+		}
+	}
+
+	c.JSON(200, gin.H{
+		"status":  0,
+		"message": "Success",
+		"body":    searchedPosts,
+	})
+}
+
+func SearchText(c *gin.Context) {
+	var request TextSearchReq
+	err := c.Bind(&request)
+
+	if err != nil {
+		fmt.Println(err)
+		c.JSON(400, gin.H{
+			"status":  1,
+			"message": "Incorrect data",
+			"body":    nil,
+		})
+		return
+	}
+
+	var searchedPosts []PostStruct
+
+	for _, post := range PostList {
+		title_i := strings.Index(post.Title, request.Text)
+		if title_i > -1 {
+			searchedPosts = append(searchedPosts, post)
+			continue
+		}
+
+		text_i := strings.Index(post.Text, request.Text)
+		if text_i > -1 {
+			searchedPosts = append(searchedPosts, post)
 		}
 	}
 
@@ -359,6 +394,10 @@ func CreateComment(c *gin.Context) {
 		return
 	}
 
+	if len(request.Name) == 0 {
+		request.Name = "Anonymous"
+	}
+
 	var founded bool = false
 	var targetIndex int
 
@@ -461,20 +500,4 @@ func DeleteComment(c *gin.Context) {
 		})
 		return
 	}
-}
-
-// Utility
-
-func checkTokenUtility(token string) bool {
-	return token == AuthToken
-}
-
-func GenerateToken(strlen int) string {
-	rand.Seed(time.Now().UTC().UnixNano())
-	const chars = "abcdefghijklmnopqrstuvwxyz0123456789"
-	result := make([]byte, strlen)
-	for i := 0; i < strlen; i++ {
-		result[i] = chars[rand.Intn(len(chars))]
-	}
-	return string(result)
 }
