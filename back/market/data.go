@@ -39,10 +39,34 @@ type UserStruct struct {
 	ID       int
 	Login    string
 	Password string
+	FullName string
 	Address  string
 	Money    int
 	Backet   []LotStruct
 	Token    string
+}
+
+// Requests
+
+type RegistrationReq struct {
+	Login    string `form:"login" binding:"required"`
+	Password string `form:"password" binding:"required"`
+	FullName string `form:"name" binding:"required"`
+	Address  string `form:"address" binding:"required"`
+}
+
+type LoginReq struct {
+	Login    string `form:"login" binding:"required"`
+	Password string `form:"password" binding:"required"`
+}
+
+type TokenReq struct {
+	Token string `form:"token" binding:"required"`
+}
+
+type AddCreditReq struct {
+	Token  string `form:"token" binding:"required"`
+	Credit int    `form:"credit" binding:"required"`
 }
 
 // Current
@@ -61,9 +85,16 @@ var UserNum int = 1
 
 // Utility
 
-// func checkTokenUtility(token string) bool {
-// 	return token == AuthToken
-// }
+func CheckTokenUtility(token string) int {
+	targetIndex := -1
+	for index, user := range UserList {
+		if user.Token == token {
+			targetIndex = index
+			break
+		}
+	}
+	return targetIndex
+}
 
 func GenerateCategories() {
 	categoryNum := randomdata.Number(5, 12)
