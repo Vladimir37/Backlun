@@ -45,17 +45,6 @@ func Start(args []string) {
 }
 
 func getApiRouter(baseRouter *gin.Engine) {
-<<<<<<< HEAD
-	// api := baseRouter.Group("/api")
-	// {
-	// //
-	// }
-||||||| merged common ancestors
-	api := baseRouter.Group("/api")
-	{
-		//
-	}
-=======
 	api := baseRouter.Group("/api")
 	{
 		auth := api.Group("/auth")
@@ -87,5 +76,4 @@ func getApiRouter(baseRouter *gin.Engine) {
 			comments.POST("/delete", DeleteComment)
 		}
 	}
->>>>>>> 7aa38dffc299f1550e346f1ad5a6b217f257402f
 }

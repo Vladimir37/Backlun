@@ -5,7 +5,6 @@ import (
 	"os"
 
 	"Backlun/back/blog"
-	"Backlun/back/market"
 	"Backlun/back/oauth"
 	"Backlun/back/todo"
 )
@@ -60,7 +59,7 @@ func startServer(args []string) {
 	case "blog":
 		blog.Start(args)
 	case "market":
-		market.Start(args)
+		// market.Start(args)
 	case "forum":
 		//
 	case "oauth":

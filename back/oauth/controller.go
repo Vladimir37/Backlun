@@ -8,8 +8,6 @@ import (
 	"net/http"
 	"strings"
 
-	"dvij.geoloc/models"
-
 	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/oauth2"
@@ -117,7 +115,7 @@ func AuthHandler(cont *gin.Context) { // {{{
 func LoginHandler(cont *gin.Context) { // {{{
 
 	// session
-	state := models.RandToken(32)
+	state := RandToken(32)
 	session := sessions.Default(cont)
 	session.Set("state", state)
 	session.Save()
