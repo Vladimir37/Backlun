@@ -3,6 +3,8 @@ package market
 import (
 	"fmt"
 
+	"time"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -12,6 +14,39 @@ func GetAllProducts(c *gin.Context) {
 		"message": "Success",
 		"body":    ProductList,
 	})
+}
+
+func GetOneProduct(c *gin.Context) {
+	var request IDReq
+	err := c.Bind(&request)
+
+	if err != nil {
+		fmt.Println(err)
+		c.JSON(400, gin.H{
+			"status":  1,
+			"message": "Incorrect data",
+			"body":    nil,
+		})
+		return
+	}
+
+	product, err := GetProductUtility(request.ID)
+
+	if err != nil {
+		c.JSON(400, gin.H{
+			"status":  10,
+			"message": "Product not found",
+			"body":    nil,
+		})
+		return
+	} else {
+		c.JSON(200, gin.H{
+			"status":  0,
+			"message": "Success",
+			"body":    product,
+		})
+		return
+	}
 }
 
 func GetAllCategories(c *gin.Context) {
@@ -228,6 +263,165 @@ func AddCredit(c *gin.Context) {
 	UserList[userIndex].Money += request.Credit
 
 	c.JSON(200, gin.H{
+		"status":  0,
+		"message": "Success",
+		"body":    nil,
+	})
+}
+
+func GetUser(c *gin.Context) {
+	var request TokenReq
+	err := c.Bind(&request)
+
+	if err != nil {
+		fmt.Println(err)
+		c.JSON(400, gin.H{
+			"status":  1,
+			"message": "Incorrect data",
+			"body":    nil,
+		})
+		return
+	}
+
+	userIndex := CheckTokenUtility(request.Token)
+
+	if userIndex == -1 {
+		c.JSON(403, gin.H{
+			"status":  11,
+			"message": "Incorrect token",
+			"body":    nil,
+		})
+		return
+	} else {
+		c.JSON(200, gin.H{
+			"status":  0,
+			"message": "Success",
+			"body":    UserList[userIndex],
+		})
+		return
+	}
+}
+
+func GetAllOrders(c *gin.Context) {
+	var request TokenReq
+	err := c.Bind(&request)
+
+	if err != nil {
+		fmt.Println(err)
+		c.JSON(400, gin.H{
+			"status":  1,
+			"message": "Incorrect data",
+			"body":    nil,
+		})
+		return
+	}
+
+	userIndex := CheckTokenUtility(request.Token)
+
+	if userIndex == -1 {
+		c.JSON(403, gin.H{
+			"status":  11,
+			"message": "Incorrect token",
+			"body":    nil,
+		})
+		return
+	}
+
+	var allOrders []OrderStruct
+
+	for _, order := range OrderList {
+		if order.User == UserList[userIndex].ID {
+			allOrders = append(allOrders, order)
+		}
+	}
+
+	c.JSON(200, gin.H{
+		"status":  0,
+		"message": "Success",
+		"body":    allOrders,
+	})
+}
+
+func PayOrder(c *gin.Context) {
+	var request TokenReq
+	err := c.Bind(&request)
+
+	if err != nil {
+		fmt.Println(err)
+		c.JSON(400, gin.H{
+			"status":  1,
+			"message": "Incorrect data",
+			"body":    nil,
+		})
+		return
+	}
+
+	userIndex := CheckTokenUtility(request.Token)
+
+	if userIndex == -1 {
+		c.JSON(403, gin.H{
+			"status":  11,
+			"message": "Incorrect token",
+			"body":    nil,
+		})
+		return
+	}
+
+	if len(UserList[userIndex].Backet) == 0 {
+		c.JSON(400, gin.H{
+			"status":  2,
+			"message": "Backet is empty",
+			"body":    nil,
+		})
+		return
+	}
+
+	sum := 0
+	for _, productElem := range UserList[userIndex].Backet {
+		product, err := GetProductUtility(productElem.Product)
+		if err != nil {
+			c.JSON(500, gin.H{
+				"status":  10,
+				"message": "Product in backet not found",
+				"body":    nil,
+			})
+			return
+		}
+		sum += productElem.Count * product.Price
+		if productElem.Count > product.Count {
+			c.JSON(400, gin.H{
+				"status":  4,
+				"message": "Not enough products in stock",
+				"body":    nil,
+			})
+			return
+		}
+	}
+
+	newOrder := OrderStruct{
+		ID:       OrderNum,
+		User:     UserList[userIndex].ID,
+		Date:     time.Now(),
+		Products: UserList[userIndex].Backet,
+		Price:    sum,
+		Paid:     false,
+	}
+
+	if sum > UserList[userIndex].Money {
+		c.JSON(400, gin.H{
+			"status":  5,
+			"message": "Not enough money",
+			"body":    nil,
+		})
+		return
+	}
+
+	newOrder.Paid = true
+	OrderNum++
+	OrderList = append(OrderList, newOrder)
+	UserList[userIndex].Money -= sum
+
+	c.JSON(400, gin.H{
 		"status":  0,
 		"message": "Success",
 		"body":    nil,

@@ -4,6 +4,8 @@ import (
 	"math/rand"
 	"time"
 
+	"errors"
+
 	"github.com/Pallinder/go-randomdata"
 )
 
@@ -30,6 +32,7 @@ type LotStruct struct {
 type OrderStruct struct {
 	ID       int
 	User     int
+	Date     time.Time
 	Products []LotStruct
 	Price    int
 	Paid     bool
@@ -58,6 +61,10 @@ type RegistrationReq struct {
 type LoginReq struct {
 	Login    string `form:"login" binding:"required"`
 	Password string `form:"password" binding:"required"`
+}
+
+type IDReq struct {
+	ID int `form:"id" binding:"required"`
 }
 
 type TokenReq struct {
@@ -94,6 +101,25 @@ func CheckTokenUtility(token string) int {
 		}
 	}
 	return targetIndex
+}
+
+func GetProductUtility(id int) (ProductStruct, error) {
+	founded := false
+	var targetProduct ProductStruct
+
+	for index, product := range ProductList {
+		if product.ID == id {
+			founded = true
+			targetProduct = ProductList[index]
+			break
+		}
+	}
+
+	if founded {
+		return targetProduct, nil
+	} else {
+		return targetProduct, errors.New("Not found")
+	}
 }
 
 func GenerateCategories() {
