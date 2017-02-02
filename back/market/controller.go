@@ -110,6 +110,56 @@ func Registration(c *gin.Context) {
 	})
 }
 
+func GetBasket(c *gin.Context) {
+	var request ProductReq
+	err := c.Bind(&request)
+
+	if err != nil {
+		fmt.Println(err)
+		c.JSON(400, gin.H{
+			"status":  1,
+			"message": "Incorrect data",
+			"body":    nil,
+		})
+		return
+	}
+
+	userIndex := CheckTokenUtility(request.Token)
+
+	if userIndex == -1 {
+		c.JSON(403, gin.H{
+			"status":  11,
+			"message": "Incorrect token",
+			"body":    nil,
+		})
+		return
+	}
+
+	var fullBacket []BacketLotStruct
+	for _, lot := range UserList[userIndex].Backet {
+		product, err := GetProductUtility(lot.Product)
+		if err != nil {
+			c.JSON(500, gin.H{
+				"status":  10,
+				"message": "Product in backet not found",
+				"body":    nil,
+			})
+			return
+		}
+		newLot := BacketLotStruct{
+			Product: product,
+			Count:   request.Count,
+		}
+		fullBacket = append(fullBacket, newLot)
+	}
+
+	c.JSON(200, gin.H{
+		"status":  0,
+		"message": "Success",
+		"body":    fullBacket,
+	})
+}
+
 func Login(c *gin.Context) {
 	var request LoginReq
 	err := c.Bind(&request)
@@ -339,6 +389,67 @@ func GetAllOrders(c *gin.Context) {
 		"status":  0,
 		"message": "Success",
 		"body":    allOrders,
+	})
+}
+
+func ProductInBacket(c *gin.Context) {
+	var request ProductReq
+	err := c.Bind(&request)
+
+	if err != nil {
+		fmt.Println(err)
+		c.JSON(400, gin.H{
+			"status":  1,
+			"message": "Incorrect data",
+			"body":    nil,
+		})
+		return
+	}
+
+	userIndex := CheckTokenUtility(request.Token)
+
+	if userIndex == -1 {
+		c.JSON(403, gin.H{
+			"status":  11,
+			"message": "Incorrect token",
+			"body":    nil,
+		})
+		return
+	}
+
+	if request.Count < 0 {
+		c.JSON(400, gin.H{
+			"status":  2,
+			"message": "Incorrect count",
+			"body":    nil,
+		})
+		return
+	}
+
+	founded := false
+	for index, product := range UserList[userIndex].Backet {
+		if product.Product == request.Product {
+			founded = true
+			if request.Count == 0 {
+				UserList[userIndex].Backet = append(UserList[userIndex].Backet[:index], UserList[userIndex].Backet[index+1:]...)
+			} else {
+				UserList[userIndex].Backet[index].Count = request.Count
+			}
+		}
+	}
+
+	if !founded {
+		newItem := LotStruct{
+			Product: request.Product,
+			Count:   request.Count,
+		}
+		UserList[userIndex].Backet = append(UserList[userIndex].Backet, newItem)
+	}
+
+	c.JSON(200, gin.H{
+		"status":  0,
+		"message": "Success",
+		"body":    UserList[userIndex].Backet,
 	})
 }
 

@@ -49,6 +49,29 @@ func getApiRouter(baseRouter *gin.Engine) {
 
 	api := baseRouter.Group("/api")
 	{
-		//
+		auth := api.Group("/auth")
+		{
+			auth.GET("/check", CheckToken)
+			auth.POST("/registration", Registration)
+			auth.POST("/login", Login)
+			auth.POST("/logout", Logout)
+		}
+
+		get := api.Group("/get")
+		{
+			get.GET("/products", GetAllProducts)
+			get.GET("/product", GetOneProduct)
+			get.GET("/categories", GetAllCategories)
+			get.GET("/orders", GetAllOrders)
+			get.GET("/backet", GetBasket)
+			get.GET("/user", GetUser)
+		}
+
+		market := api.Group("/market")
+		{
+			market.POST("/credits", AddCredit)
+			market.POST("/products", ProductInBacket)
+			market.POST("/pay", PayOrder)
+		}
 	}
 }

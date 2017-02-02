@@ -6,6 +6,8 @@ import (
 
 	"errors"
 
+	"strings"
+
 	"github.com/Pallinder/go-randomdata"
 )
 
@@ -26,6 +28,11 @@ type CategoryStruct struct {
 
 type LotStruct struct {
 	Product int
+	Count   int
+}
+
+type BacketLotStruct struct {
+	Product ProductStruct
 	Count   int
 }
 
@@ -74,6 +81,12 @@ type TokenReq struct {
 type AddCreditReq struct {
 	Token  string `form:"token" binding:"required"`
 	Credit int    `form:"credit" binding:"required"`
+}
+
+type ProductReq struct {
+	Token   string `form:"token" binding:"required"`
+	Product int    `form:"product" binding:"required"`
+	Count   int    `form:"count" binding:"required"`
 }
 
 // Current
@@ -127,7 +140,7 @@ func GenerateCategories() {
 	for index := 0; index < categoryNum; index++ {
 		newCategory := CategoryStruct{
 			ID:   CategoryNum,
-			Name: randomdata.Noun(),
+			Name: strings.Title(randomdata.Noun()),
 		}
 		CategoryNum++
 		CategoryList = append(CategoryList, newCategory)
@@ -141,7 +154,7 @@ func GenerateProducts() {
 		for i := 0; i < productsNum; i++ {
 			newProduct := ProductStruct{
 				ID:           ProductNum,
-				Name:         randomdata.Adjective() + " " + randomdata.Noun(),
+				Name:         strings.Title(randomdata.Adjective()) + " " + randomdata.Noun(),
 				Manufacturer: randomdata.Country(randomdata.FullCountry),
 				Price:        randomdata.Number(2, 160),
 				Description:  randomdata.Paragraph(),
