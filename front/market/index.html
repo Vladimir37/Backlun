@@ -2,20 +2,19 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Blog Backlun</title>
+    <title>Market Backlun</title>
     <link rel="stylesheet" href="/src/bootstrap.min.css">
     <link rel="stylesheet" href="/src/index.css">
 </head>
 <body>
     <main class="jumbotron">
-        <h1 class="main-title">Blog Backlun</h1>
-        <p class="main-text">Main page - <span class="main-addr">Backlun/front/blog/index.html</span>.</p>
-        <p class="main-text">Static folder - <span class="main-addr">Backlun/front/blog/static/</span>.</p>
+        <h1 class="main-title">Market Backlun</h1>
+        <p class="main-text">Main page - <span class="main-addr">Backlun/front/market/index.html</span>.</p>
+        <p class="main-text">Static folder - <span class="main-addr">Backlun/front/market/static/</span>.</p>
         <p class="main-text">You can get the file from static folder at the address <span class="main-addr">/src</span>.</p>
-        <p class="main-text">Example: <span class="main-addr">Backlun/front/blog/static/js/build/main.js</span> -> <span class="main-addr">/src/js/build/main.js</span></p>
-        <h2 class="main-title">Blog API</h2>
-        <p class="main-text">Params marked with asterisk (*) are required. The contents of the field "Response" is located in the field "body" in Server response object. When editing is necessary to send the contents of all fields - unsent field are cleared. Send the "tags" field as a string containig tags separated by spaces.</p>
-        <p class="main-text">Example: <span class="main-addr">one two three</span> will converted to the <span class="main-addr">["one", "two", "three"]</span>.</p>
+        <p class="main-text">Example: <span class="main-addr">Backlun/front/market/static/js/build/main.js</span> -> <span class="main-addr">/src/js/build/main.js</span></p>
+        <h2 class="main-title">Market API</h2>
+        <p class="main-text">Params marked with asterisk (*) are required. The contents of the field "Response" is located in the field "body" in Server response object. When editing is necessary to send the contents of all fields - unsent field are cleared.</p>
         <table class="table table-striped table-hover">
             <tr>
                 <th>Method</th>
@@ -25,23 +24,18 @@
                 <th>Description</th>
             </tr>
             <tr>
-                <td>GET</td>
-                <td>/api/auth/get</td>
-                <td>-</td>
+                <td>POST</td>
+                <td>/api/auth/registration</td>
                 <td>
-                    Login <span class="param-type">string</span><br>
-                    Password <span class="param-type">string</span>
+                    login* <span class="param-type">string</span><br>
+                    password* <span class="param-type">string</span><br>
+                    name* <span class="param-type">string</span><br>
+                    address* <span class="param-type">string</span>
                 </td>
-                <td>Get current login and password</td>
-            </tr>
-            <tr>
-                <td>GET</td>
-                <td>/api/auth/check</td>
                 <td>
-                    token* <span class="param-type">string</span>
+                    <span class="response-obj">User objects</span>
                 </td>
-                <td>-</td>
-                <td>Validate the sended token. Check the "status" field in response</td>
+                <td>Create new user</td>
             </tr>
             <tr>
                 <td>POST</td>
@@ -51,9 +45,9 @@
                     password* <span class="param-type">string</span>
                 </td>
                 <td>
-                    token <span class="param-type">string</span>
+                    Token
                 </td>
-                <td>Get the token</td>
+                <td>Get the new user</td>
             </tr>
             <tr>
                 <td>POST</td>
@@ -66,107 +60,92 @@
             </tr>
             <tr>
                 <td>GET</td>
-                <td>/api/get/all</td>
-                <td>-</td>
+                <td>/api/auth/check</td>
                 <td>
-                    Array of <span class="response-obj">Post objects</span>
-                </td>
-                <td>Get all posts</td>
-            </tr>
-            <tr>
-                <td>GET</td>
-                <td>/api/get/one</td>
-                <td>
-                    id* <span class="param-type">int</span>
-                </td>
-                <td>
-                    <span class="response-obj">Post object</span>
-                </td>
-                <td>Get one post</td>
-            </tr>
-            <tr>
-                <td>GET</td>
-                <td>/api/get/search_tag</td>
-                <td>
-                    tag* <span class="param-type">string</span>
-                </td>
-                <td>
-                    Array of <span class="response-obj">Post objects</span>
-                </td>
-                <td>Get all posts containing sended tag</td>
-            </tr>
-            <tr>
-                <td>GET</td>
-                <td>/api/get/search_text</td>
-                <td>
-                    text* <span class="param-type">string</span>
-                </td>
-                <td>
-                    Array of <span class="response-obj">Post objects</span>
-                </td>
-                <td>Get all posts containing sended text in title or text</td>
-            </tr>
-            <tr>
-                <td>POST</td>
-                <td>/api/posts/create</td>
-                <td>
-                    token* <span class="param-type">string</span><br>
-                    title* <span class="param-type">string</span><br>
-                    tags <span class="param-type">string</span><br>
-                    text* <span class="param-type">string</span>
-                </td>
-                <td>
-                    <span class="response-obj">Post object</span>
-                </td>
-                <td>Create new post</td>
-            </tr>
-            <tr>
-                <td>POST</td>
-                <td>/api/posts/edit</td>
-                <td>
-                    id* <span class="param-type">int</span><br>
-                    token* <span class="param-type">string</span><br>
-                    title* <span class="param-type">string</span><br>
-                    tags <span class="param-type">string</span><br>
-                    text* <span class="param-type">string</span>
-                </td>
-                <td>
-                    <span class="response-obj">Post object</span>
-                </td>
-                <td>Edit an existing post</td>
-            </tr>
-            <tr>
-                <td>POST</td>
-                <td>/api/posts/delete</td>
-                <td>
-                    id* <span class="param-type">int</span>
-                </td>
-                <td>-</td>
-                <td>Delete an existing post</td>
-            </tr>
-            <tr>
-                <td>POST</td>
-                <td>/api/comments/create</td>
-                <td>
-                    post* <span class="param-type">int</span><br>
-                    name <span class="param-type">string</span><br>
-                    text* <span class="param-type">string</span>
-                </td>
-                <td>
-                    <span class="response-obj">Comment object</span>
-                </td>
-                <td>Create a comment in existing post</td>
-            </tr>
-            <tr>
-                <td>POST</td>
-                <td>/api/comments/delete</td>
-                <td>
-                    post* <span class="param-type">int</span><br>
-                    comment* <span class="param-type">int</span><br>
                     token* <span class="param-type">string</span>
                 </td>
                 <td>-</td>
-                <td>Delete a comment in existing post</td>
+                <td>Validate the sended token. Check the "status" field in response</td>
+            </tr>
+            <tr>
+                <td>GET</td>
+                <td>/api/get/products</td>
+                <td>-</td>
+                <td>Array of <span class="response-obj">Product objects</span></td>
+                <td>Get all products</td>
+            </tr>
+            <tr>
+                <td>GET</td>
+                <td>/api/get/product</td>
+                <td>
+                    id* <span class="param-type">int</span>
+                </td>
+                <td><span class="response-obj">Product objects</span></td>
+                <td>Get one product</td>
+            </tr>
+            <tr>
+                <td>GET</td>
+                <td>/api/get/categories</td>
+                <td>-</td>
+                <td>Array of <span class="response-obj">Category objects</span></td>
+                <td>Get all categories</td>
+            </tr>
+            <tr>
+                <td>GET</td>
+                <td>/api/get/orders</td>
+                <td>
+                    token* <span class="param-type">string</span>
+                </td>
+                <td>Array of <span class="response-obj">Order objects</span></td>
+                <td>Get all user orders</td>
+            </tr>
+            <tr>
+                <td>GET</td>
+                <td>/api/get/backet</td>
+                <td>
+                    token* <span class="param-type">string</span>
+                </td>
+                <td>Array of <span class="response-obj">Backet lot objects</span></td>
+                <td>Get user backet</td>
+            </tr>
+            <tr>
+                <td>GET</td>
+                <td>/api/get/user</td>
+                <td>
+                    token* <span class="param-type">string</span>
+                </td>
+                <td><span class="response-obj">User objects</span></td>
+                <td>Get user data</td>
+            </tr>
+            <tr>
+                <td>POST</td>
+                <td>/api/market/credits</td>
+                <td>
+                    token* <span class="param-type">string</span><br>
+                    credit* <span class="param-type">int</span>
+                </td>
+                <td>-</td>
+                <td>Add credits to account</td>
+            </tr>
+            <tr>
+                <td>POST</td>
+                <td>/api/market/products</td>
+                <td>
+                    token* <span class="param-type">string</span><br>
+                    product* <span class="param-type">int</span><br>
+                    count <span class="param-type">int</span>
+                </td>
+                <td>-</td>
+                <td>Add, edit or delete products in backet</td>
+            </tr>
+            <tr>
+                <td>POST</td>
+                <td>/api/market/pay</td>
+                <td>
+                    token* <span class="param-type">string</span>
+                </td>
+                <td>-</td>
+                <td>Buy all products in backet</td>
             </tr>
         </table>
 
@@ -177,23 +156,51 @@
             message <span class="param-type">string</span><br>
             body <span class="param-type">any</span><br>
         </article>
-        <p class="main-text">Status code: 0 - Success, 1-9 - various errors, 10 - not found, 11 - forbidden.</p>
-        <p>Post object:</p>
-        <article class="obj-panel">
-            ID <span class="param-type">int</span><br>
-            Title <span class="param-type">string</span><br>
-            Text <span class="param-type">string</span><br>
-            Date <span class="param-type">date</span><br>
-            Tags <span class="param-type">Array of string</span><br>
-            Comments <span class="param-type">Array of Comment objects</span><br>
-            CurrentCommentID <span class="param-type">int</span><br>
-        </article>
-        <p>Comment object:</p>
+        <p class="main-text">Status code: 0 - success, 1-9 - various errors, 10 - not found, 11 - forbidden.</p>
+        <p>Product object:</p>
         <article class="obj-panel">
             ID <span class="param-type">int</span><br>
             Name <span class="param-type">string</span><br>
+            Manufacturer <span class="param-type">string</span><br>
+            Price <span class="param-type">int</span><br>
+            Description <span class="param-type">string</span><br>
+            Count <span class="param-type">int</span><br>
+            Category <span class="param-type">int</span><br>
+        </article>
+        <p>Category object:</p>
+        <article class="obj-panel">
+            ID <span class="param-type">int</span><br>
+            Name <span class="param-type">string</span><br>
+        </article>
+        <p>User object:</p>
+        <article class="obj-panel">
+            ID <span class="param-type">int</span><br>
+            Login <span class="param-type">string</span><br>
+            Password <span class="param-type">string</span><br>
+            FullName <span class="param-type">string</span><br>
+            Address <span class="param-type">string</span><br>
+            Money <span class="param-type">int</span><br>
+            Backet <span class="param-type">Array of Lot objects</span><br>
+            Token <span class="param-type">string</span><br>
+        </article>
+        <p>Order object:</p>
+        <article class="obj-panel">
+            ID <span class="param-type">int</span><br>
+            User <span class="param-type">string</span><br>
             Date <span class="param-type">date</span><br>
-            Text <span class="param-type">string</span><br>
+            Products <span class="param-type">Array of Lot objects</span><br>
+            Price <span class="param-type">int</span><br>
+            Paid <span class="param-type">bool</span><br>
+        </article>
+        <p>Lot object:</p>
+        <article class="obj-panel">
+            Product <span class="param-type">int</span><br>
+            Count <span class="param-type">int</span><br>
+        </article>
+        <p>Backet lot object:</p>
+        <article class="obj-panel">
+            Product <span class="param-type">Product object</span><br>
+            Count <span class="param-type">int</span><br>
         </article>
     </main>
 </body>
