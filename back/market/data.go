@@ -86,7 +86,7 @@ type AddCreditReq struct {
 type ProductReq struct {
 	Token   string `form:"token" binding:"required"`
 	Product int    `form:"product" binding:"required"`
-	Count   int    `form:"count" binding:"required"`
+	Count   int    `form:"count"`
 }
 
 // Current

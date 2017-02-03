@@ -111,7 +111,7 @@ func Registration(c *gin.Context) {
 }
 
 func GetBasket(c *gin.Context) {
-	var request ProductReq
+	var request TokenReq
 	err := c.Bind(&request)
 
 	if err != nil {
@@ -148,7 +148,7 @@ func GetBasket(c *gin.Context) {
 		}
 		newLot := BacketLotStruct{
 			Product: product,
-			Count:   request.Count,
+			Count:   lot.Count,
 		}
 		fullBacket = append(fullBacket, newLot)
 	}
@@ -426,6 +426,25 @@ func ProductInBacket(c *gin.Context) {
 		return
 	}
 
+	product, err := GetProductUtility(request.Product)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"status":  10,
+			"message": "Product not found",
+			"body":    nil,
+		})
+		return
+	}
+
+	if product.Count < request.Count {
+		c.JSON(400, gin.H{
+			"status":  4,
+			"message": "Not enough products in stock",
+			"body":    nil,
+		})
+		return
+	}
+
 	founded := false
 	for index, product := range UserList[userIndex].Backet {
 		if product.Product == request.Product {
@@ -527,12 +546,15 @@ func PayOrder(c *gin.Context) {
 		return
 	}
 
+	var emptyBacket []LotStruct
+
 	newOrder.Paid = true
 	OrderNum++
 	OrderList = append(OrderList, newOrder)
 	UserList[userIndex].Money -= sum
+	UserList[userIndex].Backet = emptyBacket
 
-	c.JSON(400, gin.H{
+	c.JSON(200, gin.H{
 		"status":  0,
 		"message": "Success",
 		"body":    nil,
