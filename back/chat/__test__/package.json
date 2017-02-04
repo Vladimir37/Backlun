@@ -1,0 +1,21 @@
+{
+  "name": "test chat",
+  "version": "0.0.1",
+  "description": "websocker chat test",
+  "main": "json_client.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "asm.jaime",
+  "license": "MIT",
+  "dependencies": {
+    "babel-cli": "^6.10.1",
+    "babel-core": "^6.10.4",
+    "babel-loader": "^6.2.4",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-stage-0": "^6.5.0",    
+    "webpack": "^1.13.1",
+    "websocket": "^1.0.23"
+  }
+}
+

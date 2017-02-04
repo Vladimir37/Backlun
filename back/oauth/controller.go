@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/gin-gonic/contrib/sessions"
@@ -15,6 +16,11 @@ import (
 )
 
 var cred Credentials
+var DefaultCred *Credentials = &Credentials{
+	Cid:     "295529031882-ap6njd8e8p0bmggmvkb7t0iflhcetjn1.apps.googleusercontent.com",
+	Csecret: "ICiVhKO51UxbNfIQVR7WudxH",
+}
+
 var confTemp *oauth2.Config
 
 func getLoginURL(state string) string { // {{{
@@ -22,19 +28,33 @@ func getLoginURL(state string) string { // {{{
 } // }}}
 
 func init() { // {{{
-	// file, err := ioutil.ReadFile("keys/clientid.google.json")
-	// if err != nil {
-	// log.Printf("File error: %v\n", err)
-	// os.Exit(1)
-	// }
-	// json.Unmarshal(file, &cred)
-	cred.Cid = "295529031882-ap6njd8e8p0bmggmvkb7t0iflhcetjn1.apps.googleusercontent.com"
-	cred.Csecret = "ICiVhKO51UxbNfIQVR7WudxH"
+	var err_some error
+	if _, err := os.Stat(KeyFile); err == nil {
+		if file, err_read := ioutil.ReadFile(KeyFile); err_read == nil {
+			if err_marshal := json.Unmarshal(file, &cred); err_marshal != nil {
+				err_some = err_marshal
+				fmt.Print("\nwrong json conver wtih marshal..\n")
+			}
+		} else {
+			err_some = err_read
+			fmt.Print("\nwrong file...\n")
+		}
+	} else {
+		err_some = err
+		if os.IsNotExist(err) {
+			fmt.Print("\nKeyfile does not exitst, creditials will be set as default..\n")
+		}
+	}
+
+	if err_some != nil {
+		cred.Cid = DefaultCred.Cid
+		cred.Csecret = DefaultCred.Csecret
+	}
 
 	confTemp = &oauth2.Config{
 		ClientID:     cred.Cid,
 		ClientSecret: cred.Csecret,
-		RedirectURL:  "http://localhost" + Port + "/auth",
+		RedirectURL:  "http://" + Host + ":" + Port + "/auth",
 		Scopes: []string{
 			"https://www.googleapis.com/auth/userinfo.email",
 			// You have to select your own scope from here -> https://developers.google.com/identity/protocols/googlescopes#google_sign-in

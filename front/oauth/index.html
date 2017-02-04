@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>oauth Backlun</title>
+    <link rel="stylesheet" href="/src/bootstrap.min.css">
+    <link rel="stylesheet" href="/src/index.css">
+</head>
+<body>
+    <main class="jumbotron">
+        <h1 class="main-title">oauth List Backlun</h1>
+        <p class="main-text">Main page - <span class="main-addr">Backlun/front/oauth/index.html</span>.</p>
+        <p class="main-text">Static folder - <span class="main-addr">Backlun/front/oauth/static/</span>.</p>
+        <p class="main-text">You can get the file from static folder at the address <span class="main-addr">/src</span>.</p>
+        <p class="main-text">Example: <span class="main-addr">Backlun/front/oauth/static/js/build/main.js</span> -> <span class="main-addr">/src/js/build/main.js</span></p>
+        <h2 class="main-title">oauth API</h2>
+        <p class="main-text">Params marked with asterisk (*) are required. The contents of the field "Response" is located in the field "body" in Server response object. When editing is necessary to send the contents of all fields - unsent field are cleared.</p>
+        <table class="table table-striped table-hover">
+            <tr>
+                <th>Method</th>
+                <th>Address</th>
+                <th>Params</th>
+                <th>Response</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>GET</td>
+                <td>/login</td>
+                <td>-</td>
+                <td>
+                  <span class="response-obj">link, client_id, auth_url, redirect_uri, scope, state</span>
+                </td>
+                <td>JSON object with all params for oauth</td>
+            </tr>
+            <tr>
+                <td>GET</td>
+                <td>/auth</td>
+                <td>
+                    state* <span class="param-type">string</span><br>
+                    code* <span class="param-type">string</span><br>
+                </td>
+                <td>
+                    <span class="response-obj">authorize status</span>
+                </td>
+                <td>get auth status (authorized or not authorized)</td>
+            </tr>
+        </table>
+    </main>
+</body>
+</html>
