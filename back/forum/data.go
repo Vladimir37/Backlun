@@ -1,6 +1,7 @@
 package forum
 
 import (
+	"math/rand"
 	"time"
 )
 
@@ -62,3 +63,26 @@ var UserNum int = 0
 var CategoryNum int = 0
 var ThreadNum int = 0
 var PostNum int = 0
+
+// Utility
+
+func CheckTokenUtility(token string) int {
+	targetIndex := -1
+	for index, user := range UserList {
+		if user.Token == token {
+			targetIndex = index
+			break
+		}
+	}
+	return targetIndex
+}
+
+func GenerateToken(strlen int) string {
+	rand.Seed(time.Now().UTC().UnixNano())
+	const chars = "abcdefghijklmnopqrstuvwxyz0123456789"
+	result := make([]byte, strlen)
+	for i := 0; i < strlen; i++ {
+		result[i] = chars[rand.Intn(len(chars))]
+	}
+	return string(result)
+}
