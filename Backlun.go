@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"Backlun/back/blog"
+	"Backlun/back/chat"
 	"Backlun/back/market"
 	"Backlun/back/oauth"
 	"Backlun/back/todo"
@@ -65,6 +66,8 @@ func startServer(args []string) {
 		//
 	case "oauth":
 		oauth.Start(args)
+	case "chat":
+		chat.Start(args)
 	default:
 		fmt.Println("---------------")
 		fmt.Println("ERROR")

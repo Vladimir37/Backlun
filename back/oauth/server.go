@@ -6,17 +6,29 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/contrib/sessions"
-	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
 )
 
-// Server for you
+// Server structure
 type Server struct{}
 
+var Host string = "localhost"
 var Port string = "8000"
+var KeyFile string = "key.json"
 
-func testData(cont *gin.Context) {
-	cont.JSON(200, gin.H{"message: ": "test data"})
+func serveHome(c *gin.Context) {
+	if c.Request.URL.Path != "/" {
+		c.JSON(404, gin.H{"message": "Not found"})
+	}
+	if c.Request.Method != "GET" {
+		c.JSON(405, gin.H{"message": "Method not allowed"})
+	}
+	c.Writer.Header().Set("Content-Type", "text/html; charset=utf-8")
+	c.HTML(http.StatusOK, "index.html", "")
+}
+
+func lockData(cont *gin.Context) {
+	cont.JSON(200, gin.H{"message: ": "here is locked data, you have got auth data!"})
 }
 
 // AuthorizeRequest is used to authorize a request for a certain end-point group.
@@ -69,9 +81,11 @@ func (server *Server) NewEngine(port string) {
 	router.Use(CORSMiddleware())
 
 	// all frontend
-	router.Use(static.Serve("/", static.LocalFile("./front/oauth", true)))
+	router.LoadHTMLGlob("front/oauth/index.html")
+	router.Static("/src", "./front/oauth/static/")
 
-	// login
+	// set api/handlers
+	router.GET("/", serveHome)
 	router.GET("/login", LoginHandler)
 	router.GET("/auth", AuthHandler)
 
@@ -79,24 +93,28 @@ func (server *Server) NewEngine(port string) {
 	authorized := router.Group("/v1")
 	authorized.Use(AuthorizeRequest())
 	{
-		authorized.GET("/test", testData)
+		authorized.GET("/test", lockData)
 	}
 
 	router.Run(":" + port)
 }
 
 func Start(args []string) {
-	// Set port
-	if len(args) == 4 {
+	if len(args) > 3 { // set port
 		Port = args[3]
+	} else if len(args) > 4 { // set host
+		Host = args[4]
+	} else if len(args) > 5 { // set key
+		KeyFile = args[5]
 	}
 
-	// Info
+	// info
 	fmt.Println("---------------")
 	fmt.Println("Selected port: " + Port)
+	fmt.Println("Selected host: " + Host)
 	fmt.Println("---------------")
 
-	// Star server
+	// star server
 	thisServer := new(Server)
 	thisServer.NewEngine(Port)
 }
