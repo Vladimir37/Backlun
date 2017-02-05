@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ToDo Backlun</title>
+    <link rel="stylesheet" href="/src/bootstrap.min.css">
+    <link rel="stylesheet" href="/src/index.css">
+</head>
+<body>
+    <main class="jumbotron">
+        <h1 class="main-title">ToDo List Backlun</h1>
+        <p class="main-text">Main page - <span class="main-addr">Backlun/front/todo/index.html</span>.</p>
+        <p class="main-text">Static folder - <span class="main-addr">Backlun/front/todo/static/</span>.</p>
+        <p class="main-text">You can get the file from static folder at the address <span class="main-addr">/src</span>.</p>
+        <p class="main-text">Example: <span class="main-addr">Backlun/front/todo/static/js/build/main.js</span> -> <span class="main-addr">/src/js/build/main.js</span></p>
+        <h2 class="main-title">ToDo API</h2>
+        <p class="main-text">Params marked with asterisk (*) are required. The contents of the field "Response" is located in the field "body" in Server response object. When editing is necessary to send the contents of all fields - unsent field are cleared.</p>
+        <table class="table table-striped table-hover">
+            <tr>
+                <th>Method</th>
+                <th>Address</th>
+                <th>Params</th>
+                <th>Response</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>GET</td>
+                <td>/api/tasks/get_all/</td>
+                <td>-</td>
+                <td>
+                    Array of <span class="response-obj">Task objects</span>
+                </td>
+                <td>Get the array of all ToDo tasks</td>
+            </tr>
+            <tr>
+                <td>POST</td>
+                <td>/api/tasks/add/</td>
+                <td>
+                    title* <span class="param-type">string</span><br>
+                    text* <span class="param-type">string</span><br>
+                    category <span class="param-type">int</span>
+                </td>
+                <td>
+                    <span class="response-obj">Task object</span>
+                </td>
+                <td>Create new ToDo task</td>
+            </tr>
+            <tr>
+                <td>POST</td>
+                <td>/api/tasks/edit/</td>
+                <td>
+                    id* <span class="param-type">int</span><br>
+                    title <span class="param-type">string</span><br>
+                    text <span class="param-type">string</span><br>
+                    category <span class="param-type">int</span><br>
+                    status <span class="param-type">bool</span>
+                </td>
+                <td>
+                    <span class="response-obj">Task object</span>
+                </td>
+                <td>Edit an existing ToDo task</td>
+            </tr>
+            <tr>
+                <td>POST</td>
+                <td>/api/tasks/delete/</td>
+                <td>id* <span class="param-type">int</span></td>
+                <td>-</td>
+                <td>Delete an existing ToDo task</td>
+            </tr>
+            <tr>
+                <td>GET</td>
+                <td>/api/categories/get_all/</td>
+                <td>-</td>
+                <td>
+                    Array of <span class="response-obj">Category objects</span>
+                </td>
+                <td>Get the array of all tasks categories</td>
+            </tr>
+            <tr>
+                <td>POST</td>
+                <td>/api/categories/add/</td>
+                <td>
+                    name* <span class="param-type">string</span><br>
+                    color* <span class="param-type">string</span>
+                </td>
+                <td>
+                    <span class="response-obj">Category object</span>
+                </td>
+                <td>Create new task category</td>
+            </tr>
+            <tr>
+                <td>POST</td>
+                <td>/api/categories/edit/</td>
+                <td>
+                    id* <span class="param-type">int</span><br>
+                    name <span class="param-type">string</span><br>
+                    color <span class="param-type">string</span>
+                </td>
+                <td>
+                    <span class="response-obj">Category object</span>
+                </td>
+                <td>Edit an existing task category</td>
+            </tr>
+            <tr>
+                <td>POST</td>
+                <td>/api/categories/delete/</td>
+                <td>
+                    id* <span class="param-type">int</span>
+                </td>
+                <td>-</td>
+                <td>Delete an existing task category</td>
+            </tr>
+        </table>
+
+        <h2 class="main-title">Standard objects</h2>
+        <p>Server response:</p>
+        <article class="obj-panel">
+            status <span class="param-type">int</span><br>
+            message <span class="param-type">string</span><br>
+            body <span class="param-type">any</span><br>
+        </article>
+        <p class="main-text">Status code: 0 - success, 1-9 - various errors, 10 - not found.</p>
+        <p>Task object:</p>
+        <article class="obj-panel">
+            ID <span class="param-type">int</span><br>
+            Title <span class="param-type">string</span><br>
+            Text <span class="param-type">string</span><br>
+            Category <span class="param-type">int</span><br>
+            Status <span class="param-type">bool</span><br>
+        </article>
+        <p class="main-text">The field "Category" should contain ID of the existing Category or 0.</p>
+        <p>Category object:</p>
+        <article class="obj-panel">
+            ID <span class="param-type">int</span><br>
+            Name <span class="param-type">string</span><br>
+            Color <span class="param-type">string</span><br>
+        </article>
+        <p class="main-text">You can not delete a category, as long it contains the tasks</p>
+    </main>
+</body>
+</html>
