@@ -167,3 +167,103 @@ func CheckToken(c *gin.Context) {
 		return
 	}
 }
+
+func GetAllCategories(c *gin.Context) {
+	c.JSON(200, gin.H{
+		"status":  0,
+		"message": "Success",
+		"body":    CategoryList,
+	})
+}
+
+func GetAllThreads(c *gin.Context) {
+	var request CategoryReq
+	err := c.Bind(&request)
+
+	if err != nil {
+		fmt.Println(err)
+		c.JSON(400, gin.H{
+			"status":  1,
+			"message": "Incorrect data",
+			"body":    nil,
+		})
+		return
+	}
+
+	founded := false
+
+	for _, category := range CategoryList {
+		if category.ID == request.Category {
+			founded = true
+			break
+		}
+	}
+
+	if !founded {
+		c.JSON(400, gin.H{
+			"status":  11,
+			"message": "Category not found",
+			"body":    nil,
+		})
+		return
+	}
+
+	var allThreads []ThreadStruct
+
+	for _, thread := range ThreadList {
+		if thread.Category == request.Category {
+			allThreads = append(allThreads, thread)
+		}
+	}
+
+	c.JSON(200, gin.H{
+		"status":  1,
+		"message": "Success",
+		"body":    allThreads,
+	})
+}
+
+func GetThread(c *gin.Context) {
+	var request GetThreadReq
+	err := c.Bind(&request)
+
+	if err != nil {
+		fmt.Println(err)
+		c.JSON(400, gin.H{
+			"status":  1,
+			"message": "Incorrect data",
+			"body":    nil,
+		})
+		return
+	}
+
+	founded := false
+	var targetIndex int
+
+	for index, thread := range ThreadList {
+		if thread.ID == request.Thread {
+			founded = true
+			targetIndex = index
+		}
+	}
+
+	if !founded {
+		c.JSON(400, gin.H{
+			"status":  11,
+			"message": "Thread not found",
+			"body":    nil,
+		})
+		return
+	} else {
+		c.JSON(200, gin.H{
+			"status":  0,
+			"message": "Success",
+			"body":    ThreadList[targetIndex],
+		})
+		return
+	}
+}
+
+func CreateThread(c *gin.Context) {
+	//
+}

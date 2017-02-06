@@ -52,6 +52,28 @@ type TokenReq struct {
 	Token string `form:"token" binding:"required"`
 }
 
+type CategoryReq struct {
+	Category int `form:"category" binding:"required"`
+}
+
+type GetThreadReq struct {
+	Thread int `form:"thread" binding:"required"`
+}
+
+type ThreadReq struct {
+	Token    string `form:"token" binding:"required"`
+	Category int    `form:"category" binding:"required"`
+	Title    string `form:"title" binding:"required"`
+	Text     string `form:"text" binding:"required"`
+}
+
+type PostReq struct {
+	Token    string `form:"token" binding:"required"`
+	Category int    `form:"category" binding:"required"`
+	Thread   string `form:"thread" binding:"required"`
+	Text     string `form:"text" binding:"required"`
+}
+
 // Current
 
 var UserList []UserStruct
