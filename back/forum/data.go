@@ -13,7 +13,14 @@ type UserStruct struct {
 	Token      string
 	PostCount  int
 	Reputation int
-	Voted      map[int]time.Time
+}
+
+type PublicUserStruct struct {
+	ID         int
+	Login      string
+	Text       string
+	PostCount  int
+	Reputation int
 }
 
 type CategoryStruct struct {
@@ -25,12 +32,12 @@ type ThreadStruct struct {
 	ID       int
 	Category int
 	Title    string
+	PostNum  int
 	Posts    []PostStruct
 }
 
 type PostStruct struct {
 	ID     int
-	Thread int
 	Author int
 	Text   string
 }
@@ -46,6 +53,10 @@ type RegistrationReq struct {
 type LoginReq struct {
 	Login    string `form:"login" binding:"required"`
 	Password string `form:"password" binding:"required"`
+}
+
+type IDReq struct {
+	ID string `form:"id" binding:"required"`
 }
 
 type TokenReq struct {
@@ -70,8 +81,14 @@ type ThreadReq struct {
 type PostReq struct {
 	Token    string `form:"token" binding:"required"`
 	Category int    `form:"category" binding:"required"`
-	Thread   string `form:"thread" binding:"required"`
+	Thread   int    `form:"thread" binding:"required"`
 	Text     string `form:"text" binding:"required"`
+}
+
+type ReputationReq struct {
+	Token  string `form:"token" binding:"required"`
+	Target int    `form:"target" binding:"required"`
+	Inc    bool   `form:"inc"`
 }
 
 // Current
@@ -79,12 +96,10 @@ type PostReq struct {
 var UserList []UserStruct
 var CategoryList []CategoryStruct
 var ThreadList []ThreadStruct
-var PostList []PostStruct
 
 var UserNum int = 0
 var CategoryNum int = 0
 var ThreadNum int = 0
-var PostNum int = 0
 
 // Utility
 
