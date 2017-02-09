@@ -213,10 +213,25 @@ func GetAllThreads(c *gin.Context) {
 		}
 	}
 
+	var publicThreadsList []PublicThreadStruct
+	for _, thread := range allThreads {
+		err, publicThread := ThreadToPublicThread(thread)
+		if err != nil {
+			c.JSON(500, gin.H{
+				"status":  8,
+				"message": "Author not found",
+				"body":    nil,
+			})
+			return
+		} else {
+			publicThreadsList = append(publicThreadsList, publicThread)
+		}
+	}
+
 	c.JSON(200, gin.H{
 		"status":  1,
 		"message": "Success",
-		"body":    allThreads,
+		"body":    publicThreadsList,
 	})
 }
 
@@ -246,19 +261,29 @@ func GetThread(c *gin.Context) {
 
 	if !founded {
 		c.JSON(400, gin.H{
-			"status":  11,
+			"status":  7,
 			"message": "Thread not found",
 			"body":    nil,
 		})
 		return
-	} else {
-		c.JSON(200, gin.H{
-			"status":  0,
-			"message": "Success",
-			"body":    ThreadList[targetIndex],
+	}
+
+	err, publicThread := ThreadToPublicThread(ThreadList[targetIndex])
+
+	if err != nil {
+		c.JSON(500, gin.H{
+			"status":  8,
+			"message": "Author not found",
+			"body":    nil,
 		})
 		return
 	}
+
+	c.JSON(200, gin.H{
+		"status":  0,
+		"message": "Success",
+		"body":    publicThread,
+	})
 }
 
 func GetUser(c *gin.Context) {
@@ -307,6 +332,33 @@ func GetTargetUser(c *gin.Context) {
 		return
 	}
 
+	var founded bool
+	var targetUser PublicUserStruct
+
+	for _, user := range UserList {
+		if user.ID == request.ID {
+			founded = true
+			targetUser.ID = user.ID
+			targetUser.Login = user.Login
+			targetUser.Text = user.Text
+			targetUser.PostCount = user.PostCount
+			targetUser.Reputation = user.Reputation
+		}
+	}
+
+	if !founded {
+		c.JSON(400, gin.H{
+			"status":  2,
+			"message": "User not found",
+			"body":    nil,
+		})
+	} else {
+		c.JSON(200, gin.H{
+			"status":  0,
+			"message": "Success",
+			"body":    targetUser,
+		})
+	}
 }
 
 func CreateThread(c *gin.Context) {

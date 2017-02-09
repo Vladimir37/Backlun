@@ -1,6 +1,7 @@
 package forum
 
 import (
+	"errors"
 	"math/rand"
 	"time"
 )
@@ -42,6 +43,20 @@ type PostStruct struct {
 	Text   string
 }
 
+type PublicThreadStruct struct {
+	ID       int
+	Category int
+	Title    string
+	PostNum  int
+	Posts    []PublicPostStruct
+}
+
+type PublicPostStruct struct {
+	ID     int
+	Author PublicUserStruct
+	Text   string
+}
+
 // Requests
 
 type RegistrationReq struct {
@@ -56,7 +71,7 @@ type LoginReq struct {
 }
 
 type IDReq struct {
-	ID string `form:"id" binding:"required"`
+	ID int `form:"id" binding:"required"`
 }
 
 type TokenReq struct {
@@ -112,6 +127,59 @@ func CheckTokenUtility(token string) int {
 		}
 	}
 	return targetIndex
+}
+
+func GetUserUtility(id int) (error, PublicUserStruct) {
+	var founded bool
+	var targetIndex int
+	for index, user := range UserList {
+		if id == user.ID {
+			founded = true
+			targetIndex = index
+			break
+		}
+	}
+
+	if !founded {
+		var emptyUser PublicUserStruct
+		return errors.New("User not found"), emptyUser
+	}
+
+	targetUser := PublicUserStruct{
+		ID:         UserList[targetIndex].ID,
+		Login:      UserList[targetIndex].Login,
+		Text:       UserList[targetIndex].Text,
+		PostCount:  UserList[targetIndex].PostCount,
+		Reputation: UserList[targetIndex].Reputation,
+	}
+	return nil, targetUser
+}
+
+func ThreadToPublicThread(thread ThreadStruct) (error, PublicThreadStruct) {
+	var newPosts []PublicPostStruct
+	for _, post := range thread.Posts {
+		err, user := GetUserUtility(post.Author)
+		if err != nil {
+			var emptyThread PublicThreadStruct
+			return errors.New("Author not found"), emptyThread
+		}
+		newPost := PublicPostStruct{
+			ID:     post.ID,
+			Author: user,
+			Text:   post.Text,
+		}
+		newPosts = append(newPosts, newPost)
+	}
+
+	targetThread := PublicThreadStruct{
+		ID:       thread.ID,
+		Category: thread.Category,
+		Title:    thread.Title,
+		PostNum:  thread.PostNum,
+		Posts:    newPosts,
+	}
+
+	return nil, targetThread
 }
 
 func GenerateToken(strlen int) string {
