@@ -3,7 +3,10 @@ package forum
 import (
 	"errors"
 	"math/rand"
+	"strings"
 	"time"
+
+	randomdata "github.com/Pallinder/go-randomdata"
 )
 
 type UserStruct struct {
@@ -112,9 +115,9 @@ var UserList []UserStruct
 var CategoryList []CategoryStruct
 var ThreadList []ThreadStruct
 
-var UserNum int = 0
-var CategoryNum int = 0
-var ThreadNum int = 0
+var UserNum int = 1
+var CategoryNum int = 1
+var ThreadNum int = 1
 
 // Utility
 
@@ -190,4 +193,16 @@ func GenerateToken(strlen int) string {
 		result[i] = chars[rand.Intn(len(chars))]
 	}
 	return string(result)
+}
+
+func GenerateCategory() {
+	categoryNum := randomdata.Number(4, 12)
+	for index := 0; index < categoryNum; index++ {
+		newCategory := CategoryStruct{
+			ID:   CategoryNum,
+			Name: strings.Title(randomdata.Noun()),
+		}
+		CategoryNum++
+		CategoryList = append(CategoryList, newCategory)
+	}
 }

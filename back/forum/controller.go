@@ -420,6 +420,7 @@ func CreateThread(c *gin.Context) {
 	}
 
 	ThreadList = append(ThreadList, newThread)
+	UserList[userIndex].PostCount++
 
 	c.JSON(200, gin.H{
 		"status":  0,
@@ -528,6 +529,15 @@ func ChangeReputation(c *gin.Context) {
 		c.JSON(403, gin.H{
 			"status":  6,
 			"message": "User not found",
+			"body":    nil,
+		})
+		return
+	}
+
+	if UserList[targetIndex].ID == UserList[userIndex].ID {
+		c.JSON(403, gin.H{
+			"status":  9,
+			"message": "You can not change a reputation for yourself",
 			"body":    nil,
 		})
 		return

@@ -45,6 +45,8 @@ func Start(args []string) {
 }
 
 func getApiRouter(baseRouter *gin.Engine) {
+	GenerateCategory()
+
 	api := baseRouter.Group("/api")
 	{
 		auth := api.Group("/auth")

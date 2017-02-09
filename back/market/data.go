@@ -98,10 +98,10 @@ var ProductList []ProductStruct
 
 // Numbers
 
-var CategoryNum int = 0
-var ProductNum int = 0
-var OrderNum int = 0
-var UserNum int = 0
+var CategoryNum int = 1
+var ProductNum int = 1
+var OrderNum int = 1
+var UserNum int = 1
 
 // Utility
 
