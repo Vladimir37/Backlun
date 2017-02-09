@@ -47,6 +47,28 @@ func Start(args []string) {
 func getApiRouter(baseRouter *gin.Engine) {
 	api := baseRouter.Group("/api")
 	{
-		//
+		auth := api.Group("/auth")
+		{
+			auth.GET("/check", CheckToken)
+			auth.GET("/user", GetUser)
+			auth.POST("/registration", Registration)
+			auth.POST("/login", Login)
+			auth.POST("/logout", Logout)
+		}
+
+		get := api.Group("/get")
+		{
+			get.GET("/categories", GetAllCategories)
+			get.GET("/threads", GetAllThreads)
+			get.GET("/thread", GetThread)
+			get.GET("/user", GetTargetUser)
+		}
+
+		forum := api.Group("/forum")
+		{
+			forum.POST("/create", CreateThread)
+			forum.POST("/send", SendPost)
+			forum.POST("/reputation", ChangeReputation)
+		}
 	}
 }
