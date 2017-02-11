@@ -73,10 +73,12 @@ func (server *Server) NewEngine(port string) {
 		Path:   "/",
 		MaxAge: 86400 * 7,
 	})
+
 	// router
 	router.Use(gin.Logger())
 	router.Use(gin.Recovery())
 	router.Use(sessions.Sessions("goquestsession", store))
+
 	// add headers middleware
 	router.Use(CORSMiddleware())
 
@@ -100,11 +102,14 @@ func (server *Server) NewEngine(port string) {
 }
 
 func Start(args []string) {
+
 	if len(args) > 3 { // set port
 		Port = args[3]
-	} else if len(args) > 4 { // set host
+	}
+	if len(args) > 4 { // set host
 		Host = args[4]
-	} else if len(args) > 5 { // set key
+	}
+	if len(args) > 5 { // set key
 		KeyFile = args[5]
 	}
 
@@ -112,6 +117,7 @@ func Start(args []string) {
 	fmt.Println("---------------")
 	fmt.Println("Selected port: " + Port)
 	fmt.Println("Selected host: " + Host)
+	fmt.Println("Selected key file: " + KeyFile)
 	fmt.Println("---------------")
 
 	// star server

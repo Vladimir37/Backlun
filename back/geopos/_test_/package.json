@@ -1,15 +1,15 @@
 {
-  "name": "chat.test",
-  "version": "0.0.2",
-  "description": "web-socket chat test",
-  "main": "chat.ws.test.js",
+  "name": "geopos.test",
+  "version": "0.0.4",
+  "description": "test rest requests",
+  "main": "request.test.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "asm.jaime",
   "license": "MIT",
   "dependencies": {
-    "websocket": "^1.0.23"
+    "node-fetch": "^1.5.3"
   },
   "devDependencies": {
     "babel-cli": "^6.10.1",
@@ -20,4 +20,3 @@
     "webpack": "^1.13.1"
   }
 }
-
