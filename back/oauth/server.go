@@ -100,12 +100,12 @@ func (server *Server) NewEngine(port string) {
 }
 
 func Start(args []string) {
-	if len(args) > 3 { // set port
-		Port = args[3]
-	} else if len(args) > 4 { // set host
-		Host = args[4]
-	} else if len(args) > 5 { // set key
-		KeyFile = args[5]
+	if len(args) > 2 { // set port
+		Port = args[2]
+	} else if len(args) > 3 { // set host
+		Host = args[3]
+	} else if len(args) > 4 { // set key
+		KeyFile = args[4]
 	}
 
 	// info

@@ -45,12 +45,12 @@ func (server *Server) NewEngine(port string) {
 
 func Start(args []string) {
 	// set port
-	if len(args) > 3 {
-		Port = args[3]
+	if len(args) > 2 {
+		Port = args[2]
 	}
 	// set host
-	if len(args) > 4 {
-		Host = args[4]
+	if len(args) > 2 {
+		Host = args[2]
 	}
 
 	// info
