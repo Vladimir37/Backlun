@@ -8,6 +8,7 @@ import (
 	"Backlun/back/blog"
 	"Backlun/back/chat"
 	"Backlun/back/forum"
+	"Backlun/back/geopos"
 	"Backlun/back/market"
 	"Backlun/back/oauth"
 	"Backlun/back/todo"
@@ -104,6 +105,12 @@ func printPlatformHelp(platform string) {
 		//
 	case "forum":
 		//
+	case "chat":
+		//
+	case "oauth":
+		//
+	case "geopos":
+		//
 	default:
 		fmt.Println("---------------")
 		fmt.Println("ERROR")
@@ -126,6 +133,8 @@ func startServer(args []string) {
 		oauth.Start(args)
 	case "chat":
 		chat.Start(args)
+	case "geopos":
+		geopos.Start(args)
 	default:
 		fmt.Println("---------------")
 		fmt.Println("ERROR")

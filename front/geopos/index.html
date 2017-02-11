@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>geopos Backlun</title>
+    <link rel="stylesheet" href="/src/bootstrap.min.css">
+    <link rel="stylesheet" href="/src/index.css">
+</head>
+<body>
+    <main class="jumbotron">
+        <h1 class="main-title">geopos List Backlun</h1>
+        <p class="main-text">Main page - <span class="main-addr">Backlun/front/geopos/index.html</span>.</p>
+        <p class="main-text">Static folder - <span class="main-addr">Backlun/front/geopos/static/</span>.</p>
+        <p class="main-text">You can get the file from static folder at the address <span class="main-addr">/src</span>.</p>
+        <p class="main-text">Example: <span class="main-addr">Backlun/front/geopos/static/js/build/main.js</span> -> <span class="main-addr">/src/js/build/main.js</span></p>
+        <h2 class="main-title">geopos API</h2>
+        <p class="main-text">Params marked with asterisk (*) are required. The contents of the field "Response" is located in the field "body" in Server response object. When editing is necessary to send the contents of all fields - unsent field are cleared.</p>
+        <table class="table table-striped table-hover">
+            <tr>
+                <th>Method</th>
+                <th>Address</th>
+                <th>Params</th>
+                <th>Response</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>GET</td>
+                <td>/getPoints</td>
+                <td>-</td>
+                <td>
+                    Array of <span class="response-obj">Points objects</span>
+                </td>
+                <td>Get the array of all geopos points</td>
+            </tr>
+            <tr>
+                <td>GET</td>
+                <td>/getPointOnToken</td>
+                <td>-</td>
+                <td>
+                    A object of <span class="response-obj">Point object</span>
+                </td>
+                <td>Get a point of the token</td>
+            </tr>
+            <tr>
+                <td>POST</td>
+                <td>/postPoint/</td>
+                <td>
+                    point* <span class="param-type">point</span><br>
+                </td>
+                <td>
+                    <span class="response-obj">status object</span>
+                </td>
+                <td>Add a point in geostate</td>
+            </tr>
+            <tr>
+                <td>PUT</td>
+                <td>/putDistance</td>
+                <td>
+                    point* <span class="param-type">point</span><br>
+                </td>
+                <td>
+                    <span class="response-obj">distance you coordinats until checkPoint</span>
+                </td>
+                <td>Put your point in geostate and return distance of checkPoint</td>
+            </tr>
+            <tr>
+                <td>GET</td>
+                <td>/getCheckPoint</td>
+                <td>-</td>
+                <td>
+                    Point of <span class="response-obj">Point objects</span>
+                </td>
+                <td>Get the point of check</td>
+            </tr>
+            <tr>
+                <td>POST</td>
+                <td>/postCheckPoint</td>
+                <td>point* <span class="param-type">point</span></td>
+                <td>-</td>
+                <td>Update/Set new check point as primary goal</td>
+            </tr>
+            <tr>
+                <td>POST</td>
+                <td>/postRndPoint</td>
+                <td>
+                    point* <span class="param-type">point</span>
+                </td>
+                <td>
+                    <span class="response-obj">Point object</span>
+                </td>
+                <td>post random point to geostate</td>
+            </tr>
+            <tr>
+                <td>GET</td>
+                <td>/getRndPoint</td>
+                <td>-</td>
+                <td>
+                    Point of <span class="response-obj">Point objects</span>
+                </td>
+                <td>Get random point</td>
+            </tr>
+        </table>
+    </main>
+</body>
+</html>
