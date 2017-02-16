@@ -1,10 +1,12 @@
 'use strict'
 const wsClient = require('websocket').client;
+const fetch = require('node-fetch');
 
 const SERVER = "localhost";
 const PORT = "8000";
+const URL =`http://${SERVER}:${PORT}`
 
-let ws_client = new wsClient();
+const ws_client = new wsClient();
 
 //gen data {{{
 function gen_num() {
@@ -23,11 +25,11 @@ function gen_token() {
   return text;
 } //}}}
 
-ws_client.on('connectFailed', function(error) {
+ws_client.on('connectFailed', function(error) {//{{{
   console.log('Connect Error: ' + error.toString());
-});
+});//}}}
 
-ws_client.on('connect', function(connection) {
+ws_client.on('connect', function(connection) {//{{{
   console.log('WebSocket Client Connected');
   connection.on('error', function(error) {
     console.log("Connection Error: " + error.toString());
@@ -54,6 +56,15 @@ ws_client.on('connect', function(connection) {
     }
   }
   send_msg();
-});
+});//}}}
 
-ws_client.connect(`ws://${SERVER}:${PORT}/ws`);
+function get_error_request() { //{{{
+  fetch(`${URL}/api/error_request`)
+    .then((res) => res.json())
+    .then((json) => console.log('error_request:', json))
+    .catch(error => console.log('error_request error: ', error));
+} //}}}
+
+get_error_request();
+
+ws_client.connect(`ws://${SERVER}:${PORT}/api/ws`);

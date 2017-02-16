@@ -6,62 +6,12 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
 	"strings"
 
 	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/oauth2"
-	"golang.org/x/oauth2/google"
 )
-
-var cred Credentials
-var DefaultCred *Credentials = &Credentials{
-	Cid:     "295529031882-ap6njd8e8p0bmggmvkb7t0iflhcetjn1.apps.googleusercontent.com",
-	Csecret: "ICiVhKO51UxbNfIQVR7WudxH",
-}
-
-var confTemp *oauth2.Config
-
-func getLoginURL(state string) string { // {{{
-	return confTemp.AuthCodeURL(state)
-} // }}}
-
-func init() { // {{{
-	var err_some error
-	if _, err := os.Stat(KeyFile); err == nil {
-		if file, err_read := ioutil.ReadFile(KeyFile); err_read == nil {
-			if err_marshal := json.Unmarshal(file, &cred); err_marshal != nil {
-				err_some = err_marshal
-				fmt.Print("\nwrong json conver wtih marshal..\n")
-			}
-		} else {
-			err_some = err_read
-			fmt.Print("\nwrong file...\n")
-		}
-	} else {
-		err_some = err
-		if os.IsNotExist(err) {
-			fmt.Print("\nKeyfile does not exitst, creditials will be set as default..\n")
-		}
-	}
-
-	if err_some != nil {
-		cred.Cid = DefaultCred.Cid
-		cred.Csecret = DefaultCred.Csecret
-	}
-
-	confTemp = &oauth2.Config{
-		ClientID:     cred.Cid,
-		ClientSecret: cred.Csecret,
-		RedirectURL:  "http://" + Host + ":" + Port + "/auth",
-		Scopes: []string{
-			"https://www.googleapis.com/auth/userinfo.email",
-			// You have to select your own scope from here -> https://developers.google.com/identity/protocols/googlescopes#google_sign-in
-		},
-		Endpoint: google.Endpoint,
-	}
-} // }}}
 
 // AuthHandler handles authentication of a user and initiates a session.
 func AuthHandler(cont *gin.Context) { // {{{
@@ -141,7 +91,7 @@ func LoginHandler(cont *gin.Context) { // {{{
 	session.Save()
 
 	// response
-	link := getLoginURL(state)
+	link := confTemp.AuthCodeURL(state)
 	cont.JSON(http.StatusOK, gin.H{
 		"auth_url":     confTemp.Endpoint.AuthURL,
 		"client_id":    confTemp.ClientID,
@@ -153,8 +103,12 @@ func LoginHandler(cont *gin.Context) { // {{{
 } // }}}
 
 // FieldHandler is a rudementary handler for logged in users.
-func FieldHandler(cont *gin.Context) { // {{{
-	session := sessions.Default(cont)
+func FieldHandler(c *gin.Context) { // {{{
+	session := sessions.Default(c)
 	userID := session.Get("user-id")
-	cont.JSON(http.StatusOK, gin.H{"user": userID})
+	c.JSON(http.StatusOK, gin.H{"user": userID})
 } // }}}
+
+func lockTest(c *gin.Context) {
+	c.JSON(http.StatusOK, msgState.Messages[http.StatusOK])
+}

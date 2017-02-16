@@ -3,6 +3,7 @@ const fetch = require('node-fetch');
 
 const SERVER = "localhost";
 const PORT = "8000";
+const URL = `http://${SERVER}:${PORT}`
 
 const static_point = {
   token: gen_token(),
@@ -27,14 +28,21 @@ function gen_token() {
 } //}}}
 
 function get_points() { //{{{
-  fetch(`http://${SERVER}:${PORT}/getPoints`)
+  fetch(`${URL}/api/points/get`)
     .then((res) => res.json())
-    .then((json) => console.log('getPoint:', json.body))
-    .catch(error => console.log('get error: ', error));
+    .then((json) => console.log('get points: ', json))
+    .catch(error => console.log('get points error: ', error));
 } //}}}
 
-function post_point(point) { //{{{
-  fetch(`http://${SERVER}:${PORT}/postPoint`, {
+function get_point_from_token(token) { //{{{
+  fetch(`${URL}/points/get_from_token?token=${token}`)
+    .then((res) => res.json())
+    .then((json) => console.log('get_from_token:', json))
+    .catch(error => console.log('get_from_token error: ', error));
+} //}}}
+
+function post_point(point, sample) {
+  fetch(`${URL}/api/points/post`, {
       headers: {
         'Content-Type': 'application/json'
       },
@@ -42,15 +50,21 @@ function post_point(point) { //{{{
       body: JSON.stringify(point),
     })
     .then((res) => res.json())
-    .then((json) => console.log('postPoint: ', json.body))
-    .catch(error => console.log('postPoint error: ', error));
-} //}}}
+    .then((json) => {
+      if (Object.keys(point).length == 0) {
+        console.log('here is null');
+        console.assert(json.body == null);
+      }
+      console.log('post point: ', json)
+    })
+    .catch(error => console.log('post point error: ', error));
+}
 
 function get_rnd_point() { //{{{
-  fetch(`http://${SERVER}:${PORT}/getRndPoint`)
+  fetch(`${URL}/random_point/get`)
     .then((res) => res.json())
-    .then((json) => console.log('getRndPoint:', json.body))
-    .catch(error => console.log('getRndPoint error: ', error));
+    .then((json) => console.log('get random_point:', json))
+    .catch(error => console.log('get random_point error: ', error));
 } //}}}
 
 function post_rnd_point() { //{{{
@@ -59,32 +73,38 @@ function post_rnd_point() { //{{{
     coordinates: [gen_num(), gen_num()],
   };
 
-  fetch(`http://${SERVER}:${PORT}/postRndPoint`, {
+  fetch(`${URL}/random_point/post`, {
       method: 'POST',
       body: JSON.stringify(rnd_pos),
     })
     .then((res) => res.json())
-    .then((json) => console.log('postRndPoint: ', json.body))
-    .catch(error => console.log('postRndPoint error: ', error));
+    .then((json) => console.log('post random_point: ', json))
+    .catch(error => console.log('post random_point error: ', error));
 } //}}}
 
-function get_point_on_token(token) { //{{{
-  fetch(`http://${SERVER}:${PORT}/getPointOnToken?token=${token}`)
-    .then((res) => res.json())
-    .then((json) => console.log('getPointOnToken:', json.body))
-    .catch(error => console.log('getPointOnToken error: ', error));
-} //}}}
-
-function get_check_point() {
-  fetch(`http://${SERVER}:${PORT}/getCheckPoint`)
+function get_check_point() { //{{{
+  fetch(`${URL}/getCheckPoint`)
     .then((res) => res.json())
     .then((json) => console.log('getCheckPoint:', json.body))
     .catch(error => console.log('getCheckPoint error: ', error));
-}
+} //}}}
 
-function put_distance_point(point) {
-  console.log('point: ', point)
-  fetch(`http://${SERVER}:${PORT}/putDistance`, {
+function post_check_point(point) { //{{{
+  fetch(`${URL}/api/check_point/post`, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method: 'POST',
+      body: JSON.stringify(point),
+    })
+    .then((res) => res.json())
+    .then((json) => console.log('post check_point: ', json))
+    .catch(error => console.log('post check_point error: ', error));
+} //}}}
+
+function put_distance_point(point) { //{{{
+  console.log('distance point: ', point)
+  fetch(`${URL}/check_point/put_distance`, {
       headers: {
         'Content-Type': 'application/json'
       },
@@ -92,16 +112,11 @@ function put_distance_point(point) {
       body: JSON.stringify(point),
     })
     .then((res) => res.json())
-    .then((json) => console.log('Distance', json.body))
+    .then((json) => console.log('Distance', json))
     .catch(error => console.log('putDistance error: ', error));
-}
+} //}}}
 
-post_rnd_point();
-post_rnd_point();
-post_rnd_point();
-get_points();
-post_point(static_point);
-get_point_on_token(static_point.token);
-
-get_check_point()
-put_distance_point(static_point);
+// get_points();
+// post_point(static_point);
+post_point({});
+// post_point({test: "test"});
