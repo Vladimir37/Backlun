@@ -1,4 +1,4 @@
-### backun - univesral backend for your frontend project
+### backun - univesral backend for your frontend
 
 This project is important for any front-end developer, who whant to build a app with no details about backend programming.
 
