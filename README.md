@@ -5,10 +5,14 @@
 
 ### tests
   fetch-requests. Start: `npm install` inside `__test__` and:
-  * `node request.test.js`
-  * `babel-node request.test.js` (if it didn't work)
 
-### Backend
+### dependencies
+  * Nothing. This project fully all-sufficient.
+
+### installation
+  * Nothing. Just start your backlun and use it.
+
+### What available now:
 
 #### #blog
   Usable blog
