@@ -1,9 +1,10 @@
 package geopos
 
 import (
+	"Backlun/back/conf"
 	"fmt"
-
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -16,21 +17,36 @@ type Config struct {
 	Host string
 }
 
+// declare states
+var msgState *conf.MsgState
+var geoState *GeoState
+var checkPoint *GeoPoint
+
 func (config *Config) SetDefault() { // {{{
 	config.Port = "8000"
 	config.Host = "localhost"
 } // }}}
 
-// home whitch specification {{{
-func serveHome(c *gin.Context) {
+func serveHome(c *gin.Context) { // {{{
 	if c.Request.URL.Path != "/" {
-		c.JSON(404, gin.H{"message": "Not found"})
+		c.JSON(http.StatusNotFound, msgState.Errors[http.StatusNotFound])
 	}
+
 	if c.Request.Method != "GET" {
-		c.JSON(405, gin.H{"message": "Method not allowed"})
+		c.JSON(http.StatusMethodNotAllowed, msgState.Errors[http.StatusMethodNotAllowed])
 	}
 	c.Writer.Header().Set("Content-Type", "text/html; charset=utf-8")
+
 	c.HTML(http.StatusOK, "index.html", "")
+} // }}}
+
+func noRoute(c *gin.Context) { // {{{
+	path := strings.Split(c.Request.URL.Path, "/")
+	if (path[1] != "") && (path[1] == "api") {
+		c.JSON(http.StatusNotFound, msgState.Errors[http.StatusNotFound])
+	} else {
+		c.HTML(http.StatusOK, "index.html", "")
+	}
 } // }}}
 
 // CORSMiddleware middleware witch headers for any RESTful requests {{{
@@ -57,9 +73,6 @@ func (server *Server) NewEngine(port string) {
 	router.Use(gin.Logger())
 	router.Use(gin.Recovery())
 
-	// add headers middleware
-	router.Use(CORSMiddleware())
-
 	// all frontend
 	router.LoadHTMLGlob("front/geopos/index.html")
 	router.Static("/src", "./front/geopos/static/")
@@ -67,26 +80,44 @@ func (server *Server) NewEngine(port string) {
 	// set api/handlers
 	router.GET("/", serveHome)
 
-	router.GET("/getPoints", GetPoints)
-	router.GET("/getPointOnToken", GetPointOnToken)
+	api := router.Group("api")
+	{
+		// add headers middleware
+		api.Use(CORSMiddleware())
 
-	router.POST("/postPoint", PostPoint)
-
-	router.PUT("/putDistance", PutDistance)
-	router.GET("/getCheckPoint", GetCheckPoint)
-	router.POST("/postCheckPoint", PostCheckPoint)
-
-	router.GET("/getRndPoint", GetRndPoint)
-	router.POST("/postRndPoint", PostRndPoint)
+		// points
+		points := api.Group("points")
+		{
+			points.GET("/get", GetPoints)
+			points.GET("/get_from_token", GetPointFromToken)
+			points.POST("/post", PostPoint)
+		}
+		random_point := api.Group("random_point")
+		{
+			random_point.GET("/get", GetRndPoint)
+			random_point.POST("/post", PostRndPoint)
+		}
+		check_point := api.Group("check_point")
+		{
+			check_point.PUT("/put_distance", PutDistance)
+			check_point.GET("/get", GetCheckPoint)
+			check_point.POST("/post", PostCheckPoint)
+		}
+	}
 
 	// start server
 	router.Run(":" + port)
 } // }}}
 
-// Start will start new server {{{
+// Start will start new server
 func Start(args []string) {
+	// config
 	config := Config{}
 	config.SetDefault()
+	msgState = conf.NewMsgState()
+	msgState.SetErrors()
+	geoState = NewGeoState()
+	checkPoint = NewGeoPoint()
 
 	if len(args) > 3 { // set port
 		config.Port = args[3]
@@ -104,4 +135,4 @@ func Start(args []string) {
 	// star server
 	thisServer := new(Server)
 	thisServer.NewEngine(config.Port)
-} // }}}
+}

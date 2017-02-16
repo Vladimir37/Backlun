@@ -1,6 +1,7 @@
 package geopos
 
 import (
+	"Backlun/back/conf"
 	"fmt"
 	"net/http"
 
@@ -9,53 +10,35 @@ import (
 
 // GetPoints get all points
 func GetPoints(c *gin.Context) { // {{{
-	if len(geostate.Location) > 0 {
-		c.JSON(200, gin.H{
-			"status":  0,
-			"message": "Success",
-			"body":    geostate.Location,
-		})
+	fmt.Printf("\ngeost: %v", geoState)
+	if len(geoState.Location) > 0 {
+		c.JSON(http.StatusOK, conf.GiveResponse(geoState.Location))
 	} else {
-		c.JSON(http.StatusNoContent, gin.H{
-			"status":  3,
-			"message": "Geostate is empty",
-			"body":    nil,
-		})
+		c.JSON(http.StatusInternalServerError, msgState.Errors[http.StatusInternalServerError])
 	}
 } // }}}
 
-func PostPoint(c *gin.Context) { // {{{
-	var point GeoPoint
-	err := c.BindJSON(&point)
+func PostPoint(c *gin.Context) {
+	var request GeoPoint
 
+	err := c.BindJSON(&request)
+	// fmt.Printf("\nreq: %v", request)
 	if err != nil {
 		fmt.Println(err)
-		c.JSON(400, gin.H{
-			"status":  1,
-			"message": "Incorrect data",
-			"body":    nil,
-		})
+		c.JSON(http.StatusBadRequest, msgState.Errors[http.StatusBadRequest])
 		return
 	}
 
-	geostate.Add(&point)
+	geoState.Add(&request)
 
-	c.JSON(200, gin.H{
-		"status":  0,
-		"message": "Success",
-		"body":    point,
-	})
-} // }}}
+	c.JSON(http.StatusOK, conf.GiveResponse(request))
+}
 
 func GetRndPoint(c *gin.Context) { // {{{
 	var request GeoPoint
 	request.SetRnd()
 
-	c.JSON(200, gin.H{
-		"status":  0,
-		"message": "Success",
-		"body":    request,
-	})
+	c.JSON(http.StatusOK, conf.GiveResponse(request))
 } // }}}
 
 func PostRndPoint(c *gin.Context) { // {{{
@@ -64,48 +47,28 @@ func PostRndPoint(c *gin.Context) { // {{{
 	err := c.BindJSON(&request)
 	if err != nil {
 		fmt.Println(err)
-		c.JSON(400, gin.H{
-			"status":  1,
-			"message": "Incorrect data",
-			"body":    nil,
-		})
+		c.JSON(http.StatusBadRequest, msgState.Errors[http.StatusBadRequest])
 		return
 	}
 
-	geostate.Add(&request)
+	geoState.Add(&request)
 
-	c.JSON(200, gin.H{
-		"status":  0,
-		"message": "Success",
-		"body":    request,
-	})
+	c.JSON(http.StatusOK, conf.GiveResponse(request))
 } // }}}
 
-func GetPointOnToken(c *gin.Context) { // {{{
+func GetPointFromToken(c *gin.Context) { // {{{
 
 	token := c.Request.URL.Query().Get("token")
 	if token == "" {
-		c.JSON(403, gin.H{
-			"status":  1,
-			"message": "Incorrect request params",
-			"body":    nil,
-		})
+		c.JSON(http.StatusBadRequest, msgState.Errors[http.StatusBadRequest])
 		return
 	}
 	fmt.Printf("\n## get point: %s\n", token)
 
-	if point, ok := geostate.GetPoint(token); ok {
-		c.JSON(200, gin.H{
-			"status":  0,
-			"message": "Success",
-			"body":    point,
-		})
+	if point, ok := geoState.GetPoint(token); ok {
+		c.JSON(http.StatusOK, conf.GiveResponse(point))
 	} else {
-		c.JSON(403, gin.H{
-			"status":  13,
-			"message": "point didn't found",
-			"body":    nil,
-		})
+		c.JSON(http.StatusNotFound, msgState.Errors[http.StatusNotFound])
 	}
 } // }}}
 
@@ -115,30 +78,18 @@ func PutDistance(c *gin.Context) { // {{{
 	err := c.BindJSON(&request)
 	if err != nil {
 		fmt.Println(err)
-		c.JSON(400, gin.H{
-			"status":  1,
-			"message": "Incorrect request",
-			"body":    nil,
-		})
+		c.JSON(http.StatusBadRequest, msgState.Errors[http.StatusBadRequest])
 		return
 	}
 
-	geostate.Add(&request)
+	geoState.Add(&request)
 	distance := checkPoint.GetDistance(&request)
 
-	c.JSON(200, gin.H{
-		"status":  0,
-		"message": "Success",
-		"body":    distance,
-	})
+	c.JSON(http.StatusOK, conf.GiveResponse(distance))
 } // }}}
 
 func GetCheckPoint(c *gin.Context) { // {{{
-	c.JSON(200, gin.H{
-		"status":  0,
-		"message": "Success",
-		"body":    checkPoint,
-	})
+	c.JSON(http.StatusOK, conf.GiveResponse(checkPoint))
 } // }}}
 
 func PostCheckPoint(c *gin.Context) { // {{{
@@ -147,19 +98,11 @@ func PostCheckPoint(c *gin.Context) { // {{{
 	err := c.BindJSON(&request)
 	if err != nil {
 		fmt.Println(err)
-		c.JSON(400, gin.H{
-			"status":  1,
-			"message": "Incorrect data",
-			"body":    nil,
-		})
+		c.JSON(http.StatusBadRequest, msgState.Errors[http.StatusBadRequest])
 		return
 	}
 
 	checkPoint = &request
 
-	c.JSON(200, gin.H{
-		"status":  0,
-		"message": "Success",
-		"body":    checkPoint,
-	})
+	c.JSON(http.StatusOK, conf.GiveResponse(checkPoint))
 } // }}}

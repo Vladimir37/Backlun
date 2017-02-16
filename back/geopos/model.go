@@ -43,10 +43,6 @@ type GeoState struct {
 	sync.RWMutex
 }
 
-var geostate = NewGeoState()
-
-var checkPoint = NewGeoPoint()
-
 // ========== GeoState methods
 
 // NewGeoState will return a new state {{{
@@ -93,23 +89,23 @@ func (geost *GeoState) Print() {
 	fmt.Print(geost)
 } // }}}
 
-// GetPoint new point with token
+// GetPoint new point with token// {{{
 func (geost *GeoState) GetPoint(token string) (point GeoPoint, ok bool) {
 	geost.Lock()
 	defer geost.Unlock()
 	point, ok = geost.Location[token]
 	return point, ok
-}
+} // }}}
 
 // ========== GeoPoint methods
 
-// GetDistance set random data to a point
+// GetDistance set random data to a point// {{{
 func (point *GeoPoint) GetDistance(toPoint *GeoPoint) (distance float64) {
 	distance = math.Sqrt(
 		math.Pow(point.Coordinates[0]-toPoint.Coordinates[0], 2) +
 			math.Pow(point.Coordinates[1]-toPoint.Coordinates[1], 2))
 	return distance
-}
+} // }}}
 
 // NewGeoPoint will return a new point {{{
 func NewGeoPoint() *GeoPoint {
