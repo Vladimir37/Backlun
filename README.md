@@ -1,5 +1,7 @@
 ### backun - universal backend server
 
+<img align="right" src="docs/backun-logo.png">
+
 ### installation/dependencies
   * Nothing. Backun fully all-sufficient.
 
