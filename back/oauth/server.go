@@ -1,37 +1,80 @@
 package oauth
 
 import (
+	"Backlun/back/conf"
+	"encoding/json"
 	"fmt"
-
+	"io/ioutil"
 	"net/http"
+	"strings"
+
+	"golang.org/x/oauth2"
+	"golang.org/x/oauth2/google"
 
 	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 
-// Server structure
+// configure structurs
 type Server struct{}
 
-var Host string = "localhost"
-var Port string = "8000"
-var KeyFile string = "key.json"
+// Credentials which stores google ids.
+type Credentials struct {
+	Cid     string `json:"cid"`
+	Csecret string `json:"csecret"`
+}
 
-func serveHome(c *gin.Context) {
-	if c.Request.URL.Path != "/" {
-		c.JSON(404, gin.H{"message": "Not found"})
+type Config struct {
+	Port    string
+	Host    string
+	KeyFile string
+	Cred    Credentials
+}
+
+// configure vars
+var config *Config
+var msgState *conf.MsgState
+var confTemp *oauth2.Config
+
+func (cred *Credentials) SetFromFile(keyf string) *conf.ApiError { // {{{
+	file, err := ioutil.ReadFile(keyf)
+	if err != nil {
+		return conf.NewApiError(err)
 	}
+
+	err = json.Unmarshal(file, &cred)
+	if err != nil {
+		return conf.NewApiError(err)
+	}
+	return conf.NewApiError(err)
+} // }}}
+
+func (config *Config) SetDefault() { // {{{
+	config.Host = "localhost"
+	config.Port = "8000"
+	config.KeyFile = "key.json"
+	config.Cred.Cid = "295529031882-ap6njd8e8p0bmggmvkb7t0iflhcetjn1.apps.googleusercontent.com"
+	config.Cred.Csecret = "ICiVhKO51UxbNfIQVR7WudxH"
+} // }}}
+
+// ========== homepage
+
+func serveHome(c *gin.Context) { // {{{
+	if c.Request.URL.Path != "/" {
+		c.JSON(http.StatusNotFound, msgState.Errors[http.StatusNotFound])
+	}
+
 	if c.Request.Method != "GET" {
-		c.JSON(405, gin.H{"message": "Method not allowed"})
+		c.JSON(http.StatusMethodNotAllowed, msgState.Errors[http.StatusMethodNotAllowed])
 	}
 	c.Writer.Header().Set("Content-Type", "text/html; charset=utf-8")
+
 	c.HTML(http.StatusOK, "index.html", "")
-}
+} // }}}
 
-func lockData(cont *gin.Context) {
-	cont.JSON(200, gin.H{"message: ": "here is locked data, you have got auth data!"})
-}
+// ========== middlewares
 
-// AuthorizeRequest is used to authorize a request for a certain end-point group.
+// AuthorizeRequest is used to authorize a request for a certain end-point group.// {{{
 func AuthorizeRequest() gin.HandlerFunc {
 	return func(thisContext *gin.Context) {
 		session := sessions.Default(thisContext)
@@ -42,9 +85,9 @@ func AuthorizeRequest() gin.HandlerFunc {
 		}
 		thisContext.Next()
 	}
-}
+} // }}}
 
-// CORSMiddleware middleware witch headers for any RESTful requests
+// CORSMiddleware middleware witch headers for any RESTful requests// {{{
 func CORSMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
@@ -61,9 +104,20 @@ func CORSMiddleware() gin.HandlerFunc {
 			c.Next()
 		}
 	}
-}
+} // }}}
 
-// NewEngine return the new gin server
+func noRoute(c *gin.Context) { // {{{
+	path := strings.Split(c.Request.URL.Path, "/")
+	if (path[1] != "") && (path[1] == "api") {
+		c.JSON(http.StatusNotFound, msgState.Errors[http.StatusNotFound])
+	} else {
+		c.HTML(http.StatusOK, "index.html", "")
+	}
+} // }}}
+
+// ========== server
+
+// NewEngine return the new gin server// {{{
 func (server *Server) NewEngine(port string) {
 	router := gin.Default()
 
@@ -86,41 +140,67 @@ func (server *Server) NewEngine(port string) {
 	router.LoadHTMLGlob("front/oauth/index.html")
 	router.Static("/src", "./front/oauth/static/")
 
-	// set api/handlers
+	// set specification
 	router.GET("/", serveHome)
-	router.GET("/login", LoginHandler)
-	router.GET("/auth", AuthHandler)
 
-	// v1 group: here is API for authorized query
-	authorized := router.Group("/v1")
-	authorized.Use(AuthorizeRequest())
+	// set api/handlers
+	api := router.Group("api")
 	{
-		authorized.GET("/test", lockData)
+		api.GET("/login", LoginHandler)
+		api.GET("/auth", AuthHandler)
+		//  group: here is API for authorized query
+		authorized := router.Group("/lock")
+		authorized.Use(AuthorizeRequest())
+		{
+			authorized.GET("/test", lockTest)
+		}
 	}
 
+	// no route, bad url
+	router.NoRoute(noRoute)
 	router.Run(":" + port)
-}
+} // }}}
 
 func Start(args []string) {
+	// configure
+	config = &Config{}
+	config.SetDefault()
+	msgState = conf.NewMsgState()
+	msgState.SetErrors()
 
 	if len(args) > 3 { // set port
-		Port = args[3]
+		config.Port = args[3]
 	}
 	if len(args) > 4 { // set host
-		Host = args[4]
+		config.Host = args[4]
 	}
 	if len(args) > 5 { // set key
-		KeyFile = args[5]
+		config.KeyFile = args[5]
+	}
+	err := config.Cred.SetFromFile(config.KeyFile)
+	if err != nil {
+		fmt.Println(err)
+	}
+	// init oauth config
+	//scope: https://developers.google.com/identity/protocols/googlescopes#google_sign-in
+	confTemp = &oauth2.Config{
+		ClientID:     config.Cred.Cid,
+		ClientSecret: config.Cred.Csecret,
+		RedirectURL:  "http://" + config.Host + ":" + config.Port + "/auth",
+		Scopes: []string{
+			"https://www.googleapis.com/auth/userinfo.email",
+		},
+		Endpoint: google.Endpoint,
 	}
 
 	// info
 	fmt.Println("---------------")
-	fmt.Println("Selected port: " + Port)
-	fmt.Println("Selected host: " + Host)
-	fmt.Println("Selected key file: " + KeyFile)
+	fmt.Println("Selected port: " + config.Port)
+	fmt.Println("Selected host: " + config.Host)
+	fmt.Println("Selected key file: " + config.KeyFile)
 	fmt.Println("---------------")
 
 	// star server
 	thisServer := new(Server)
-	thisServer.NewEngine(Port)
+	thisServer.NewEngine(config.Port)
 }
