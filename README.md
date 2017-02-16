@@ -13,7 +13,7 @@ This project is important for any front-end developer, who whant to build a app 
   * `node request.test.js`
   * `babel-node request.test.js` (if it didn't work)
   
-### What backend functions available now:
+### What backend things available now:
 
 #### #blog
   Usable blog
