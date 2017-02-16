@@ -19,10 +19,10 @@ This project is important for any front-end developer, who whant to build a app 
   Awesome forum.
   
 #### #geopos
-  Geoposition! Give a point on server and go.
+  Geoposition. Give a point to server and go.
   
 #### #market
-  Trade a little things.
+  Trade market.
 
 #### #oauth2
   Oauth server with use google api. Start:
