@@ -8,12 +8,12 @@ This project is important for any front-end developer, who whant to build a app 
 ### installation
   * Nothing. Just start your backlun and use it.
 
-### #tests
+### tests
   We make in free form javascript tests with fetch requests. You have examples for all request to backend, just copy-paste it in you application. If you want to start it, do command: `npm install` inside folder. Start `test` in `__test__`:
   * `node request.test.js`
   * `babel-node request.test.js` (if it didn't work)
   
-### Backend
+### What backend functions available now:
 
 #### #blog
   Usable blog
