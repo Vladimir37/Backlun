@@ -1,8 +1,10 @@
 package chat
 
 import (
+	"Backlun/back/conf"
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -10,19 +12,39 @@ import (
 // Server structure
 type Server struct{}
 
-var Port string = "8000"
-var Host string = "localhost"
+type Config struct {
+	Port string
+	Host string
+}
 
-func serveHome(c *gin.Context) {
+var msgState *conf.MsgState
+
+func (config *Config) SetDefault() { // {{{
+	config.Port = "8000"
+	config.Host = "localhost"
+} // }}}
+
+func serveHome(c *gin.Context) { // {{{
 	if c.Request.URL.Path != "/" {
-		c.JSON(404, gin.H{"message": "Not found"})
+		c.JSON(http.StatusNotFound, msgState.Errors[http.StatusNotFound])
 	}
+
 	if c.Request.Method != "GET" {
-		c.JSON(405, gin.H{"message": "Method not allowed"})
+		c.JSON(http.StatusMethodNotAllowed, msgState.Errors[http.StatusMethodNotAllowed])
 	}
 	c.Writer.Header().Set("Content-Type", "text/html; charset=utf-8")
+
 	c.HTML(http.StatusOK, "index.html", "")
-}
+} // }}}
+
+func noRoute(c *gin.Context) { // {{{
+	path := strings.Split(c.Request.URL.Path, "/")
+	if (path[1] != "") && (path[1] == "api") {
+		c.JSON(http.StatusNotFound, msgState.Errors[http.StatusNotFound])
+	} else {
+		c.HTML(http.StatusOK, "index.html", "")
+	}
+} // }}}
 
 func (server *Server) NewEngine(port string) {
 	// router
@@ -34,32 +56,43 @@ func (server *Server) NewEngine(port string) {
 
 	// start chat hub
 	go hub.run()
+	// specification page
+	router.GET("/", serveHome)
 
 	// set api/handlers
-	router.GET("/", serveHome)
-	router.GET("/ws", serveWs)
+	api := router.Group("/api")
+	{
+		api.GET("/ws", serveWs)
+	}
+
+	// no route, bad url
+	router.NoRoute(noRoute)
 
 	// start server
 	router.Run(":" + port)
 }
 
 func Start(args []string) {
-	// set port
-	if len(args) > 2 {
-		Port = args[2]
+	// configure
+	config := Config{}
+	config.SetDefault()
+	msgState = conf.NewMsgState()
+	msgState.SetErrors()
+
+	if len(args) > 2 { // set port
+		config.Port = args[2]
 	}
-	// set host
-	if len(args) > 2 {
-		Host = args[2]
+	if len(args) > 2 { // set port
+		config.Host = args[2]
 	}
 
 	// info
 	fmt.Println("---------------")
-	fmt.Println("Selected port: " + Port)
-	fmt.Println("Selected host: " + Host)
+	fmt.Println("Selected port: " + config.Port)
+	fmt.Println("Selected host: " + config.Host)
 	fmt.Println("---------------")
 
 	// star server
 	thisServer := new(Server)
-	thisServer.NewEngine(Port)
+	thisServer.NewEngine(config.Port)
 }
