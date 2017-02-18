@@ -14,7 +14,7 @@
         <p class="main-text">You can get the file from static folder at the address <span class="main-addr">/src</span>.</p>
         <p class="main-text">Example: <span class="main-addr">Backlun/front/geopos/static/js/build/main.js</span> -> <span class="main-addr">/src/js/build/main.js</span></p>
         <h2 class="main-title">Geopos API</h2>
-        <p class="main-text">Params marked with asterisk (*) are required. The contents of the field "Response" is located in the field "body" in Server response object. When editing is necessary to send the contents of all fields - unsent field are cleared.</p>
+        <p class="main-text">Params marked with asterisk (*) are required. The contents of the field "Response" is located in the field "body" in Server response object.</p>
         <table class="table table-striped table-hover">
             <tr>
                 <th>Method</th>
@@ -100,6 +100,18 @@
                 <td>Get random point</td>
             </tr>
         </table>
+        <h2 class="main-title">Standard objects</h2>
+        <p>Server response:</p>
+        <article class="obj-panel">
+            status <span class="param-type">int</span><br>
+            message <span class="param-type">string</span><br>
+            body <span class="param-type">any</span><br>
+        </article>
+        <p class="main-text">Status code: 0 - success, 1-9 - various errors, 10 - not found.</p>
+        <p>Point object:</p>
+        <article class="obj-panel">
+            <!-- Тут вот описание Point object -->
+        </article>
     </main>
 </body>
 </html>
