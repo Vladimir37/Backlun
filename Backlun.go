@@ -86,6 +86,7 @@ func printFullHelp() {
 	fmt.Println("— forum")
 	fmt.Println("— oauth")
 	fmt.Println("— chat")
+	fmt.Println("— geopos")
 	fmt.Println("")
 	fmt.Println("You can run \"help\" and \"start\" for any platform")
 	fmt.Println("")
@@ -98,19 +99,33 @@ func printFullHelp() {
 func printPlatformHelp(platform string) {
 	switch platform {
 	case "todo":
-		//
+		fmt.Println("Simple ToDo list. You can create, edite and delete tasks and categories.")
+		fmt.Println("Start:")
+		fmt.Println("\"start todo [<port>]\"")
 	case "blog":
-		//
+		fmt.Println("Blog. REST API. You can log in, create, edite and delete post. You can alco comment on the posts.")
+		fmt.Println("Start:")
+		fmt.Println("\"start blog [<port>]\"")
 	case "market":
-		//
+		fmt.Println("E-commerce. REST API. You can register, log in, manage your shopping cart and make orders.")
+		fmt.Println("Start:")
+		fmt.Println("\"start market [<port>]\"")
 	case "forum":
-		//
+		fmt.Println("Forum. REST API. You can register, log in, create threads and reply to the threads.")
+		fmt.Println("Start:")
+		fmt.Println("\"start forum [<port>]\"")
 	case "chat":
-		//
+		fmt.Println("Simple chat on WebSockets.")
+		fmt.Println("Start:")
+		fmt.Println("\"start chat [<port>]\"")
 	case "oauth":
-		//
+		fmt.Println("OAuth 2.0 server on Google API.")
+		fmt.Println("Start:")
+		fmt.Println("\"start oauth [<port> <host> <key>]\"")
 	case "geopos":
-		//
+		fmt.Println("Geoposition. Give a point on server and go.")
+		fmt.Println("Start:")
+		fmt.Println("\"start geopos [<port>]\"")
 	default:
 		fmt.Println("---------------")
 		fmt.Println("ERROR")

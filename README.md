@@ -35,3 +35,9 @@
 
 #### #todo
   Easy todo
+
+### Creators
+
+**General Investor**: https://github.com/b4by
+
+**Developers**: https://github.com/Vladimir37, https://github.com/asm-jaime

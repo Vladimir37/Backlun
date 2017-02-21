@@ -2,19 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>chat Backlun</title>
+    <title>Chat Backlun</title>
     <link rel="stylesheet" href="/src/bootstrap.min.css">
     <link rel="stylesheet" href="/src/index.css">
 </head>
 <body>
     <main class="jumbotron">
-        <h1 class="main-title">chat List Backlun</h1>
+        <h1 class="main-title">Chat Backlun</h1>
         <p class="main-text">Main page - <span class="main-addr">Backlun/front/chat/index.html</span>.</p>
         <p class="main-text">Static folder - <span class="main-addr">Backlun/front/chat/static/</span>.</p>
         <p class="main-text">You can get the file from static folder at the address <span class="main-addr">/src</span>.</p>
         <p class="main-text">Example: <span class="main-addr">Backlun/front/chat/static/js/build/main.js</span> -> <span class="main-addr">/src/js/build/main.js</span></p>
-        <h2 class="main-title">chat API</h2>
-        <p class="main-text">.</p>
+        <h2 class="main-title">Chat API</h2>
         <table class="table table-striped table-hover">
             <tr>
                 <th>Method</th>
@@ -25,12 +24,45 @@
             </tr>
             <tr>
                 <td>ws</td>
-                <td>/ws</td>
+                <td>/api/ws</td>
                 <td>-</td>
                 <td>
                     Open of <span class="response-obj">websocket connection</span>
                 </td>
                 <td>Open websocket connection and write/read some msg</td>
+            </tr>
+        </table>
+        <h2 class="main-title">WebSocket API</h2>
+        <table class="table table-striped table-hover">
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Data</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>connect</td>
+                <td>Server</td>
+                <td>-</td>
+                <td>The connection is established</td>
+            </tr>
+            <tr>
+                <td>connectFailed</td>
+                <td>Server</td>
+                <td>-</td>
+                <td>Connection error</td>
+            </tr>
+            <tr>
+                <td>close</td>
+                <td>Server</td>
+                <td>-</td>
+                <td>Connection closed</td>
+            </tr>
+            <tr>
+                <td>message</td>
+                <td>Server</td>
+                <td>utf8Data <span class="response-obj">string</span></td>
+                <td>Message received</td>
             </tr>
         </table>
     </main>
