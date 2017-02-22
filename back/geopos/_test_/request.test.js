@@ -6,8 +6,9 @@ const PORT = "8000";
 const URL = `http://${SERVER}:${PORT}`
 
 const static_point = {
-  token: gen_token(),
-  coordinates: [gen_num(), gen_num()],
+  Type: 'Point',
+  Token: gen_token(),
+  Coordinates: [gen_num(), gen_num()],
 };
 
 //gen data {{{
@@ -30,18 +31,18 @@ function gen_token() {
 function get_points() { //{{{
   fetch(`${URL}/api/points/get`)
     .then((res) => res.json())
-    .then((json) => console.log('get points: ', json))
+    .then((json) => console.log('get points: ', json.body))
     .catch(error => console.log('get points error: ', error));
 } //}}}
 
 function get_point_from_token(token) { //{{{
-  fetch(`${URL}/points/get_from_token?token=${token}`)
+  fetch(`${URL}/api/points/get_from_token?token=${token}`)
     .then((res) => res.json())
     .then((json) => console.log('get_from_token:', json))
     .catch(error => console.log('get_from_token error: ', error));
 } //}}}
 
-function post_point(point, sample) {
+function post_point(point, sample) {//{{{
   fetch(`${URL}/api/points/post`, {
       headers: {
         'Content-Type': 'application/json'
@@ -58,32 +59,33 @@ function post_point(point, sample) {
       console.log('post point: ', json)
     })
     .catch(error => console.log('post point error: ', error));
-}
+}//}}}
 
 function get_rnd_point() { //{{{
-  fetch(`${URL}/random_point/get`)
+  fetch(`${URL}/api/random_point/get`)
     .then((res) => res.json())
     .then((json) => console.log('get random_point:', json))
     .catch(error => console.log('get random_point error: ', error));
 } //}}}
 
-function post_rnd_point() { //{{{
+function post_rnd_point() {//{{{
   let rnd_pos = {
-    token: gen_token(),
-    coordinates: [gen_num(), gen_num()],
+    Type: 'Point',
+    Token: gen_token(),
+    Coordinates: [gen_num(), gen_num()],
   };
 
-  fetch(`${URL}/random_point/post`, {
+  fetch(`${URL}/api/random_point/post`, {
       method: 'POST',
       body: JSON.stringify(rnd_pos),
     })
     .then((res) => res.json())
     .then((json) => console.log('post random_point: ', json))
     .catch(error => console.log('post random_point error: ', error));
-} //}}}
+}//}}}
 
 function get_check_point() { //{{{
-  fetch(`${URL}/getCheckPoint`)
+  fetch(`${URL}/api/check_point/get`)
     .then((res) => res.json())
     .then((json) => console.log('getCheckPoint:', json.body))
     .catch(error => console.log('getCheckPoint error: ', error));
@@ -104,7 +106,7 @@ function post_check_point(point) { //{{{
 
 function put_distance_point(point) { //{{{
   console.log('distance point: ', point)
-  fetch(`${URL}/check_point/put_distance`, {
+  fetch(`${URL}/api/check_point/put_distance`, {
       headers: {
         'Content-Type': 'application/json'
       },
@@ -116,7 +118,16 @@ function put_distance_point(point) { //{{{
     .catch(error => console.log('putDistance error: ', error));
 } //}}}
 
-// get_points();
-// post_point(static_point);
+function get_full_response() { //{{{
+  fetch(`${URL}/api/random_point/get`)
+    .then((res) => res.json())
+    .then((json) => console.log('get response: ', json))
+    .catch(error => console.log('get response error: ', error));
+} //}}}
+
+get_full_response();
 post_point({});
-// post_point({test: "test"});
+post_point({test: "test"});
+post_point(static_point);
+post_rnd_point();
+get_points();

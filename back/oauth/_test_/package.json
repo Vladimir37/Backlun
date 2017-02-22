@@ -1,10 +1,10 @@
 {
-  "name": "request.test",
+  "name": "Backun.test",
   "version": "0.0.1",
   "description": "test rest requests",
   "main": "request.test.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node request.test.js"
   },
   "author": "asm.jaime",
   "license": "MIT",

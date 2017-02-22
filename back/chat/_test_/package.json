@@ -1,6 +1,6 @@
 {
-  "name": "chat.test",
-  "version": "0.0.2",
+  "name": "Backun.test",
+  "version": "0.0.1",
   "description": "web-socket chat test",
   "main": "chat.ws.test.js",
   "scripts": {

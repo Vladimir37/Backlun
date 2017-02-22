@@ -10,8 +10,8 @@ import (
 
 // GetPoints get all points
 func GetPoints(c *gin.Context) { // {{{
-	fmt.Printf("\ngeost: %v", geoState)
 	if len(geoState.Location) > 0 {
+		// c.JSON(http.StatusOK, conf.GiveResponse(geoState.Location))
 		c.JSON(http.StatusOK, conf.GiveResponse(geoState.Location))
 	} else {
 		c.JSON(http.StatusInternalServerError, msgState.Errors[http.StatusInternalServerError])
@@ -22,7 +22,6 @@ func PostPoint(c *gin.Context) {
 	var request GeoPoint
 
 	err := c.BindJSON(&request)
-	// fmt.Printf("\nreq: %v", request)
 	if err != nil {
 		fmt.Println(err)
 		c.JSON(http.StatusBadRequest, msgState.Errors[http.StatusBadRequest])
@@ -63,7 +62,6 @@ func GetPointFromToken(c *gin.Context) { // {{{
 		c.JSON(http.StatusBadRequest, msgState.Errors[http.StatusBadRequest])
 		return
 	}
-	fmt.Printf("\n## get point: %s\n", token)
 
 	if point, ok := geoState.GetPoint(token); ok {
 		c.JSON(http.StatusOK, conf.GiveResponse(point))

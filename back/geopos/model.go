@@ -23,23 +23,23 @@ func rndStr(n int) string {
 // ========== data section
 
 type TokenReq struct {
-	Token string `form:"token" binding:"required"`
+	Token string `form:"Token" binding:"required"`
 }
 
 type DistanceReq struct {
-	Distance float64 `form:"distance" binding:"required"`
+	Distance float64 `form:"Distance" binding:"required"`
 }
 
 // GeoPoint for example {lat: 1.011111, lng: 1.0000450}
 type GeoPoint struct {
 	Type        string     `form:"-"`
-	Token       string     `form:"token" binding:"required"`
-	Coordinates [2]float64 `form:"coordinates" binding:"required"`
+	Token       string     `form:"Token" binding:"required"`
+	Coordinates [2]float64 `form:"Coordinates" binding:"required"`
 }
 
 // GeoState is map(array) of points
 type GeoState struct {
-	Location map[string]GeoPoint `json:"location"`
+	Location map[string]GeoPoint `json:"Location"`
 	sync.RWMutex
 }
 

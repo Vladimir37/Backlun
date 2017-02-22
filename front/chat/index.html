@@ -13,6 +13,8 @@
         <p class="main-text">Static folder - <span class="main-addr">Backlun/front/chat/static/</span>.</p>
         <p class="main-text">You can get the file from static folder at the address <span class="main-addr">/src</span>.</p>
         <p class="main-text">Example: <span class="main-addr">Backlun/front/chat/static/js/build/main.js</span> -> <span class="main-addr">/src/js/build/main.js</span></p>
+    <p class="main-text">Test it: <span class="main-addr">Backlun/back/chat/_test_/chat.ws.test.js</span> </p>
+    <p class="main-text">Command required: <span class="main-addr">npm install && npm run test</span> </p>
         <h2 class="main-title">Chat API</h2>
         <table class="table table-striped table-hover">
             <tr>
@@ -27,7 +29,7 @@
                 <td>/api/ws</td>
                 <td>-</td>
                 <td>
-                    Open of <span class="response-obj">websocket connection</span>
+                    Open a <span class="response-obj">websocket connection</span>
                 </td>
                 <td>Open websocket connection and write/read some msg</td>
             </tr>
@@ -44,13 +46,13 @@
                 <td>connect</td>
                 <td>Server</td>
                 <td>-</td>
-                <td>The connection is established</td>
+                <td>WebSocket Client Connected</td>
             </tr>
             <tr>
                 <td>connectFailed</td>
                 <td>Server</td>
                 <td>-</td>
-                <td>Connection error</td>
+                <td>Connect error</td>
             </tr>
             <tr>
                 <td>close</td>
