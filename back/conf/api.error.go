@@ -65,10 +65,10 @@ func (errst *MsgState) SetErrors() {
 	errst.Errors[http.StatusBadRequest] = gin.H{"status": 1, "message": "Bad request, incorrect data", "body": nil}
 	errst.Errors[http.StatusInternalServerError] = gin.H{"status": 5, "message": "Internal error, server can't return correct data", "body": nil}
 	errst.Errors[http.StatusMethodNotAllowed] = gin.H{"status": 1, "message": "Method not allowed", "body": nil}
-	errst.Errors[http.StatusNotFound] = gin.H{"status": 3, "message": "Request not found", "body": nil}
-	errst.Errors[http.StatusRequestTimeout] = gin.H{"status": 10, "message": "url req not found", "body": nil}
-	errst.Errors[http.StatusNotImplemented] = gin.H{"status": 10, "message": "req not implemented", "body": nil}
-	errst.Errors[http.StatusNoContent] = gin.H{"status": 3, "message": "empty content", "body": nil}
+	errst.Errors[http.StatusNotFound] = gin.H{"status": 10, "message": "Request not found", "body": nil}
+	errst.Errors[http.StatusRequestTimeout] = gin.H{"status": 1, "message": "url req not found", "body": nil}
+	errst.Errors[http.StatusNotImplemented] = gin.H{"status": 1, "message": "req not implemented", "body": nil}
+	errst.Errors[http.StatusNoContent] = gin.H{"status": 2, "message": "empty content", "body": nil}
 }
 
 func GiveResponse(some interface{}) (response *gin.H) {

@@ -83,7 +83,7 @@ func (server *Server) NewEngine(port string) {
 	api := router.Group("api")
 	{
 		// add headers middleware
-		api.Use(CORSMiddleware())
+		// api.Use(CORSMiddleware())
 
 		// points
 		points := api.Group("points")
@@ -105,6 +105,8 @@ func (server *Server) NewEngine(port string) {
 		}
 	}
 
+	// no route, bad url
+	router.NoRoute(noRoute)
 	// start server
 	router.Run(":" + port)
 } // }}}
