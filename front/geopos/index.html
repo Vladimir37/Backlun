@@ -20,7 +20,6 @@
     <h2 class="main-title">Geopos API</h2>
     <p class="main-text">Params marked with asterisk (*) are required. The contents of the field "Response"
       is located in the field "body" in Server response object.</p>
-    <p class="main-text">Example of response: <span class="main-addr">{body: { ... }, message: 'Success', status: 0}</span> </p>
     <table class="table table-striped table-hover">
       <tr>
         <th>Method</th>
@@ -120,18 +119,24 @@
     <p class="main-text">Status code: 0 - success, 1-9 - various errors, 10 - not found.</p>
     <p>Point object:</p>
     <article class="obj-panel">
-      Type: <span class="param-type">any</span><br>
+      Type: <span class="param-type">string</span><br>
       Token: <span class="param-type">string</span><br>
       Coordinats: <span class="param-type">[float64, float64]</span><br>
-      example:
-      <span>{ Type: 'Point', Token: 'Erzhn', Coordinates: [ 1.0511093343504192, 0.7650437151547923 ] }<span><br>
     </article>
-    <p> Geostate:</p>
+    <p>Geostate:</p>
     <article class="obj-panel">
+      Type: <span class="param-type">string</span><br>
       Token: <span class="param-type">string</span><br>
       Point: <span class="param-type">Point object</span><br>
-      example:
-      <span>{<br>
+    </article>
+    <h2 class="main-title">Examples</h2>
+    <p>Point object:</p>
+    <article class="obj-panel">
+      { Type: 'Point', Token: 'Erzhn', Coordinates: [ 1.0511093343504192, 0.7650437151547923 ] }
+    </article>
+    <p>Geostate:</p>
+    <article class="obj-panel">
+      {<br>
         VLdyv:
          { Type: 'Point',
            Token: 'VLdyv',
@@ -144,8 +149,7 @@
          { Type: 'Point',
            Token: 'hJfmw',
            Coordinates: [ 0.9386107042591662, 1.0641967512107868 ] }  <br>
-      }</span>
-    </article>
+      }
   </main>
 </body>
 
