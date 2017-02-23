@@ -10,12 +10,7 @@ import (
 
 // GetPoints get all points
 func GetPoints(c *gin.Context) { // {{{
-	if len(geoState.Location) > 0 {
-		// c.JSON(http.StatusOK, conf.GiveResponse(geoState.Location))
-		c.JSON(http.StatusOK, conf.GiveResponse(geoState.Location))
-	} else {
-		c.JSON(http.StatusInternalServerError, msgState.Errors[http.StatusInternalServerError])
-	}
+	c.JSON(http.StatusOK, conf.GiveResponse(geoState.Location))
 } // }}}
 
 func PostPoint(c *gin.Context) {
