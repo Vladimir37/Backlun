@@ -18,6 +18,13 @@ const thread = {
 };
 
 //gen data {{{
+
+function obj_to_param(obj) {
+  return Object.keys(obj).map(function(key) {
+    return key + '=' + obj[key];
+  }).join('&');
+}
+
 function gen_num() {
   const min = 1;
   const max = 10000;
@@ -33,8 +40,8 @@ function gen_token(len_token) {
   return text;
 } //}}}
 
-function get_all_threads() { //{{{
-  fetch(`${URL}/api/get/threads`)
+function get_all_threads(category) { //{{{
+  fetch(`${URL}/api/get/threads?${obj_to_param(category)}`)
     .then((res) => res.json())
     .then((json) => console.log('threads: ', json.body))
     .catch(error => console.log('threads error: ', error));
@@ -47,7 +54,7 @@ function get_all_categories() { //{{{
     .catch(error => console.log('threads error: ', error));
 } //}}}
 
-function create_thread(thread) {//{{{
+function create_thread(thread) { //{{{
   console.log('thread will be created: ', thread);
   fetch(`${URL}/api/forum/create`, {
       headers: {
@@ -61,9 +68,9 @@ function create_thread(thread) {//{{{
       console.log('thread: ', json)
     })
     .catch(error => console.log('post a post error: ', error));
-}//}}}
+} //}}}
 
-function registration(user) {//{{{
+function registration(user) { //{{{
   return fetch(`${URL}/api/auth/registration`, {
       headers: {
         'Content-Type': 'application/json'
@@ -78,13 +85,14 @@ function registration(user) {//{{{
       return user;
     })
     .catch(error => console.log('get auth error: ', error));
-}//}}}
+} //}}}
 
 // get_all_categories();
 registration(user).then(user => {
   thread.token = user.token;
   create_thread(thread);
-  get_all_threads();
+  get_all_threads({
+    category: 3
+  });
   // console.log(user);
 });
-
