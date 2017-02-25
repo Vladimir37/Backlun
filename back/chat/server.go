@@ -54,15 +54,17 @@ func (server *Server) NewEngine(port string) {
 	router.LoadHTMLGlob("front/chat/index.html")
 	router.Static("/src", "./front/chat/static/")
 
-	// start chat hub
-	go hub.run()
 	// specification page
 	router.GET("/", serveHome)
+
+	// start chat hub
+	hub := newHub()
+	go hub.run()
 
 	// set api/handlers
 	api := router.Group("/api")
 	{
-		api.GET("/ws", serveWs)
+		api.GET("/ws", func(c *gin.Context) { serveWs(hub, c) })
 	}
 
 	// no route, bad url

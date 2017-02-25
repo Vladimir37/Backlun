@@ -4,7 +4,7 @@ const fetch = require('node-fetch');
 
 const SERVER = "localhost";
 const PORT = "8000";
-const URL =`http://${SERVER}:${PORT}`
+const URL = `http://${SERVER}:${PORT}`
 
 const ws_client = new wsClient();
 
@@ -25,38 +25,38 @@ function gen_token() {
   return text;
 } //}}}
 
-ws_client.on('connectFailed', function(error) {//{{{
+ws_client.on('connectFailed', function(error) { //{{{
   console.log('Connect Error: ' + error.toString());
-});//}}}
+}); //}}}
 
-ws_client.on('connect', function(connection) {//{{{
+ws_client.on('connect', function(connection) { //{{{
   console.log('WebSocket Client Connected');
   connection.on('error', function(error) {
     console.log("Connection Error: " + error.toString());
   });
-
   connection.on('close', function() {
     console.log('echo-protocol Connection Closed');
   });
-
   connection.on('message', function(message) {
     if (message.type === 'utf8') {
       console.log("Received: '" + message.utf8Data + "'");
     }
   });
-
   function send_msg() {
     if (connection.connected) {
       const msg = {
         "message": gen_token()
       };
-      //ws_client.send(JSON.stringify(geo_pos));
       connection.sendUTF(JSON.stringify(msg));
-      setTimeout(send_msg, 10000);
     }
   }
-  send_msg();
-});//}}}
+  function start_sending(num) {
+    for (let i = 1; i < num; i++) {
+      setTimeout(send_msg, 3000*i);
+    }
+  }
+  start_sending(10);
+}); //}}}
 
 function get_error_request() { //{{{
   fetch(`${URL}/api/error_request`)

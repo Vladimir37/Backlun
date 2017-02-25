@@ -4,23 +4,22 @@ package chat
 // connections.
 type Hub struct {
 	// Registered connections.
-	connections map[*Conn]bool
-
+	connections map[*Client]bool
 	// Inbound messages from the connections.
 	broadcast chan []byte
-
 	// Register requests from the connections.
-	register chan *Conn
-
+	register chan *Client
 	// Unregister requests from connections.
-	unregister chan *Conn
+	unregister chan *Client
 }
 
-var hub = Hub{
-	broadcast:   make(chan []byte),
-	register:    make(chan *Conn),
-	unregister:  make(chan *Conn),
-	connections: make(map[*Conn]bool),
+func newHub() *Hub {
+	return &Hub{
+		broadcast:   make(chan []byte),
+		register:    make(chan *Client),
+		unregister:  make(chan *Client),
+		connections: make(map[*Client]bool),
+	}
 }
 
 func (h *Hub) run() {
@@ -37,9 +36,10 @@ func (h *Hub) run() {
 			for conn := range h.connections {
 				select {
 				case conn.send <- message:
+					// fmt.Printf("\nnick: %v\nmsg: %v\n", conn.nick, message)
 				default:
 					close(conn.send)
-					delete(hub.connections, conn)
+					delete(h.connections, conn)
 				}
 			}
 		}
