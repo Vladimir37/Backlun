@@ -5,6 +5,8 @@ import (
 	"strconv"
 	"time"
 
+	"errors"
+
 	randomdata "github.com/Pallinder/go-randomdata"
 )
 
@@ -18,11 +20,14 @@ type Card struct {
 type Player struct {
 	Name  string
 	User  bool
+	Stay  bool
 	Cards []Card
 	Sum   int
 }
 
 type Game struct {
+	Ended   bool
+	Winner  []Player
 	Cards   []Card
 	Players []Player
 	Token   string
@@ -30,14 +35,19 @@ type Game struct {
 
 // Requests
 
+type TokenReq struct {
+	Token string `form:"token" binding:"required"`
+}
+
 type StartReq struct {
 	Players int `form:"players" binding:"required"`
-	Decks   int `form:"decks" binding:"required"`
+	Decks   int `form:"decks"`
 }
 
 // Current
 
 var CurrentGames []Game
+var EndedGames []Game
 
 // Utility
 
@@ -47,6 +57,24 @@ func TakeCard(game *Game, player *Player) Card {
 	game.Cards = append(game.Cards[:num], game.Cards[num+1:]...)
 	player.Sum += player.Cards[len(player.Cards)-1].Value
 	return player.Cards[len(player.Cards)-1]
+}
+
+func FindPlayer(token string) (int, error) {
+	founded := false
+	targetIndex := 0
+
+	for index, game := range CurrentGames {
+		if game.Token == token {
+			founded = true
+			targetIndex = index
+		}
+	}
+
+	if founded {
+		return targetIndex, nil
+	} else {
+		return 0, errors.New("Not found")
+	}
 }
 
 // Generators
@@ -95,6 +123,7 @@ func GeneratePlayer(num int) []Player {
 	players = append(players, Player{
 		Name:  "Player",
 		User:  true,
+		Stay:  false,
 		Cards: emptyDeck,
 		Sum:   0,
 	})
@@ -121,6 +150,7 @@ func GeneratePlayer(num int) []Player {
 		players = append(players, Player{
 			Name:  name,
 			User:  false,
+			Stay:  false,
 			Cards: emptyDeck,
 			Sum:   0,
 		})
