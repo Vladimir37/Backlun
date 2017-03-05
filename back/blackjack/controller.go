@@ -88,11 +88,12 @@ func StartGame(c *gin.Context) {
 
 	var emptyPlayers []Player
 	newGame := Game{
-		Ended:   false,
-		Winner:  emptyPlayers,
-		Cards:   decks,
-		Players: GeneratePlayer(request.Players),
-		Token:   GenerateToken(26),
+		Ended:        false,
+		FinalMessage: "",
+		Winner:       emptyPlayers,
+		Cards:        decks,
+		Players:      GeneratePlayer(request.Players),
+		Token:        GenerateToken(26),
 	}
 
 	for _, player := range newGame.Players {
@@ -102,16 +103,23 @@ func StartGame(c *gin.Context) {
 
 	CurrentGames = append(CurrentGames, newGame)
 
+	CheckFullWinners(&newGame)
+
 	c.JSON(200, gin.H{
 		"status":  0,
 		"message": "Success",
 		"body":    CurrentGames,
 	})
+
+	if newGame.Ended {
+		DeactivateGame(newGame.Token)
+	}
+
 	return
 }
 
 func TakeCardGame(c *gin.Context) {
-	var request StartReq
+	var request TokenReq
 	err := c.Bind(&request)
 
 	if err != nil {
@@ -135,11 +143,31 @@ func TakeCardGame(c *gin.Context) {
 		return
 	}
 
-	//
+	emptyDeck := CheckCardsLen(&CurrentGames[index])
+
+	if !emptyDeck {
+		TakeCard(&CurrentGames[index], &CurrentGames[index].Players[0])
+	}
+
+	CheckFullWinners(&CurrentGames[index])
+
+	AllPlayersCicle(&CurrentGames[index])
+
+	c.JSON(200, gin.H{
+		"status":  0,
+		"message": "Success",
+		"body":    CurrentGames[index],
+	})
+
+	if CurrentGames[index].Ended {
+		DeactivateGame(CurrentGames[index].Token)
+	}
+
+	return
 }
 
 func StopTakeGame(c *gin.Context) {
-	var request StartReq
+	var request TokenReq
 	err := c.Bind(&request)
 
 	if err != nil {
@@ -163,5 +191,19 @@ func StopTakeGame(c *gin.Context) {
 		return
 	}
 
-	//
+	CurrentGames[index].Players[0].Stay = true
+
+	AllPlayersCicle(&CurrentGames[index])
+
+	c.JSON(200, gin.H{
+		"status":  0,
+		"message": "Success",
+		"body":    CurrentGames[index],
+	})
+
+	if CurrentGames[index].Ended {
+		DeactivateGame(CurrentGames[index].Token)
+	}
+
+	return
 }

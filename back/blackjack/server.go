@@ -47,6 +47,18 @@ func Start(args []string) {
 func getApiRouter(baseRouter *gin.Engine) {
 	api := baseRouter.Group("/api")
 	{
-		//
+		get := api.Group("/get")
+		{
+			get.GET("/one", GetGame)
+			get.GET("/all", GetAllGames)
+			get.GET("/ended", GetAllEndedGames)
+		}
+
+		game := api.Group("/game")
+		{
+			game.POST("/start", StartGame)
+			game.POST("/hit", TakeCardGame)
+			game.POST("/stand", StopTakeGame)
+		}
 	}
 }

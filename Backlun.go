@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	"Backlun/back/blackjack"
 	"Backlun/back/blog"
 	"Backlun/back/chat"
 	"Backlun/back/forum"
@@ -84,6 +85,7 @@ func printFullHelp() {
 	fmt.Println("— blog")
 	fmt.Println("— market")
 	fmt.Println("— forum")
+	fmt.Println("— blackjack")
 	fmt.Println("— oauth")
 	fmt.Println("— chat")
 	fmt.Println("— geopos")
@@ -144,6 +146,8 @@ func startServer(args []string) {
 		market.Start(args)
 	case "forum":
 		forum.Start(args)
+	case "blackjack":
+		blackjack.Start(args)
 	case "oauth":
 		oauth.Start(args)
 	case "chat":
