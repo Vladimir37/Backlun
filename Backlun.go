@@ -116,6 +116,10 @@ func printPlatformHelp(platform string) {
 		fmt.Println("Forum. REST API. You can register, log in, create threads and reply to the threads.")
 		fmt.Println("Start:")
 		fmt.Println("\"start forum [<port>]\"")
+	case "blackjack":
+		fmt.Println("Simple card game. REST API. You can play in blackjack.")
+		fmt.Println("Start:")
+		fmt.Println("\"start blackjack [<port>]\"")
 	case "chat":
 		fmt.Println("Simple chat on WebSockets.")
 		fmt.Println("Start:")
