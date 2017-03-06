@@ -171,7 +171,7 @@ func GenerateToken(strlen int) string {
 }
 
 func MakeDecision(value int) bool {
-	if value < 15 {
+	if value < 16 {
 		return true
 	} else if value < 18 {
 		return randomdata.Boolean()
@@ -191,7 +191,7 @@ func CheckFullWinners(game *Game) bool {
 	}
 	if len(game.Winner) == 1 {
 		game.FinalMessage = "One winner"
-	} else if len(game.Winner) < 1 {
+	} else if len(game.Winner) > 1 {
 		game.FinalMessage = "Several winners"
 	}
 
@@ -206,7 +206,9 @@ func checkMaxWinners(game *Game) {
 	maxSum := 0
 
 	for _, player := range game.Players {
-		if player.Sum >= maxSum {
+		if player.Sum > 21 {
+			continue
+		} else if player.Sum >= maxSum {
 			game.Winner = append(game.Winner, player)
 			game.Ended = true
 			maxSum = player.Sum
@@ -217,7 +219,7 @@ func checkMaxWinners(game *Game) {
 
 	if len(game.Winner) == 1 {
 		game.FinalMessage = "One winner"
-	} else if len(game.Winner) < 1 {
+	} else if len(game.Winner) > 1 {
 		game.FinalMessage = "Several winners"
 	}
 }
@@ -249,7 +251,7 @@ func AllPlayersCicle(game *Game) {
 			notStay = true
 			takeDecision := MakeDecision(player.Sum)
 			if takeDecision {
-				TakeCard(game, &player)
+				TakeCard(game, &game.Players[index])
 				CheckFullWinners(game)
 			} else {
 				game.Players[index].Stay = true

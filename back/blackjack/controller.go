@@ -96,9 +96,9 @@ func StartGame(c *gin.Context) {
 		Token:        GenerateToken(26),
 	}
 
-	for _, player := range newGame.Players {
-		TakeCard(&newGame, &player)
-		TakeCard(&newGame, &player)
+	for index, _ := range newGame.Players {
+		TakeCard(&newGame, &newGame.Players[index])
+		TakeCard(&newGame, &newGame.Players[index])
 	}
 
 	CurrentGames = append(CurrentGames, newGame)
@@ -108,7 +108,7 @@ func StartGame(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"status":  0,
 		"message": "Success",
-		"body":    CurrentGames,
+		"body":    newGame,
 	})
 
 	if newGame.Ended {
@@ -152,6 +152,11 @@ func TakeCardGame(c *gin.Context) {
 	CheckFullWinners(&CurrentGames[index])
 
 	AllPlayersCicle(&CurrentGames[index])
+
+	if !CurrentGames[index].Ended && CurrentGames[index].Players[0].Sum > 20 {
+		CurrentGames[index].Players[0].Stay = true
+		AllPlayersCicle(&CurrentGames[index])
+	}
 
 	c.JSON(200, gin.H{
 		"status":  0,
