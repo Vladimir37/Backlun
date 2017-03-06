@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Blackjack Backlun</title>
+    <link rel="stylesheet" href="/src/bootstrap.min.css">
+    <link rel="stylesheet" href="/src/index.css">
+</head>
+<body>
+    <main class="jumbotron">
+        <h1 class="main-title">Blackjack Backlun</h1>
+        <p class="main-text">Main page - <span class="main-addr">Backlun/front/blackjack/index.html</span>.</p>
+        <p class="main-text">Static folder - <span class="main-addr">Backlun/front/blackjack/static/</span>.</p>
+        <p class="main-text">You can get the file from static folder at the address <span class="main-addr">/src</span>.</p>
+        <p class="main-text">Example: <span class="main-addr">Backlun/front/blackjack/static/js/build/main.js</span> -> <span class="main-addr">/src/js/build/main.js</span></p>
+
+        <h2 class="main-title">Blackjack API</h2>
+        <p class="main-text">Params marked with asterisk (*) are required. The contents of the field "Response" is located in the field "body" in Server response object.</p>
+        <table class="table table-striped table-hover">
+            <tr>
+                <th>Method</th>
+                <th>Address</th>
+                <th>Params</th>
+                <th>Response</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>GET</td>
+                <td>/api/get/one</td>
+                <td>
+                    token* <span class="param-type">string</span>
+                </td>
+                <td>
+                    <span class="response-obj">Game object</span>
+                    </td>
+                <td>Get one game</td>
+            </tr>
+            <tr>
+                <td>GET</td>
+                <td>/api/get/all</td>
+                <td>-</td>
+                <td>
+                    Array of <span class="response-obj">Game objects</span>
+                </td>
+                <td>Get all active games</td>
+            </tr>
+            <tr>
+                <td>GET</td>
+                <td>/api/get/ended</td>
+                <td>-</td>
+                <td>
+                    Array of <span class="response-obj">Game objects</span>
+                </td>
+                <td>Get all completed games</td>
+            </tr>
+            <tr>
+                <td>POST</td>
+                <td>/api/game/start</td>
+                <td>
+                    players* <span class="param-type">int</span>
+                    decks <span class="param-type">int</span>
+                </td>
+                <td>
+                    <span class="response-obj">Game object</span>
+                </td>
+                <td>Start new game</td>
+            </tr>
+            <tr>
+                <td>POST</td>
+                <td>/api/game/hit</td>
+                <td>
+                    token* <span class="param-type">string</span>
+                </td>
+                <td>
+                    <span class="response-obj">Game object</span>
+                </td>
+                <td>Ask for one more card</td>
+            </tr>
+            <tr>
+                <td>POST</td>
+                <td>/api/game/stand</td>
+                <td>
+                    token* <span class="param-type">string</span>
+                </td>
+                <td>
+                    <span class="response-obj">Game object</span>
+                </td>
+                <td>Wait for the other players' turns</td>
+            </tr>
+        </table>
+
+        <h2 class="main-title">Standard objects</h2>
+        <p>Server response:</p>
+        <article class="obj-panel">
+            status <span class="param-type">int</span><br>
+            message <span class="param-type">string</span><br>
+            body <span class="param-type">any</span><br>
+        </article>
+        <p class="main-text">Status code: 0 - success, 1-9 - various errors, 10 - not found, 11 - forbidden.</p>
+        <p>Game object:</p>
+        <article class="obj-panel">
+            Ended <span class="param-type">bool</span><br>
+            FinalMessage <span class="param-type">string</span><br>
+            Winner <span class="param-type">Array of Player objects</span><br>
+            Cards <span class="param-type">Array of Card objects</span><br>
+            Players <span class="param-type">Array of Player objects</span><br>
+            Token <span class="param-type">string</span>
+        </article>
+        <p>Player object:</p>
+        <article class="obj-panel">
+            Name <span class="param-type">string</span><br>
+            User <span class="param-type">bool</span><br>
+            Stay <span class="param-type">bool</span><br>
+            Cards <span class="param-type">Array of Card objects</span><br>
+            Sum  <span class="param-type">int</span>
+        </article>
+        <p>Card object:</p>
+        <article class="obj-panel">
+            Name <span class="param-type">string</span><br>
+            Type <span class="param-type">string</span><br>
+            Suit <span class="param-type">string</span><br>
+            Value <span class="param-type">int</span>
+        </article>
+    </main>
+</body>
+</html>
