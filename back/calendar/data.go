@@ -127,6 +127,7 @@ func GetShortCategory(event ShortEvent) ShortEventExpanded {
 		if category.ID == event.Category {
 			founded = true
 			targetIndex = index
+			break
 		}
 	}
 
@@ -159,6 +160,7 @@ func GetLongCategory(event LongEvent) LongEventExpanded {
 		if category.ID == event.Category {
 			founded = true
 			targetIndex = index
+			break
 		}
 	}
 
@@ -167,4 +169,67 @@ func GetLongCategory(event LongEvent) LongEventExpanded {
 	}
 
 	return expandedEvent
+}
+
+func FindShortEvent(targetEvent int) (bool, int, time.Time) {
+	founded := false
+	targetIndex := 0
+	targetTime := time.Now()
+
+	for time, eventsList := range AllShortEvents {
+		for index, event := range eventsList {
+			if event.ID == targetEvent {
+				founded = true
+				targetIndex = index
+				targetTime = time
+				break
+			}
+		}
+	}
+
+	if founded {
+		return true, targetIndex, targetTime
+	} else {
+		return false, targetIndex, targetTime
+	}
+}
+
+func FindLongEvent(targetEvent int) (bool, int, time.Time) {
+	founded := false
+	targetIndex := 0
+	targetTime := time.Now()
+
+	for time, eventsList := range AllLongEvents {
+		for index, event := range eventsList {
+			if event.ID == targetEvent {
+				founded = true
+				targetIndex = index
+				targetTime = time
+				break
+			}
+		}
+	}
+
+	if founded {
+		return true, targetIndex, targetTime
+	} else {
+		return false, targetIndex, targetTime
+	}
+}
+
+func CheckCategoryExist(targetCategory int) bool {
+	founded := false
+
+	if targetCategory == 0 {
+		return true
+	}
+
+	for _, category := range AllCategories {
+		if category.ID == targetCategory {
+			founded = true
+			break
+		}
+	}
+
+	return founded
 }
