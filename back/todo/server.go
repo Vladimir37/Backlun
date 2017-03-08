@@ -50,6 +50,7 @@ func getApiRouter(baseRouter *gin.Engine) {
 		tasks := api.Group("/tasks")
 		{
 			tasks.GET("/get_all", GetAllTasks)
+			tasks.GET("/get_category", GetCategoryTasks)
 			tasks.POST("/add", AddNewTask)
 			tasks.POST("/edit", EditTask)
 			tasks.POST("/delete", DeleteTask)

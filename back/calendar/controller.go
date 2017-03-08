@@ -180,8 +180,8 @@ func EditShortEvent(c *gin.Context) {
 	})
 }
 
-func EditLongEvent(c *gin.Context) {
-	var request EditLongEventReq
+func DeleteShortEvent(c *gin.Context) {
+	var request IDReq
 	err := c.Bind(&request)
 
 	if err != nil {
@@ -193,40 +193,6 @@ func EditLongEvent(c *gin.Context) {
 		})
 		return
 	}
-
-	categoryExist := CheckCategoryExist(request.Category)
-
-	founded, index, date := FindLongEvent(request.ID)
-
-	if !categoryExist {
-		c.JSON(400, gin.H{
-			"status":  2,
-			"message": "Category is not exist",
-			"body":    nil,
-		})
-		return
-	}
-
-	if !founded {
-		c.JSON(400, gin.H{
-			"status":  3,
-			"message": "Event is not exist",
-			"body":    nil,
-		})
-		return
-	}
-
-	AllLongEvents[date][index].Category = request.Category
-	AllLongEvents[date][index].Description = request.Description
-	AllLongEvents[date][index].StartTime = request.StartTime
-	AllLongEvents[date][index].EndTime = request.EndTime
-	AllLongEvents[date][index].Title = request.Title
-
-	c.JSON(200, gin.H{
-		"status":  0,
-		"message": "Success",
-		"body":    AllLongEvents[date][index],
-	})
 }
 
 func CreateLongEvent(c *gin.Context) {
@@ -278,5 +244,54 @@ func CreateLongEvent(c *gin.Context) {
 		"status":  0,
 		"message": "Success",
 		"body":    expandedNewEvent,
+	})
+}
+
+func EditLongEvent(c *gin.Context) {
+	var request EditLongEventReq
+	err := c.Bind(&request)
+
+	if err != nil {
+		fmt.Println(err)
+		c.JSON(400, gin.H{
+			"status":  1,
+			"message": "Incorrect data",
+			"body":    nil,
+		})
+		return
+	}
+
+	categoryExist := CheckCategoryExist(request.Category)
+
+	founded, index, date := FindLongEvent(request.ID)
+
+	if !categoryExist {
+		c.JSON(400, gin.H{
+			"status":  2,
+			"message": "Category is not exist",
+			"body":    nil,
+		})
+		return
+	}
+
+	if !founded {
+		c.JSON(400, gin.H{
+			"status":  3,
+			"message": "Event is not exist",
+			"body":    nil,
+		})
+		return
+	}
+
+	AllLongEvents[date][index].Category = request.Category
+	AllLongEvents[date][index].Description = request.Description
+	AllLongEvents[date][index].StartTime = request.StartTime
+	AllLongEvents[date][index].EndTime = request.EndTime
+	AllLongEvents[date][index].Title = request.Title
+
+	c.JSON(200, gin.H{
+		"status":  0,
+		"message": "Success",
+		"body":    AllLongEvents[date][index],
 	})
 }

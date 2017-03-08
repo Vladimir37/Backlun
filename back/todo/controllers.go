@@ -11,6 +11,45 @@ func GetAllTasks(c *gin.Context) {
 	})
 }
 
+func GetCategoryTasks(c *gin.Context) {
+	var request IDRequest
+	err := c.Bind(&request)
+
+	if err != nil {
+		fmt.Println(err)
+		c.JSON(400, gin.H{
+			"status":  1,
+			"message": "Incorrect data",
+			"body":    nil,
+		})
+		return
+	}
+
+	checkCategory := categoryExist(request.ID)
+	if !checkCategory {
+		c.JSON(400, gin.H{
+			"status":  3,
+			"message": "Category not found",
+			"body":    nil,
+		})
+		return
+	}
+
+	var targetTasks []ToDoStruct
+
+	for _, task := range TasksList {
+		if task.Category == request.ID {
+			targetTasks = append(targetTasks, task)
+		}
+	}
+
+	c.JSON(200, gin.H{
+		"status":  0,
+		"message": "Success",
+		"body":    targetTasks,
+	})
+}
+
 func AddNewTask(c *gin.Context) {
 	var request ToDoStruct
 	err := c.Bind(&request)
