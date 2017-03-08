@@ -193,6 +193,25 @@ func DeleteShortEvent(c *gin.Context) {
 		})
 		return
 	}
+
+	founded, index, date := FindShortEvent(request.ID)
+
+	if !founded {
+		c.JSON(400, gin.H{
+			"status":  3,
+			"message": "Event is not exist",
+			"body":    nil,
+		})
+		return
+	}
+
+	AllShortEvents[date] = append(AllShortEvents[date][:index], AllShortEvents[date][index+1:]...)
+
+	c.JSON(200, gin.H{
+		"status":  0,
+		"message": "Success",
+		"body":    nil,
+	})
 }
 
 func CreateLongEvent(c *gin.Context) {
@@ -236,7 +255,7 @@ func CreateLongEvent(c *gin.Context) {
 		AllLongEvents[request.StartTime] = []LongEvent{newLongEvent}
 	}
 
-	CurrentShortEventID++
+	CurrentLongEventID++
 
 	expandedNewEvent := GetLongCategory(newLongEvent)
 
@@ -293,5 +312,168 @@ func EditLongEvent(c *gin.Context) {
 		"status":  0,
 		"message": "Success",
 		"body":    AllLongEvents[date][index],
+	})
+}
+
+func DeleteLongEvent(c *gin.Context) {
+	var request IDReq
+	err := c.Bind(&request)
+
+	if err != nil {
+		fmt.Println(err)
+		c.JSON(400, gin.H{
+			"status":  1,
+			"message": "Incorrect data",
+			"body":    nil,
+		})
+		return
+	}
+
+	founded, index, date := FindLongEvent(request.ID)
+
+	if !founded {
+		c.JSON(400, gin.H{
+			"status":  3,
+			"message": "Event is not exist",
+			"body":    nil,
+		})
+		return
+	}
+
+	AllLongEvents[date] = append(AllLongEvents[date][:index], AllLongEvents[date][index+1:]...)
+
+	c.JSON(200, gin.H{
+		"status":  0,
+		"message": "Success",
+		"body":    nil,
+	})
+}
+
+func CreateCategory(c *gin.Context) {
+	var request NewCategoryReq
+	err := c.Bind(&request)
+
+	if err != nil {
+		fmt.Println(err)
+		c.JSON(400, gin.H{
+			"status":  1,
+			"message": "Incorrect data",
+			"body":    nil,
+		})
+		return
+	}
+
+	newCategory := Category{
+		ID:    CurrentCategoryID,
+		Name:  request.Name,
+		Color: request.Color,
+	}
+
+	AllCategories = append(AllCategories, newCategory)
+
+	CurrentCategoryID++
+
+	c.JSON(200, gin.H{
+		"status":  0,
+		"message": "Success",
+		"body":    newCategory,
+	})
+}
+
+func EditCategory(c *gin.Context) {
+	var request EditCategoryReq
+	err := c.Bind(&request)
+
+	if err != nil {
+		fmt.Println(err)
+		c.JSON(400, gin.H{
+			"status":  1,
+			"message": "Incorrect data",
+			"body":    nil,
+		})
+		return
+	}
+
+	exists, index := FindCategory(request.ID)
+
+	if !exists {
+		c.JSON(400, gin.H{
+			"status":  2,
+			"message": "Category is not exist",
+			"body":    nil,
+		})
+		return
+	}
+
+	AllCategories[index].Name = request.Name
+	AllCategories[index].Color = request.Color
+
+	c.JSON(200, gin.H{
+		"status":  0,
+		"message": "Success",
+		"body":    AllCategories[index],
+	})
+}
+
+func DeleteCategory(c *gin.Context) {
+	var request IDReq
+	err := c.Bind(&request)
+
+	if err != nil {
+		fmt.Println(err)
+		c.JSON(400, gin.H{
+			"status":  1,
+			"message": "Incorrect data",
+			"body":    nil,
+		})
+		return
+	}
+
+	founded := false
+
+	for _, eventsMap := range AllShortEvents {
+		for _, event := range eventsMap {
+			if event.Category == request.ID {
+				founded = true
+				break
+			}
+		}
+	}
+
+	for _, eventsMap := range AllLongEvents {
+		for _, event := range eventsMap {
+			if event.Category == request.ID {
+				founded = true
+				break
+			}
+		}
+	}
+
+	if founded {
+		c.JSON(400, gin.H{
+			"status":  4,
+			"message": "There are events with this category - category can not be deleted",
+			"body":    nil,
+		})
+		return
+	}
+
+	exists, index := FindCategory(request.ID)
+
+	if !exists {
+		c.JSON(400, gin.H{
+			"status":  2,
+			"message": "Category is not exist",
+			"body":    nil,
+		})
+		return
+	}
+
+	AllCategories = append(AllCategories[:index], AllCategories[index+1:]...)
+
+	c.JSON(200, gin.H{
+		"status":  0,
+		"message": "Success",
+		"body":    nil,
 	})
 }

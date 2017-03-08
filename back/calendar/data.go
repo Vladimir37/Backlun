@@ -233,3 +233,18 @@ func CheckCategoryExist(targetCategory int) bool {
 
 	return founded
 }
+
+func FindCategory(num int) (bool, int) {
+	founded := false
+	targetIndex := 0
+
+	for index, category := range AllCategories {
+		if category.ID == num {
+			founded = true
+			targetIndex = index
+			break
+		}
+	}
+
+	return founded, targetIndex
+}
