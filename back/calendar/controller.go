@@ -81,6 +81,59 @@ func GetLongEvents(c *gin.Context) {
 	})
 }
 
+func GetCategoryEvents(c *gin.Context) {
+	var request IDReq
+	err := c.Bind(&request)
+
+	if err != nil {
+		fmt.Println(err)
+		c.JSON(400, gin.H{
+			"status":  1,
+			"message": "Incorrect data",
+			"body":    nil,
+		})
+		return
+	}
+
+	var ShortEventList []ShortEventExpanded
+	var LongEventList []LongEventExpanded
+
+	// Short events
+	for _, eventsMap := range AllShortEvents {
+		for _, event := range eventsMap {
+			if event.Category == request.ID {
+				targetEvent := GetShortCategory(event)
+				ShortEventList = append(ShortEventList, targetEvent)
+			}
+		}
+	}
+
+	// Long events
+	for _, eventsMap := range AllLongEvents {
+		for _, event := range eventsMap {
+			if event.Category == request.ID {
+				targetEvent := GetLongCategory(event)
+				LongEventList = append(LongEventList, targetEvent)
+			}
+		}
+	}
+
+	fullList := map[string]interface{}{
+		"short": ShortEventList,
+		"long":  LongEventList,
+	}
+
+	c.JSON(200, gin.H{
+		"status":  0,
+		"message": "Success",
+		"body":    fullList,
+	})
+}
+
+func GetDayData(c *gin.Context) {
+	//
+}
+
 func CreateShortEvent(c *gin.Context) {
 	var request NewShortEventReq
 	err := c.Bind(&request)
