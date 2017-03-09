@@ -99,8 +99,8 @@ var CurrentShortEventID int = 1
 var CurrentLongEventID int = 1
 var CurrentCategoryID int = 1
 
-var AllShortEvents map[time.Time][]ShortEvent
-var AllLongEvents map[time.Time][]LongEvent
+var AllShortEvents []ShortEvent
+var AllLongEvents []LongEvent
 
 var AllCategories []Category
 
@@ -171,49 +171,41 @@ func GetLongCategory(event LongEvent) LongEventExpanded {
 	return expandedEvent
 }
 
-func FindShortEvent(targetEvent int) (bool, int, time.Time) {
+func FindShortEvent(targetEvent int) (bool, int) {
 	founded := false
 	targetIndex := 0
-	targetTime := time.Now()
 
-	for time, eventsList := range AllShortEvents {
-		for index, event := range eventsList {
-			if event.ID == targetEvent {
-				founded = true
-				targetIndex = index
-				targetTime = time
-				break
-			}
+	for index, event := range AllShortEvents {
+		if event.ID == targetEvent {
+			founded = true
+			targetIndex = index
+			break
 		}
 	}
 
 	if founded {
-		return true, targetIndex, targetTime
+		return true, targetIndex
 	} else {
-		return false, targetIndex, targetTime
+		return false, targetIndex
 	}
 }
 
-func FindLongEvent(targetEvent int) (bool, int, time.Time) {
+func FindLongEvent(targetEvent int) (bool, int) {
 	founded := false
 	targetIndex := 0
-	targetTime := time.Now()
 
-	for time, eventsList := range AllLongEvents {
-		for index, event := range eventsList {
-			if event.ID == targetEvent {
-				founded = true
-				targetIndex = index
-				targetTime = time
-				break
-			}
+	for index, event := range AllLongEvents {
+		if event.ID == targetEvent {
+			founded = true
+			targetIndex = index
+			break
 		}
 	}
 
 	if founded {
-		return true, targetIndex, targetTime
+		return true, targetIndex
 	} else {
-		return false, targetIndex, targetTime
+		return false, targetIndex
 	}
 }
 

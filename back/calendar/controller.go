@@ -2,38 +2,28 @@ package calendar
 
 import (
 	"fmt"
-	"time"
 
 	"github.com/gin-gonic/gin"
 )
 
 func GetAllEvents(c *gin.Context) {
-	var ShortEventsList map[time.Time][]ShortEventExpanded
-	var LongEventsList map[time.Time][]LongEventExpanded
-
 	// Short categories
-	for date, _ := range AllShortEvents {
-		var emptyPointEvents []ShortEventExpanded
-		ShortEventsList[date] = emptyPointEvents
+	var ShortEventList []ShortEventExpanded
 
-		for _, targetShortEvent := range AllShortEvents[date] {
-			ShortEventsList[date] = append(ShortEventsList[date], GetShortCategory(targetShortEvent))
-		}
+	for _, targetShortEvent := range AllShortEvents {
+		ShortEventList = append(ShortEventList, GetShortCategory(targetShortEvent))
 	}
 
 	// Long categories
-	for date, _ := range LongEventsList {
-		var emptyPointEvents []LongEventExpanded
-		LongEventsList[date] = emptyPointEvents
+	var LongEventList []LongEventExpanded
 
-		for _, targetLongEvent := range AllLongEvents[date] {
-			LongEventsList[date] = append(LongEventsList[date], GetLongCategory(targetLongEvent))
-		}
+	for _, targetLongEvent := range AllLongEvents {
+		LongEventList = append(LongEventList, GetLongCategory(targetLongEvent))
 	}
 
 	fullList := map[string]interface{}{
-		"short": ShortEventsList,
-		"long":  LongEventsList,
+		"short": ShortEventList,
+		"long":  LongEventList,
 	}
 
 	c.JSON(200, gin.H{
@@ -44,40 +34,30 @@ func GetAllEvents(c *gin.Context) {
 }
 
 func GetShortEvents(c *gin.Context) {
-	var ShortEventsList map[time.Time][]ShortEventExpanded
+	var ShortEventList []ShortEventExpanded
 
-	for date, _ := range AllShortEvents {
-		var emptyPointEvents []ShortEventExpanded
-		ShortEventsList[date] = emptyPointEvents
-
-		for _, targetShortEvent := range AllShortEvents[date] {
-			ShortEventsList[date] = append(ShortEventsList[date], GetShortCategory(targetShortEvent))
-		}
+	for _, targetShortEvent := range AllShortEvents {
+		ShortEventList = append(ShortEventList, GetShortCategory(targetShortEvent))
 	}
 
 	c.JSON(200, gin.H{
 		"status":  0,
 		"message": "Success",
-		"body":    ShortEventsList,
+		"body":    ShortEventList,
 	})
 }
 
 func GetLongEvents(c *gin.Context) {
-	var LongEventsList map[time.Time][]LongEventExpanded
+	var LongEventList []LongEventExpanded
 
-	for date, _ := range LongEventsList {
-		var emptyPointEvents []LongEventExpanded
-		LongEventsList[date] = emptyPointEvents
-
-		for _, targetLongEvent := range AllLongEvents[date] {
-			LongEventsList[date] = append(LongEventsList[date], GetLongCategory(targetLongEvent))
-		}
+	for _, targetLongEvent := range AllLongEvents {
+		LongEventList = append(LongEventList, GetLongCategory(targetLongEvent))
 	}
 
 	c.JSON(200, gin.H{
 		"status":  0,
 		"message": "Success",
-		"body":    LongEventsList,
+		"body":    LongEventList,
 	})
 }
 
@@ -99,22 +79,18 @@ func GetCategoryEvents(c *gin.Context) {
 	var LongEventList []LongEventExpanded
 
 	// Short events
-	for _, eventsMap := range AllShortEvents {
-		for _, event := range eventsMap {
-			if event.Category == request.ID {
-				targetEvent := GetShortCategory(event)
-				ShortEventList = append(ShortEventList, targetEvent)
-			}
+	for _, event := range AllShortEvents {
+		if event.Category == request.ID {
+			targetEvent := GetShortCategory(event)
+			ShortEventList = append(ShortEventList, targetEvent)
 		}
 	}
 
 	// Long events
-	for _, eventsMap := range AllLongEvents {
-		for _, event := range eventsMap {
-			if event.Category == request.ID {
-				targetEvent := GetLongCategory(event)
-				LongEventList = append(LongEventList, targetEvent)
-			}
+	for _, event := range AllLongEvents {
+		if event.Category == request.ID {
+			targetEvent := GetLongCategory(event)
+			LongEventList = append(LongEventList, targetEvent)
 		}
 	}
 
@@ -167,12 +143,7 @@ func CreateShortEvent(c *gin.Context) {
 		Time:        request.Time,
 	}
 
-	_, ok := AllShortEvents[request.Time]
-	if ok {
-		AllShortEvents[request.Time] = append(AllShortEvents[request.Time], newShortEvent)
-	} else {
-		AllShortEvents[request.Time] = []ShortEvent{newShortEvent}
-	}
+	AllShortEvents = append(AllShortEvents, newShortEvent)
 
 	CurrentShortEventID++
 
@@ -201,7 +172,7 @@ func EditShortEvent(c *gin.Context) {
 
 	categoryExist := CheckCategoryExist(request.Category)
 
-	founded, index, date := FindShortEvent(request.ID)
+	founded, index := FindShortEvent(request.ID)
 
 	if !categoryExist {
 		c.JSON(400, gin.H{
@@ -221,15 +192,15 @@ func EditShortEvent(c *gin.Context) {
 		return
 	}
 
-	AllShortEvents[date][index].Category = request.Category
-	AllShortEvents[date][index].Description = request.Description
-	AllShortEvents[date][index].Time = request.Time
-	AllShortEvents[date][index].Title = request.Title
+	AllShortEvents[index].Category = request.Category
+	AllShortEvents[index].Description = request.Description
+	AllShortEvents[index].Time = request.Time
+	AllShortEvents[index].Title = request.Title
 
 	c.JSON(200, gin.H{
 		"status":  0,
 		"message": "Success",
-		"body":    AllShortEvents[date][index],
+		"body":    AllShortEvents[index],
 	})
 }
 
@@ -247,7 +218,7 @@ func DeleteShortEvent(c *gin.Context) {
 		return
 	}
 
-	founded, index, date := FindShortEvent(request.ID)
+	founded, index := FindShortEvent(request.ID)
 
 	if !founded {
 		c.JSON(400, gin.H{
@@ -258,7 +229,7 @@ func DeleteShortEvent(c *gin.Context) {
 		return
 	}
 
-	AllShortEvents[date] = append(AllShortEvents[date][:index], AllShortEvents[date][index+1:]...)
+	AllShortEvents = append(AllShortEvents[:index], AllShortEvents[index+1:]...)
 
 	c.JSON(200, gin.H{
 		"status":  0,
@@ -301,12 +272,7 @@ func CreateLongEvent(c *gin.Context) {
 		EndTime:     request.EndTime,
 	}
 
-	_, ok := AllLongEvents[request.StartTime]
-	if ok {
-		AllLongEvents[request.StartTime] = append(AllLongEvents[request.StartTime], newLongEvent)
-	} else {
-		AllLongEvents[request.StartTime] = []LongEvent{newLongEvent}
-	}
+	AllLongEvents = append(AllLongEvents, newLongEvent)
 
 	CurrentLongEventID++
 
@@ -335,7 +301,7 @@ func EditLongEvent(c *gin.Context) {
 
 	categoryExist := CheckCategoryExist(request.Category)
 
-	founded, index, date := FindLongEvent(request.ID)
+	founded, index := FindLongEvent(request.ID)
 
 	if !categoryExist {
 		c.JSON(400, gin.H{
@@ -355,16 +321,16 @@ func EditLongEvent(c *gin.Context) {
 		return
 	}
 
-	AllLongEvents[date][index].Category = request.Category
-	AllLongEvents[date][index].Description = request.Description
-	AllLongEvents[date][index].StartTime = request.StartTime
-	AllLongEvents[date][index].EndTime = request.EndTime
-	AllLongEvents[date][index].Title = request.Title
+	AllLongEvents[index].Category = request.Category
+	AllLongEvents[index].Description = request.Description
+	AllLongEvents[index].StartTime = request.StartTime
+	AllLongEvents[index].EndTime = request.EndTime
+	AllLongEvents[index].Title = request.Title
 
 	c.JSON(200, gin.H{
 		"status":  0,
 		"message": "Success",
-		"body":    AllLongEvents[date][index],
+		"body":    AllLongEvents[index],
 	})
 }
 
@@ -382,7 +348,7 @@ func DeleteLongEvent(c *gin.Context) {
 		return
 	}
 
-	founded, index, date := FindLongEvent(request.ID)
+	founded, index := FindLongEvent(request.ID)
 
 	if !founded {
 		c.JSON(400, gin.H{
@@ -393,7 +359,7 @@ func DeleteLongEvent(c *gin.Context) {
 		return
 	}
 
-	AllLongEvents[date] = append(AllLongEvents[date][:index], AllLongEvents[date][index+1:]...)
+	AllLongEvents = append(AllLongEvents[:index], AllLongEvents[index+1:]...)
 
 	c.JSON(200, gin.H{
 		"status":  0,
@@ -484,21 +450,17 @@ func DeleteCategory(c *gin.Context) {
 
 	founded := false
 
-	for _, eventsMap := range AllShortEvents {
-		for _, event := range eventsMap {
-			if event.Category == request.ID {
-				founded = true
-				break
-			}
+	for _, event := range AllShortEvents {
+		if event.Category == request.ID {
+			founded = true
+			break
 		}
 	}
 
-	for _, eventsMap := range AllLongEvents {
-		for _, event := range eventsMap {
-			if event.Category == request.ID {
-				founded = true
-				break
-			}
+	for _, event := range AllLongEvents {
+		if event.Category == request.ID {
+			founded = true
+			break
 		}
 	}
 
