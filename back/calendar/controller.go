@@ -107,7 +107,62 @@ func GetCategoryEvents(c *gin.Context) {
 }
 
 func GetDayData(c *gin.Context) {
-	//
+	var request TimeReq
+	err := c.Bind(&request)
+
+	if err != nil {
+		fmt.Println(err)
+		c.JSON(400, gin.H{
+			"status":  1,
+			"message": "Incorrect data",
+			"body":    nil,
+		})
+		return
+	}
+
+	minTime := GetStartDay(request.Time).Unix()
+	maxTime := GetEndDay(request.Time).Unix()
+
+	var ShortEventList []ShortEventExpanded
+	var LongEventList []LongEventExpanded
+
+	// Short events
+	for _, event := range AllShortEvents {
+		eventTime := event.Time.Unix()
+
+		if (minTime < eventTime) && (maxTime > eventTime) {
+			ShortEventList = append(ShortEventList, GetShortCategory(event))
+		}
+	}
+
+	// Long events
+	for _, event := range AllLongEvents {
+		eventStartTime := event.StartTime.Unix()
+		eventEndTime := event.EndTime.Unix()
+
+		if ((minTime < eventEndTime) && (maxTime > eventStartTime)) || ((minTime > eventStartTime) && (maxTime < eventEndTime)) {
+			LongEventList = append(LongEventList, GetLongCategory(event))
+		}
+	}
+
+	fullList := map[string]interface{}{
+		"short": ShortEventList,
+		"long":  LongEventList,
+	}
+
+	c.JSON(200, gin.H{
+		"status":  0,
+		"message": "Success",
+		"body":    fullList,
+	})
+}
+
+func GetAllCategories(c *gin.Context) {
+	c.JSON(200, gin.H{
+		"status":  0,
+		"message": "Success",
+		"body":    AllCategories,
+	})
 }
 
 func CreateShortEvent(c *gin.Context) {

@@ -47,6 +47,35 @@ func Start(args []string) {
 func getApiRouter(baseRouter *gin.Engine) {
 	api := baseRouter.Group("/api")
 	{
-		//
+		get := api.Group("/get")
+		{
+			get.GET("/all", GetAllEvents)
+			get.GET("/short", GetShortEvents)
+			get.GET("/long", GetLongEvents)
+			get.GET("/category_events", GetCategoryEvents)
+			get.GET("/all_categories", GetAllCategories)
+			get.GET("/day", GetDayData)
+		}
+
+		short := api.Group("/short")
+		{
+			short.POST("/create", CreateShortEvent)
+			short.POST("/edit", EditShortEvent)
+			short.POST("/delete", DeleteShortEvent)
+		}
+
+		long := api.Group("/long")
+		{
+			long.POST("/create", CreateLongEvent)
+			long.POST("/edit", EditLongEvent)
+			long.POST("/delete", DeleteLongEvent)
+		}
+
+		categories := api.Group("/categories")
+		{
+			categories.POST("/create", CreateCategory)
+			categories.POST("/edit", EditCategory)
+			categories.POST("/delete", DeleteCategory)
+		}
 	}
 }

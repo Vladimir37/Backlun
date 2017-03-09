@@ -93,6 +93,10 @@ type IDReq struct {
 	ID int `form:"id" binding:"required"`
 }
 
+type TimeReq struct {
+	Time time.Time `form:"day" binding:"required"`
+}
+
 // Current
 
 var CurrentShortEventID int = 1
