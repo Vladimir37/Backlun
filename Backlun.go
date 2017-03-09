@@ -7,6 +7,7 @@ import (
 
 	"Backlun/back/blackjack"
 	"Backlun/back/blog"
+	"Backlun/back/calendar"
 	"Backlun/back/chat"
 	"Backlun/back/forum"
 	"Backlun/back/geopos"
@@ -86,6 +87,7 @@ func printFullHelp() {
 	fmt.Println("— market")
 	fmt.Println("— forum")
 	fmt.Println("— blackjack")
+	fmt.Println("— calendar")
 	fmt.Println("— oauth")
 	fmt.Println("— chat")
 	fmt.Println("— geopos")
@@ -120,6 +122,7 @@ func printPlatformHelp(platform string) {
 		fmt.Println("Simple card game. REST API. You can play in blackjack.")
 		fmt.Println("Start:")
 		fmt.Println("\"start blackjack [<port>]\"")
+	// TODO Calendar
 	case "chat":
 		fmt.Println("Simple chat on WebSockets.")
 		fmt.Println("Start:")
@@ -152,6 +155,8 @@ func startServer(args []string) {
 		forum.Start(args)
 	case "blackjack":
 		blackjack.Start(args)
+	case "calendar":
+		calendar.Start(args)
 	case "oauth":
 		oauth.Start(args)
 	case "chat":

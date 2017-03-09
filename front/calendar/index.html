@@ -2,20 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Blackjack Backlun</title>
+    <title>Calendar Backlun</title>
     <link rel="stylesheet" href="/src/bootstrap.min.css">
     <link rel="stylesheet" href="/src/index.css">
 </head>
 <body>
     <main class="jumbotron">
-        <h1 class="main-title">Blackjack Backlun</h1>
-        <p class="main-text">Main page - <span class="main-addr">Backlun/front/blackjack/index.html</span>.</p>
-        <p class="main-text">Static folder - <span class="main-addr">Backlun/front/blackjack/static/</span>.</p>
+        <h1 class="main-title">Calendar Backlun</h1>
+        <p class="main-text">Main page - <span class="main-addr">Backlun/front/calendar/index.html</span>.</p>
+        <p class="main-text">Static folder - <span class="main-addr">Backlun/front/calendar/static/</span>.</p>
         <p class="main-text">You can get the file from static folder at the address <span class="main-addr">/src</span>.</p>
-        <p class="main-text">Example: <span class="main-addr">Backlun/front/blackjack/static/js/build/main.js</span> -> <span class="main-addr">/src/js/build/main.js</span></p>
+        <p class="main-text">Example: <span class="main-addr">Backlun/front/calendar/static/js/build/main.js</span> -> <span class="main-addr">/src/js/build/main.js</span></p>
 
-        <h2 class="main-title">Blackjack API</h2>
-        <p class="main-text">Params marked with asterisk (*) are required. The contents of the field "Response" is located in the field "body" in Server response object.</p>
+        <h2 class="main-title">Calendar API</h2>
+        <p class="main-text">Params marked with asterisk (*) are required. The contents of the field "Response" is located in the field "body" in Server response object. When editing is necessary to send the contents of all fields - unsent field are cleared. The field "category" should contain ID of the existing Category or 0.</p>
         <table class="table table-striped table-hover">
             <tr>
                 <th>Method</th>
@@ -26,66 +26,176 @@
             </tr>
             <tr>
                 <td>GET</td>
-                <td>/api/get/one</td>
-                <td>
-                    token* <span class="param-type">string</span>
-                </td>
-                <td>
-                    <span class="response-obj">Game object</span>
-                    </td>
-                <td>Get one game</td>
-            </tr>
-            <tr>
-                <td>GET</td>
                 <td>/api/get/all</td>
                 <td>-</td>
                 <td>
-                    Array of <span class="response-obj">Game objects</span>
+                    short <span class="param-type">Array of Short event objects</span><br>
+                    long <span class="param-type">Array of Long event objects</span>
                 </td>
-                <td>Get all active games</td>
+                <td>Get all events</td>
             </tr>
             <tr>
                 <td>GET</td>
-                <td>/api/get/ended</td>
+                <td>/api/get/short</td>
                 <td>-</td>
                 <td>
-                    Array of <span class="response-obj">Game objects</span>
+                    <span class="param-type">Array of Short event objects</span>
                 </td>
-                <td>Get all completed games</td>
+                <td>Get all short events</td>
+            </tr>
+            <tr>
+                <td>GET</td>
+                <td>/api/get/long</td>
+                <td>-</td>
+                <td>
+                    <span class="param-type">Array of Long event objects</span>
+                </td>
+                <td>Get all long events</td>
+            </tr>
+            <tr>
+                <td>GET</td>
+                <td>/api/get/category_events</td>
+                <td>
+                    id* <span class="param-type">int</span>
+                </td>
+                <td>
+                    short <span class="param-type">Array of Short event objects</span><br>
+                    long <span class="param-type">Array of Long event objects</span>
+                </td>
+                <td>Get all events with desired category</td>
+            </tr>
+            <tr>
+                <td>GET</td>
+                <td>/api/get/all_categories</td>
+                <td>-</td>
+                <td>
+                    <span class="param-type">Array of Category objects</span>
+                </td>
+                <td>Get all categories</td>
+            </tr>
+            <tr>
+                <td>GET</td>
+                <td>/api/get/day</td>
+                <td>
+                    day* <span class="param-type">date</span>
+                </td>
+                <td>
+                    short <span class="param-type">Array of Short event objects</span><br>
+                    long <span class="param-type">Array of Long event objects</span>
+                </td>
+                <td>Get all events in the desired day</td>
             </tr>
             <tr>
                 <td>POST</td>
-                <td>/api/game/start</td>
+                <td>/api/short/create</td>
                 <td>
-                    players* <span class="param-type">int</span>
-                    decks <span class="param-type">int</span>
+                    category <span class="param-type">int</span><br>
+                    title* <span class="param-type">string</span><br>
+                    description* <span class="param-type">string</span><br>
+                    time* <span class="param-type">date</span>
                 </td>
                 <td>
-                    <span class="response-obj">Game object</span>
+                    <span class="param-type">Short event object</span>
                 </td>
-                <td>Start new game</td>
+                <td>Create new short event</td>
             </tr>
             <tr>
                 <td>POST</td>
-                <td>/api/game/hit</td>
+                <td>/api/short/edit</td>
                 <td>
-                    token* <span class="param-type">string</span>
+                    id* <span class="param-type">int</span><br>
+                    category <span class="param-type">int</span><br>
+                    title* <span class="param-type">string</span><br>
+                    description* <span class="param-type">string</span><br>
+                    time* <span class="param-type">date</span>
                 </td>
                 <td>
-                    <span class="response-obj">Game object</span>
+                    <span class="param-type">Short event object</span>
                 </td>
-                <td>Ask for one more card</td>
+                <td>Edit short event</td>
             </tr>
             <tr>
                 <td>POST</td>
-                <td>/api/game/stand</td>
+                <td>/api/short/delete</td>
                 <td>
-                    token* <span class="param-type">string</span>
+                    id* <span class="param-type">int</span>
+                </td>
+                <td>-</td>
+                <td>Delete short event</td>
+            </tr>
+            <tr>
+                <td>POST</td>
+                <td>/api/long/create</td>
+                <td>
+                    category <span class="param-type">int</span><br>
+                    title* <span class="param-type">string</span><br>
+                    description* <span class="param-type">string</span><br>
+                    start_time* <span class="param-type">date</span><br>
+                    end_time* <span class="param-type">date</span>
                 </td>
                 <td>
-                    <span class="response-obj">Game object</span>
+                    <span class="param-type">Long event objects</span>
                 </td>
-                <td>Wait for the other players' turns</td>
+                <td>Create long event</td>
+            </tr>
+            <tr>
+                <td>POST</td>
+                <td>/api/long/edit</td>
+                <td>
+                    id* <span class="param-type">int</span><br>
+                    category <span class="param-type">int</span><br>
+                    title* <span class="param-type">string</span><br>
+                    description* <span class="param-type">string</span><br>
+                    start_time* <span class="param-type">date</span><br>
+                    end_time* <span class="param-type">date</span>
+                </td>
+                <td>
+                    <span class="param-type">Long event objects</span>
+                </td>
+                <td>Edit long event</td>
+            </tr>
+            <tr>
+                <td>POST</td>
+                <td>/api/long/delete</td>
+                <td>
+                    id* <span class="param-type">int</span>
+                </td>
+                <td></td>
+                <td>Delete long event</td>
+            </tr>
+            <tr>
+                <td>POST</td>
+                <td>/api/categories/create</td>
+                <td>
+                    name* <span class="param-type">string</span><br>
+                    color* <span class="param-type">string</span>
+                </td>
+                <td>
+                    <span class="param-type">Category objects</span>
+                </td>
+                <td>Create new category</td>
+            </tr>
+            <tr>
+                <td>POST</td>
+                <td>/api/categories/edit</td>
+                <td>
+                    id* <span class="param-type">int</span><br>
+                    name* <span class="param-type">string</span><br>
+                    color* <span class="param-type">string</span>
+                </td>
+                <td>
+                    <span class="param-type">Category objects</span>
+                </td>
+                <td>Edit category</td>
+            </tr>
+            <tr>
+                <td>POST</td>
+                <td>/api/categories/delete</td>
+                <td>
+                    id* <span class="param-type">int</span>
+                </td>
+                <td>-</td>
+                <td>Delete category</td>
             </tr>
         </table>
 
@@ -96,30 +206,29 @@
             message <span class="param-type">string</span><br>
             body <span class="param-type">any</span><br>
         </article>
-        <p class="main-text">Status code: 0 - success, 1-9 - various errors, 10 - not found, 11 - forbidden.</p>
-        <p>Game object:</p>
+        <p class="main-text">Status code: 0 - success, 1-9 - various errors, 10 - not found.</p>
+        <p>Short event object:</p>
         <article class="obj-panel">
-            Ended <span class="param-type">bool</span><br>
-            FinalMessage <span class="param-type">string</span><br>
-            Winner <span class="param-type">Array of Player objects</span><br>
-            Cards <span class="param-type">Array of Card objects</span><br>
-            Players <span class="param-type">Array of Player objects</span><br>
-            Token <span class="param-type">string</span>
+            ID <span class="param-type">int</span><br>
+            Category <span class="param-type">Category object</span><br>
+            Title <span class="param-type">string</span><br>
+            Description <span class="param-type">string</span><br>
+            Time <span class="param-type">date</span>
         </article>
-        <p>Player object:</p>
+        <p>Long event object:</p>
         <article class="obj-panel">
-            Name <span class="param-type">string</span><br>
-            User <span class="param-type">bool</span><br>
-            Stay <span class="param-type">bool</span><br>
-            Cards <span class="param-type">Array of Card objects</span><br>
-            Sum  <span class="param-type">int</span>
+            ID <span class="param-type">int</span><br>
+            Category <span class="param-type">Category object</span><br>
+            Title <span class="param-type">string</span><br>
+            Description <span class="param-type">string</span><br>
+            StartTime <span class="param-type">date</span>
+            EndTime <span class="param-type">date</span>
         </article>
-        <p>Card object:</p>
+        <p>Category object:</p>
         <article class="obj-panel">
+            ID <span class="param-type">int</span><br>
             Name <span class="param-type">string</span><br>
-            Type <span class="param-type">string</span><br>
-            Suit <span class="param-type">string</span><br>
-            Value <span class="param-type">int</span>
+            Color <span class="param-type">string</span><br>
         </article>
     </main>
 </body>
