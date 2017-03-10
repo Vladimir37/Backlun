@@ -288,7 +288,7 @@ func EditShortEvent(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"status":  0,
 		"message": "Success",
-		"body":    AllShortEvents[index],
+		"body":    GetShortCategory(AllShortEvents[index]),
 	})
 }
 
@@ -353,6 +353,15 @@ func CreateLongEvent(c *gin.Context) {
 
 	errTimeStart, formattedTimeStart := FormatToDate(request.StartTime)
 	errTimeEnd, formattedTimeEnd := FormatToDate(request.EndTime)
+
+	if formattedTimeStart.Unix() >= formattedTimeEnd.Unix() {
+		c.JSON(400, gin.H{
+			"status":  6,
+			"message": "Start time is greater than or equal to the End time",
+			"body":    nil,
+		})
+		return
+	}
 
 	if (errTimeStart != nil) || (errTimeEnd != nil) {
 		c.JSON(400, gin.H{
@@ -424,6 +433,15 @@ func EditLongEvent(c *gin.Context) {
 	errTimeStart, formattedTimeStart := FormatToDate(request.StartTime)
 	errTimeEnd, formattedTimeEnd := FormatToDate(request.EndTime)
 
+	if formattedTimeStart.Unix() >= formattedTimeEnd.Unix() {
+		c.JSON(400, gin.H{
+			"status":  6,
+			"message": "Start time is greater than or equal to the End time",
+			"body":    nil,
+		})
+		return
+	}
+
 	if (errTimeStart != nil) || (errTimeEnd != nil) {
 		c.JSON(400, gin.H{
 			"status":  5,
@@ -442,7 +460,7 @@ func EditLongEvent(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"status":  0,
 		"message": "Success",
-		"body":    AllLongEvents[index],
+		"body":    GetLongCategory(AllLongEvents[index]),
 	})
 }
 
