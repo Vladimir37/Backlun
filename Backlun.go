@@ -119,10 +119,13 @@ func printPlatformHelp(platform string) {
 		fmt.Println("Start:")
 		fmt.Println("\"start forum [<port>]\"")
 	case "blackjack":
-		fmt.Println("Simple card game. REST API. You can play in blackjack.")
+		fmt.Println("Simple card game. REST API. You can play in BlackJack.")
 		fmt.Println("Start:")
 		fmt.Println("\"start blackjack [<port>]\"")
-	// TODO Calendar
+	case "calendar":
+		fmt.Println("Simple calendar. You can create short and long events and split them into categories.")
+		fmt.Println("Start:")
+		fmt.Println("\"start calendar [<port>]\"")
 	case "chat":
 		fmt.Println("Simple chat on WebSockets.")
 		fmt.Println("Start:")

@@ -4,6 +4,7 @@ body {
 
 main {
     width: 940px;
+    position: relative;
     padding: 20px;
     margin: 40px auto;
 }
@@ -42,4 +43,11 @@ p.main-text {
     padding: 10px;
     background: white;
     border: 1px solid #dddddd;
+}
+
+.logo {
+    width: 150px;
+    position: absolute;
+    top: 0px;
+    right: 10px;
 }
