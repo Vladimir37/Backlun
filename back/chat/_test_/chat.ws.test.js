@@ -1,5 +1,6 @@
 'use strict'
 const wsClient = require('websocket').client;
+// const ws_client = (require('websocket').client)();
 const fetch = require('node-fetch');
 
 const SERVER = "localhost";

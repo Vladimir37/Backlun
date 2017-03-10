@@ -65,20 +65,15 @@ func AuthHandler(cont *gin.Context) { // {{{
 	fmt.Printf("\nuser: %v\n", user)
 	log.Println(err)
 
-	// seen := false
+	seen := false
 	// db := GhostDB{}
-	// if _, mongoErr := db.LoadUser(user.Email); mongoErr == nil {
-	// seen = true
-	// } else {
-	// err = db.SaveUser(&user)
-	// if err != nil {
-	// log.Println(err)
-	// cont.JSON(http.StatusBadRequest, gin.H{"message": "Error while saving user. Please try again."})
-	// return
-	// }
-	// }
+	if _, mongoErr := ghostDB.LoadUser(user.Email); mongoErr == nil {
+		seen = true
+	} else {
+		ghostDB.SaveUser(&user)
+	}
 
-	cont.JSON(http.StatusOK, gin.H{"email": user.Email, "seen": true})
+	cont.JSON(http.StatusOK, gin.H{"email": user.Email, "seen": seen})
 } // }}}
 
 // LoginHandler handles the login procedure.
@@ -90,16 +85,14 @@ func LoginHandler(cont *gin.Context) { // {{{
 	session.Set("state", state)
 	session.Save()
 
-	// response
-	link := confTemp.AuthCodeURL(state)
-	cont.JSON(http.StatusOK, gin.H{
-		"auth_url":     confTemp.Endpoint.AuthURL,
-		"client_id":    confTemp.ClientID,
-		"redirect_uri": confTemp.RedirectURL,
-		"scope":        strings.Join(confTemp.Scopes, " "),
-		"state":        state,
-		"link":         link,
-	})
+	scopes := strings.Join(confTemp.Scopes, " ")
+	linkStr := string(confTemp.Endpoint.AuthURL +
+		"?client_id=" + confTemp.ClientID +
+		"&redirect_uri=" + confTemp.RedirectURL +
+		"&response_type=code&scope=" + scopes +
+		"&state=" + state)
+
+	cont.JSON(http.StatusOK, gin.H{"link": linkStr})
 } // }}}
 
 // FieldHandler is a rudementary handler for logged in users.

@@ -35,6 +35,7 @@ type Config struct {
 var config *Config
 var msgState *conf.MsgState
 var confTemp *oauth2.Config
+var ghostDB *GhostDB
 
 func (cred *Credentials) SetFromFile(keyf string) *conf.ApiError { // {{{
 	file, err := ioutil.ReadFile(keyf)
@@ -165,6 +166,7 @@ func Start(args []string) {
 	// configure
 	config = &Config{}
 	config.SetDefault()
+	ghostDB = &GhostDB{}
 	msgState = conf.NewMsgState()
 	msgState.SetErrors()
 
@@ -186,7 +188,7 @@ func Start(args []string) {
 	confTemp = &oauth2.Config{
 		ClientID:     config.Cred.Cid,
 		ClientSecret: config.Cred.Csecret,
-		RedirectURL:  "http://" + config.Host + ":" + config.Port + "/auth",
+		RedirectURL:  "http://" + config.Host + ":" + config.Port + "/api/auth",
 		Scopes: []string{
 			"https://www.googleapis.com/auth/userinfo.email",
 		},
