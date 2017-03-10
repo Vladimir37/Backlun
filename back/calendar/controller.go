@@ -120,8 +120,19 @@ func GetDayData(c *gin.Context) {
 		return
 	}
 
-	minTime := GetStartDay(request.Time).Unix()
-	maxTime := GetEndDay(request.Time).Unix()
+	errTime, formattedTime := FormatToDate(request.Time)
+
+	if errTime != nil {
+		c.JSON(400, gin.H{
+			"status":  5,
+			"message": "Incorrect time format",
+			"body":    nil,
+		})
+		return
+	}
+
+	minTime := GetStartDay(formattedTime).Unix()
+	maxTime := GetEndDay(formattedTime).Unix()
 
 	var ShortEventList []ShortEventExpanded
 	var LongEventList []LongEventExpanded
@@ -190,12 +201,23 @@ func CreateShortEvent(c *gin.Context) {
 		return
 	}
 
+	errTime, formattedTime := FormatToDate(request.Time)
+
+	if errTime != nil {
+		c.JSON(400, gin.H{
+			"status":  5,
+			"message": "Incorrect time format",
+			"body":    nil,
+		})
+		return
+	}
+
 	newShortEvent := ShortEvent{
 		ID:          CurrentShortEventID,
 		Category:    request.Category,
 		Title:       request.Title,
 		Description: request.Description,
-		Time:        request.Time,
+		Time:        formattedTime,
 	}
 
 	AllShortEvents = append(AllShortEvents, newShortEvent)
@@ -247,9 +269,20 @@ func EditShortEvent(c *gin.Context) {
 		return
 	}
 
+	errTime, formattedTime := FormatToDate(request.Time)
+
+	if errTime != nil {
+		c.JSON(400, gin.H{
+			"status":  5,
+			"message": "Incorrect time format",
+			"body":    nil,
+		})
+		return
+	}
+
 	AllShortEvents[index].Category = request.Category
 	AllShortEvents[index].Description = request.Description
-	AllShortEvents[index].Time = request.Time
+	AllShortEvents[index].Time = formattedTime
 	AllShortEvents[index].Title = request.Title
 
 	c.JSON(200, gin.H{
@@ -318,13 +351,25 @@ func CreateLongEvent(c *gin.Context) {
 		return
 	}
 
+	errTimeStart, formattedTimeStart := FormatToDate(request.StartTime)
+	errTimeEnd, formattedTimeEnd := FormatToDate(request.EndTime)
+
+	if (errTimeStart != nil) || (errTimeEnd != nil) {
+		c.JSON(400, gin.H{
+			"status":  5,
+			"message": "Incorrect time format",
+			"body":    nil,
+		})
+		return
+	}
+
 	newLongEvent := LongEvent{
 		ID:          CurrentShortEventID,
 		Category:    request.Category,
 		Title:       request.Title,
 		Description: request.Description,
-		StartTime:   request.StartTime,
-		EndTime:     request.EndTime,
+		StartTime:   formattedTimeStart,
+		EndTime:     formattedTimeEnd,
 	}
 
 	AllLongEvents = append(AllLongEvents, newLongEvent)
@@ -376,10 +421,22 @@ func EditLongEvent(c *gin.Context) {
 		return
 	}
 
+	errTimeStart, formattedTimeStart := FormatToDate(request.StartTime)
+	errTimeEnd, formattedTimeEnd := FormatToDate(request.EndTime)
+
+	if (errTimeStart != nil) || (errTimeEnd != nil) {
+		c.JSON(400, gin.H{
+			"status":  5,
+			"message": "Incorrect time format",
+			"body":    nil,
+		})
+		return
+	}
+
 	AllLongEvents[index].Category = request.Category
 	AllLongEvents[index].Description = request.Description
-	AllLongEvents[index].StartTime = request.StartTime
-	AllLongEvents[index].EndTime = request.EndTime
+	AllLongEvents[index].StartTime = formattedTimeStart
+	AllLongEvents[index].EndTime = formattedTimeEnd
 	AllLongEvents[index].Title = request.Title
 
 	c.JSON(200, gin.H{

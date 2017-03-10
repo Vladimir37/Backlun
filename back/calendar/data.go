@@ -58,35 +58,35 @@ type EditCategoryReq struct {
 }
 
 type NewShortEventReq struct {
-	Category    int       `form:"category"`
-	Title       string    `form:"title" binding:"required"`
-	Description string    `form:"description" binding:"required"`
-	Time        time.Time `form:"time" binding:"required"`
+	Category    int    `form:"category"`
+	Title       string `form:"title" binding:"required"`
+	Description string `form:"description" binding:"required"`
+	Time        string `form:"time" binding:"required"`
 }
 
 type EditShortEventReq struct {
-	ID          int       `form:"id" binding:"required"`
-	Category    int       `form:"category"`
-	Title       string    `form:"title" binding:"required"`
-	Description string    `form:"description" binding:"required"`
-	Time        time.Time `form:"time" binding:"required"`
+	ID          int    `form:"id" binding:"required"`
+	Category    int    `form:"category"`
+	Title       string `form:"title" binding:"required"`
+	Description string `form:"description" binding:"required"`
+	Time        string `form:"time" binding:"required"`
 }
 
 type NewLongEventReq struct {
-	Title       string    `form:"title" binding:"required"`
-	Category    int       `form:"category"`
-	Description string    `form:"description" binding:"required"`
-	StartTime   time.Time `form:"start_time" binding:"required"`
-	EndTime     time.Time `form:"end_time" binding:"required"`
+	Title       string `form:"title" binding:"required"`
+	Category    int    `form:"category"`
+	Description string `form:"description" binding:"required"`
+	StartTime   string `form:"start_time" binding:"required"`
+	EndTime     string `form:"end_time" binding:"required"`
 }
 
 type EditLongEventReq struct {
-	ID          int       `form:"id" binding:"required"`
-	Category    int       `form:"category"`
-	Title       string    `form:"title" binding:"required"`
-	Description string    `form:"description" binding:"required"`
-	StartTime   time.Time `form:"start_time" binding:"required"`
-	EndTime     time.Time `form:"end_time" binding:"required"`
+	ID          int    `form:"id" binding:"required"`
+	Category    int    `form:"category"`
+	Title       string `form:"title" binding:"required"`
+	Description string `form:"description" binding:"required"`
+	StartTime   string `form:"start_time" binding:"required"`
+	EndTime     string `form:"end_time" binding:"required"`
 }
 
 type IDReq struct {
@@ -94,7 +94,7 @@ type IDReq struct {
 }
 
 type TimeReq struct {
-	Time time.Time `form:"day" binding:"required"`
+	Time string `form:"day" binding:"required"`
 }
 
 // Current
@@ -253,4 +253,14 @@ func GetStartDay(t time.Time) time.Time {
 func GetEndDay(t time.Time) time.Time {
 	year, month, day := t.Date()
 	return time.Date(year, month, day, 23, 59, 59, 999999999, t.Location())
+}
+
+func FormatToDate(dateStr string) (error, time.Time) {
+	layout := "2006-01-02T15:04:05.000Z"
+	date, err := time.Parse(layout, dateStr)
+
+	if err != nil {
+		return err, time.Now()
+	}
+	return nil, date
 }
