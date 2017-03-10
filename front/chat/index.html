@@ -19,6 +19,7 @@
   const ws_client = new client();
   ws_client.on('connect', function(connection) {
     if (connection.connected) {
+      // Send message to the chat
       connection.sendUTF(JSON.stringify({message: "some text"}));
     }
   }</p>

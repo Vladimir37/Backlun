@@ -64,7 +64,7 @@ func incorrectCommand() {
 	fmt.Println("---------------")
 	fmt.Println("ERROR")
 	fmt.Println("Incorrect command")
-	fmt.Println("For help run \"./Backlun help\"")
+	fmt.Println("For help run \"help\"")
 	fmt.Println("---------------")
 }
 

@@ -14,11 +14,11 @@
         <p class="main-text">You can get the file from static folder at the address <span class="main-addr">/src</span>.</p>
         <p class="main-text">Example: <span class="main-addr">Backlun/front/oauth/static/js/build/main.js</span> -> <span class="main-addr">/src/js/build/main.js</span></p>
     <p class="main-text">sequence auth (step by step): <br>
-      <var>get localhost:8000/api/login</var> <br>
-      <var>follow to returned link(google auth)</var> <br>
-      <var>authorized on google</var> <br>
-      <var>automatically redirected to localhost:8000/api/auth</var> <br>
-      <var>accept or not you auth status</var> <br>
+      <var>1) Get localhost:8000/api/login</var> <br>
+      <var>2) Follow to returned link (google auth)</var> <br>
+      <var>3) Authorized on google</var> <br>
+      <var>4) Automatically redirected to 'localhost:< target port >/api/auth'. Example: <span class="main-addr">localhost:8000/api/auth</span></var> <br>
+      <var>5) Accept or not you auth status</var>
     </p>
     <p class="main-text">Test it: <span class="main-addr">Backlun/back/oauth/_test_/request.test.js</span> </p>
     <p class="main-text">Command required: <span class="main-addr">npm install && npm run test</span> </p>
@@ -37,7 +37,7 @@
                 <td>/api/login</td>
                 <td>-</td>
                 <td>
-                  link <span class="response-obj">Object</span><br>
+                  link <span class="response-obj">string</span><br>
                 </td>
                 <td>JSON object contain a link for oauth</td>
             </tr>
