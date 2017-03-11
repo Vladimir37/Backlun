@@ -1,8 +1,6 @@
+<img align="right" src="docs/logo.png">
 # BackLun
 ## Universal backend server
-
-<img align="right" src="docs/logo.png">
-
 ### Description
 Backlun — a set of various Back-end services (platforms) with a API, but missing the Front-end. You can create any Front-end using any framework, libraries, JS dialects.
 
