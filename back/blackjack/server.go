@@ -25,6 +25,7 @@ func Start(args []string) {
 	router.LoadHTMLGlob("front/blackjack/index.html")
 
 	router.Static("/src", "./front/blackjack/static/")
+	router.StaticFile("/favicon.ico", "./favicon/favicon.ico")
 	getApiRouter(router)
 
 	router.NoRoute(func(c *gin.Context) {

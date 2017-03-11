@@ -140,6 +140,7 @@ func (server *Server) NewEngine(port string) {
 	// all frontend
 	router.LoadHTMLGlob("front/oauth/index.html")
 	router.Static("/src", "./front/oauth/static/")
+	router.StaticFile("/favicon.ico", "./favicon/favicon.ico")
 
 	// set specification
 	router.GET("/", serveHome)

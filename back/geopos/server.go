@@ -76,6 +76,7 @@ func (server *Server) NewEngine(port string) {
 	// all frontend
 	router.LoadHTMLGlob("front/geopos/index.html")
 	router.Static("/src", "./front/geopos/static/")
+	router.StaticFile("/favicon.ico", "./favicon/favicon.ico")
 
 	// set api/handlers
 	router.GET("/", serveHome)

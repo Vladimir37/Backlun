@@ -53,6 +53,7 @@ func (server *Server) NewEngine(port string) {
 	router.Use(gin.Recovery())
 	router.LoadHTMLGlob("front/chat/index.html")
 	router.Static("/src", "./front/chat/static/")
+	router.StaticFile("/favicon.ico", "./favicon/favicon.ico")
 
 	// specification page
 	router.GET("/", serveHome)

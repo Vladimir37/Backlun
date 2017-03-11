@@ -25,6 +25,7 @@ func Start(args []string) {
 	router.LoadHTMLGlob("front/calendar/index.html")
 
 	router.Static("/src", "./front/calendar/static/")
+	router.StaticFile("/favicon.ico", "./favicon/favicon.ico")
 	getApiRouter(router)
 
 	router.NoRoute(func(c *gin.Context) {
