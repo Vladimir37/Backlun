@@ -27,6 +27,7 @@ Select the desired version on [release page](https://github.com/Vladimir37/Backl
 - [Backlun Windows](https://github.com/Vladimir37)
 - [Backlun Linux](https://github.com/Vladimir37)
 - [Backlun OSX](https://github.com/Vladimir37)
+
 Download the archive, unzip it to any convenient place
 
 #### Running the app
@@ -38,6 +39,7 @@ After starting, you will see the console. Enter one of the following commands:
 - **help** — Show full help
 - **help &lt;platform&gt;** — Show help for the selected platform.
 - **start &lt;platform&gt; [&lt;port&gt;]** — Run the selected platform. You can optionally specify a port.
+
 Examples:
 - `start blog` — Start blog platform on port 8000.
 - `start forum 8080` — Start forum platform on port 8080.
