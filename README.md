@@ -42,7 +42,7 @@ After starting, you will see the console. Enter one of the following commands:
 
 Examples:
 - `start blog` — Start blog platform on port 8000.
-- `start forum 8080` — Start forum platform on port 8080.
+- `start forum 5000` — Start forum platform on port 5000.
 - `help market` — Show help for market platform.
 
 ##### Note for the OAuth platform
