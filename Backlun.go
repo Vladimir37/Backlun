@@ -18,6 +18,12 @@ import (
 )
 
 func main() {
+	args := os.Args
+	if len(args) > 1 && args[1] == "start" {
+		args = append(args[:0], args[1:]...)
+		startServer(args)
+		return
+	}
 	startInit()
 }
 

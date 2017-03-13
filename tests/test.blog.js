@@ -65,15 +65,19 @@ function login(user) { //{{{
     .catch(error => console.log('login error: ', error));
 } //}}}
 
-function get_auth_data() {//{{{
+function get_auth_data() { //{{{
   fetch(`${URL}/api/auth/get`)
     .then((res) => res.json())
     .then((json) => console.log('get auth: ', json.body))
     .catch(error => console.log('get auth error: ', error));
-}//}}}
+} //}}}
 
-function get_auth_and_login() {//{{{
-  const auth = {login: '', password: '', token: ''};
+function get_auth_and_login() { //{{{
+  const auth = {
+    login: '',
+    password: '',
+    token: ''
+  };
   return fetch(`${URL}/api/auth/get`)
     .then((res) => res.json())
     .then((json) => {
@@ -95,9 +99,11 @@ function get_auth_and_login() {//{{{
       return auth;
     })
     .catch(error => console.log('get auth error: ', error));
-}//}}}
+} //}}}
 
-get_auth_and_login().then(auth => {
-  create_post(auth);
-  get_all_posts();
-});
+export default function blog() {
+  get_auth_and_login().then(auth => {
+    create_post(auth);
+    get_all_posts();
+  });
+}

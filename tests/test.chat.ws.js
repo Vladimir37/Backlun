@@ -43,6 +43,7 @@ ws_client.on('connect', function(connection) { //{{{
       console.log("Received: '" + message.utf8Data + "'");
     }
   });
+
   function send_msg() {
     if (connection.connected) {
       const msg = {
@@ -51,9 +52,10 @@ ws_client.on('connect', function(connection) { //{{{
       connection.sendUTF(JSON.stringify(msg));
     }
   }
+
   function start_sending(num) {
     for (let i = 1; i < num; i++) {
-      setTimeout(send_msg, 3000*i);
+      setTimeout(send_msg, 3000 * i);
     }
   }
   start_sending(10);
@@ -65,7 +67,7 @@ function get_error_request() { //{{{
     .then((json) => console.log('error_request:', json))
     .catch(error => console.log('error_request error: ', error));
 } //}}}
-
-get_error_request();
-
-ws_client.connect(`ws://${SERVER}:${PORT}/api/ws`);
+export default function chat () {
+  get_error_request();
+  ws_client.connect(`ws://${SERVER}:${PORT}/api/ws`);
+}

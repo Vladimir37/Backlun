@@ -33,7 +33,7 @@ function get_all_tasks() { //{{{
     .catch(error => console.log('tasks error: ', error));
 } //}}}
 
-function add_new_task(task) {//{{{
+function add_new_task(task) { //{{{
   fetch(`${URL}/api/tasks/add`, {
       headers: {
         'Content-Type': 'application/json'
@@ -46,7 +46,9 @@ function add_new_task(task) {//{{{
       console.log('add task: ', json)
     })
     .catch(error => console.log('add task error: ', error));
-}//}}}
+} //}}}
 
-add_new_task(task);
-get_all_tasks();
+export default function todo() {
+  add_new_task(task);
+  get_all_tasks();
+}
