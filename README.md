@@ -45,8 +45,20 @@ Examples:
 - `start forum 8080` — Start forum platform on port 8080.
 - `help market` — Show help for market platform.
 
+##### Note for the OAuth platform
+Starting of the OAuth platform is different from other platforms.
+- **start oauth [&lt;port&gt; &lt;host&gt; &lt;key&gt;]**
+
+`key` - key file. The default file name is `key.json` and it should be located in the root folder `Backlun/`. Key file structure: 
+```
+{ 
+    "cid": string, 
+    "csecret": string
+}
+```
+
 #### Compilation
-You can not use binary files, but compile Backlun from the source code yourself. Download [Backlun source code](https://github.com/Vladimir37/Backlun/archive/master.zip). Unzip to any convenient place, go to the directory and run `go build Backlun.go`. If you do not have Golange installed, then you can install it according to the [instructions](https://golang.org/doc/install).
+You can not use binary files, but compile Backlun from the source code yourself. Download [Backlun source code](https://github.com/Vladimir37/Backlun/archive/master.zip). Unzip to any convenient place, go to the directory and run `go build Backlun.go`. If you do not have Golang installed, then you can install it according to the [instructions](https://golang.org/doc/install).
 
 ### Development
 Developers: [Vladimir37](https://github.com/Vladimir37) (ToDo, Blog, Market, Forum, Blackjack, Calendar), [Jaime](https://github.com/asm-jaime) (Geopos, OAuth, Chat).
