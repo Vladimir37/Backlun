@@ -24,9 +24,9 @@ You want to learn how to write a Front-end on a TypeScript or ELM. You read the 
 ### Install
 #### Downloading
 Select the desired version on [release page](https://github.com/Vladimir37/Backlun/releases) or select it below:
-- [Backlun Windows](https://github.com/Vladimir37)
-- [Backlun Linux](https://github.com/Vladimir37)
-- [Backlun OSX](https://github.com/Vladimir37)
+- [Backlun Windows](https://github.com/Vladimir37/Backlun/releases/download/1.0/backlun_windows.zip)
+- [Backlun Linux](https://github.com/Vladimir37/Backlun/releases/download/1.0/backlun_linux.zip)
+- [Backlun OS X](https://github.com/Vladimir37/Backlun/releases/download/1.0/backlun_osx.zip)
 
 Download the archive, unzip it to any convenient place
 
@@ -61,6 +61,6 @@ Starting of the OAuth platform is different from other platforms.
 You can not use binary files, but compile Backlun from the source code yourself. Download [Backlun source code](https://github.com/Vladimir37/Backlun/archive/master.zip). Unzip to any convenient place, go to the directory and run `go build Backlun.go`. If you do not have Golang installed, then you can install it according to the [instructions](https://golang.org/doc/install).
 
 ### Development
-Developers: [Vladimir37](https://github.com/Vladimir37) (ToDo, Blog, Market, Forum, Blackjack, Calendar), [Jaime](https://github.com/asm-jaime) (Geopos, OAuth, Chat).
+Developers: [Vladimir37](https://github.com/Vladimir37) (ToDo, Blog, Market, Forum, Blackjack, Calendar), [Jaime](https://github.com/asm-jaime) (Geopos, OAuth, Chat, tests).
 
 Graphics made with [Logo Maker](http://logomakr.com).

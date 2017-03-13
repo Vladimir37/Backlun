@@ -104,6 +104,8 @@ func printFullHelp() {
 	fmt.Println("\"help market\"")
 	fmt.Println("\"start todo\"")
 	fmt.Println("\"start blog 8080\"")
+	fmt.Println("")
+	fmt.Println("More info on http://backlun.getforge.io/")
 }
 
 func printPlatformHelp(platform string) {
