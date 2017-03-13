@@ -3,7 +3,10 @@ package chat
 import (
 	"Backlun/back/conf"
 	"fmt"
+	"log"
 	"net/http"
+	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -47,13 +50,18 @@ func noRoute(c *gin.Context) { // {{{
 } // }}}
 
 func (server *Server) NewEngine(port string) {
+	// Current path
+	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
+	if err != nil {
+		log.Fatal(err)
+	}
 	// router
 	router := gin.Default()
 	router.Use(gin.Logger())
 	router.Use(gin.Recovery())
-	router.LoadHTMLGlob("front/chat/index.html")
-	router.Static("/src", "./front/chat/static/")
-	router.StaticFile("/favicon.ico", "./favicon/favicon.ico")
+	router.LoadHTMLGlob(dir + "/front/chat/index.html")
+	router.Static("/src", dir+"/front/chat/static/")
+	router.StaticFile("/favicon.ico", dir+"/favicon/favicon.ico")
 
 	// specification page
 	router.GET("/", serveHome)

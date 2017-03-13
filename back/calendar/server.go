@@ -2,7 +2,10 @@ package calendar
 
 import (
 	"fmt"
+	"log"
 	"net/http"
+	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -15,6 +18,12 @@ func Start(args []string) {
 		port = args[2]
 	}
 
+	// Current path
+	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	// Info
 	fmt.Println("---------------")
 	fmt.Println("Selected port: " + port)
@@ -22,10 +31,10 @@ func Start(args []string) {
 
 	// Creating router
 	router := gin.Default()
-	router.LoadHTMLGlob("front/calendar/index.html")
+	router.LoadHTMLGlob(dir + "/front/calendar/index.html")
 
-	router.Static("/src", "./front/calendar/static/")
-	router.StaticFile("/favicon.ico", "./favicon/favicon.ico")
+	router.Static("/src", dir+"/front/calendar/static/")
+	router.StaticFile("/favicon.ico", dir+"/favicon/favicon.ico")
 	getApiRouter(router)
 
 	router.NoRoute(func(c *gin.Context) {

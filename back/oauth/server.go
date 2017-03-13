@@ -5,7 +5,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
+	"os"
+	"path/filepath"
 	"strings"
 
 	"golang.org/x/oauth2"
@@ -137,10 +140,16 @@ func (server *Server) NewEngine(port string) {
 	// add headers middleware
 	router.Use(CORSMiddleware())
 
+	// Current path
+	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	// all frontend
-	router.LoadHTMLGlob("front/oauth/index.html")
-	router.Static("/src", "./front/oauth/static/")
-	router.StaticFile("/favicon.ico", "./favicon/favicon.ico")
+	router.LoadHTMLGlob(dir + "/front/oauth/index.html")
+	router.Static("/src", dir+"/front/oauth/static/")
+	router.StaticFile("/favicon.ico", dir+"/favicon/favicon.ico")
 
 	// set specification
 	router.GET("/", serveHome)

@@ -3,7 +3,10 @@ package geopos
 import (
 	"Backlun/back/conf"
 	"fmt"
+	"log"
 	"net/http"
+	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -73,10 +76,16 @@ func (server *Server) NewEngine(port string) {
 	router.Use(gin.Logger())
 	router.Use(gin.Recovery())
 
+	// Current path
+	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	// all frontend
-	router.LoadHTMLGlob("front/geopos/index.html")
-	router.Static("/src", "./front/geopos/static/")
-	router.StaticFile("/favicon.ico", "./favicon/favicon.ico")
+	router.LoadHTMLGlob(dir + "/front/geopos/index.html")
+	router.Static("/src", dir+"/front/geopos/static/")
+	router.StaticFile("/favicon.ico", dir+"/favicon/favicon.ico")
 
 	// set api/handlers
 	router.GET("/", serveHome)
