@@ -8,16 +8,23 @@ const URL = `http://${SERVER}:${PORT}`
 const user = {
   login: gen_token(4),
   password: gen_token(8),
-  FullName: gen_token(10),
-  address: gen_token(20),
 };
 
-const credit = {
+const thread = {
   token: '',
-  credit: 1000,
+  category: 1,
+  title: 'yes!',
+  text: gen_token(25),
 };
 
 //gen data {{{
+
+function obj_to_param(obj) {
+  return Object.keys(obj).map(function(key) {
+    return key + '=' + obj[key];
+  }).join('&');
+}
+
 function gen_num() {
   const min = 1;
   const max = 10000;
@@ -33,30 +40,37 @@ function gen_token(len_token) {
   return text;
 } //}}}
 
-function get_all_products() { //{{{
-  fetch(`${URL}/api/get/products`)
+function get_all_threads(category) { //{{{
+  fetch(`${URL}/api/get/threads?${obj_to_param(category)}`)
     .then((res) => res.json())
-    .then((json) => console.log('products: ', json.body))
-    .catch(error => console.log('products error: ', error));
+    .then((json) => console.log('threads: ', json.body))
+    .catch(error => console.log('threads error: ', error));
 } //}}}
 
-function add_credits(credit) {//{{{
-  console.log('thread will be created: ', credit);
-  fetch(`${URL}/api/market/credits`, {
+function get_all_categories() { //{{{
+  fetch(`${URL}/api/get/categories`)
+    .then((res) => res.json())
+    .then((json) => console.log('categories: ', json.body))
+    .catch(error => console.log('threads error: ', error));
+} //}}}
+
+function create_thread(thread) { //{{{
+  console.log('thread will be created: ', thread);
+  fetch(`${URL}/api/forum/create`, {
       headers: {
         'Content-Type': 'application/json'
       },
       method: 'POST',
-      body: JSON.stringify(credit),
+      body: JSON.stringify(thread),
     })
     .then((res) => res.json())
     .then((json) => {
-      console.log('add credit: ', json)
+      console.log('thread: ', json)
     })
-    .catch(error => console.log('add credit error: ', error));
-}//}}}
+    .catch(error => console.log('post a post error: ', error));
+} //}}}
 
-function registration(user) {//{{{
+function registration(user) { //{{{
   return fetch(`${URL}/api/auth/registration`, {
       headers: {
         'Content-Type': 'application/json'
@@ -71,13 +85,16 @@ function registration(user) {//{{{
       return user;
     })
     .catch(error => console.log('get auth error: ', error));
-}//}}}
+} //}}}
 
 // get_all_categories();
-registration(user).then(user => {
-  credit.token = user.token;
-  add_credits(credit);
-  get_all_products();
-  // console.log(user);
-});
-
+export default function forum () {
+  registration(user).then(user => {
+    thread.token = user.token;
+    create_thread(thread);
+    get_all_threads({
+      category: 3
+    });
+    // console.log(user);
+  });
+}

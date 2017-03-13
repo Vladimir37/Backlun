@@ -41,4 +41,6 @@ function get_auth(auth) { //{{{
     .catch(error => console.log('auth error: ', error));
 } //}}}
 
-get_login();
+export default function oauth() {
+  get_login();
+}

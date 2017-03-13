@@ -1,13 +1,21 @@
 {
   "name": "Backun.test",
-  "version": "0.0.1",
-  "description": "web-socket chat test",
-  "main": "chat.ws.test.js",
+  "version": "0.0.5",
+  "description": "test requests",
+  "main": "request.test.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node request.test.js"
   },
   "author": "asm.jaime",
   "license": "MIT",
+  "babel": {
+    "presets": [
+      "es2015",
+      "stage-0"
+    ],
+    "plugins": [
+    ]
+  },
   "dependencies": {
     "websocket": "^1.0.23",
     "node-fetch": "^1.5.3"
@@ -21,4 +29,3 @@
     "webpack": "^1.13.1"
   }
 }
-

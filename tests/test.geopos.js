@@ -42,7 +42,7 @@ function get_point_from_token(token) { //{{{
     .catch(error => console.log('get_from_token error: ', error));
 } //}}}
 
-function post_point(point, sample) {//{{{
+function post_point(point, sample) { //{{{
   fetch(`${URL}/api/points/post`, {
       headers: {
         'Content-Type': 'application/json'
@@ -59,7 +59,7 @@ function post_point(point, sample) {//{{{
       console.log('post point: ', json)
     })
     .catch(error => console.log('post point error: ', error));
-}//}}}
+} //}}}
 
 function get_rnd_point() { //{{{
   fetch(`${URL}/api/random_point/get`)
@@ -68,7 +68,7 @@ function get_rnd_point() { //{{{
     .catch(error => console.log('get random_point error: ', error));
 } //}}}
 
-function post_rnd_point() {//{{{
+function post_rnd_point() { //{{{
   let rnd_pos = {
     Type: 'Point',
     Token: gen_token(),
@@ -82,7 +82,7 @@ function post_rnd_point() {//{{{
     .then((res) => res.json())
     .then((json) => console.log('post random_point: ', json))
     .catch(error => console.log('post random_point error: ', error));
-}//}}}
+} //}}}
 
 function get_check_point() { //{{{
   fetch(`${URL}/api/check_point/get`)
@@ -125,9 +125,13 @@ function get_full_response() { //{{{
     .catch(error => console.log('get response error: ', error));
 } //}}}
 
-get_full_response();
-post_point({});
-post_point({test: "test"});
-post_point(static_point);
-post_rnd_point();
-get_points();
+export default function geopos () {
+  get_full_response();
+  post_point({});
+  post_point({
+    test: "test"
+  });
+  post_point(static_point);
+  post_rnd_point();
+  get_points();
+}

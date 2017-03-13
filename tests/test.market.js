@@ -8,23 +8,16 @@ const URL = `http://${SERVER}:${PORT}`
 const user = {
   login: gen_token(4),
   password: gen_token(8),
+  FullName: gen_token(10),
+  address: gen_token(20),
 };
 
-const thread = {
+const credit = {
   token: '',
-  category: 1,
-  title: 'yes!',
-  text: gen_token(25),
+  credit: 1000,
 };
 
 //gen data {{{
-
-function obj_to_param(obj) {
-  return Object.keys(obj).map(function(key) {
-    return key + '=' + obj[key];
-  }).join('&');
-}
-
 function gen_num() {
   const min = 1;
   const max = 10000;
@@ -40,34 +33,27 @@ function gen_token(len_token) {
   return text;
 } //}}}
 
-function get_all_threads(category) { //{{{
-  fetch(`${URL}/api/get/threads?${obj_to_param(category)}`)
+function get_all_products() { //{{{
+  fetch(`${URL}/api/get/products`)
     .then((res) => res.json())
-    .then((json) => console.log('threads: ', json.body))
-    .catch(error => console.log('threads error: ', error));
+    .then((json) => console.log('products: ', json.body))
+    .catch(error => console.log('products error: ', error));
 } //}}}
 
-function get_all_categories() { //{{{
-  fetch(`${URL}/api/get/categories`)
-    .then((res) => res.json())
-    .then((json) => console.log('categories: ', json.body))
-    .catch(error => console.log('threads error: ', error));
-} //}}}
-
-function create_thread(thread) { //{{{
-  console.log('thread will be created: ', thread);
-  fetch(`${URL}/api/forum/create`, {
+function add_credits(credit) { //{{{
+  console.log('thread will be created: ', credit);
+  fetch(`${URL}/api/market/credits`, {
       headers: {
         'Content-Type': 'application/json'
       },
       method: 'POST',
-      body: JSON.stringify(thread),
+      body: JSON.stringify(credit),
     })
     .then((res) => res.json())
     .then((json) => {
-      console.log('thread: ', json)
+      console.log('add credit: ', json)
     })
-    .catch(error => console.log('post a post error: ', error));
+    .catch(error => console.log('add credit error: ', error));
 } //}}}
 
 function registration(user) { //{{{
@@ -88,11 +74,11 @@ function registration(user) { //{{{
 } //}}}
 
 // get_all_categories();
-registration(user).then(user => {
-  thread.token = user.token;
-  create_thread(thread);
-  get_all_threads({
-    category: 3
+export default function market() {
+  registration(user).then(user => {
+    credit.token = user.token;
+    add_credits(credit);
+    get_all_products();
+    // console.log(user);
   });
-  // console.log(user);
-});
+}
