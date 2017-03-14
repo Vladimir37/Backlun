@@ -2,9 +2,9 @@
   "name": "Backun.test",
   "version": "0.0.5",
   "description": "test requests",
-  "main": "request.test.js",
+  "main": "start.test.js",
   "scripts": {
-    "test": "node request.test.js"
+    "test": "babel-node start.test.js"
   },
   "author": "asm.jaime",
   "license": "MIT",
