@@ -3,10 +3,10 @@
 # BackLun
 
 ### Description
-Backlun — a set of various Back-end services (platforms) with a API, but missing the Front-end. You can create any Front-end using any framework, libraries, JS dialects. Backlun does not require installation and has no dependencies. It's enough to download Backlun and start using it.
+Backlun is a set of various Back-end services (platforms) with various APIs and without frontend. You can add any frontend using any framework, library or JS dialect. Backlun does not require installation and has no dependencies, just download and start using it.
 
 #### Why?
-Backlun will be useful for Front-end developers who are not familiar with Back-end development, but who want to create a Front-end for a real dynamic application. Backlun is suitable for developers who want to try out a new Front-end framework, but do not want to create a back-end part of the application for this. Backlun is a good choice for an employer who wants to test the knowledge of a hired Front-end developer.
+Backlun will be useful for Front-end developers who are not familiar with Back-end development, but who want to practice in Front-end development or design for real dynamic applications. Backlun is suitable for developers who want to try out a new Front-end framework, but do not want to create a back-end part of the application for this. Backlun is a good choice for an employer who wants to test the knowledge of a hired Front-end developer.
 
 #### Examples of using
 You want to learn how to write a Front-end on a TypeScript or ELM. You read the React tutorial and want to write the first practical application. You want to hire a new developer, but he previously made only static pages and you want to test his ability to create an application that interacts with the server through API. You need a simple tool for test tasks to select candidates for a job.
@@ -29,7 +29,7 @@ Select the desired version on [release page](https://github.com/Vladimir37/Backl
 - [Backlun Linux](https://github.com/Vladimir37/Backlun/releases/download/1.0/backlun_linux.zip)
 - [Backlun OS X](https://github.com/Vladimir37/Backlun/releases/download/1.0/backlun_osx.zip)
 
-Download the archive, unzip it to any convenient place
+Download the archive, unzip it to any convenient place.
 
 #### Running the app
 - **Windows** — Execute the `Backlun.exe` inside the directory.
@@ -50,7 +50,7 @@ Examples:
 Starting of the OAuth platform is different from other platforms.
 - **start oauth [&lt;port&gt; &lt;host&gt; &lt;key&gt;]**
 
-`key` - key file. The default file name is `key.json` and it should be located in the root folder `Backlun/`. Key file structure: 
+`key` - key file. The default file name is `key.json` and it should be located in the root folder `Backlun/`. Initially, this file is missing and must be created by the user if necessary. Key file structure: 
 ```
 { 
     "cid": string, 
