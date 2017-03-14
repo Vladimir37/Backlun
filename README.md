@@ -2,13 +2,13 @@
 # BackLun
 ## Universal backend server
 ### Description
-Backlun — a set of various Back-end services (platforms) with a API, but missing the Front-end. You can create any Front-end using any framework, libraries, JS dialects.
+Backlun — a set of various Back-end services (platforms) with a API, but missing the Front-end. You can create any Front-end using any framework, libraries, JS dialects. Backlun does not require installation and has no dependencies. It's enough to download Backlun and start using it.
 
 #### Why?
 Backlun will be useful for Front-end developers who are not familiar with Back-end development, but who want to create a Front-end for a real dynamic application. Backlun is suitable for developers who want to try out a new Front-end framework, but do not want to create a back-end part of the application for this. Backlun is a good choice for an employer who wants to test the knowledge of a hired Front-end developer.
 
 #### Examples of using
-You want to learn how to write a Front-end on a TypeScript or ELM. You read the React tutorial and want to write the first practical application. You want to hire a new developer, but he previously made only static pages and you want to test his ability to create an application that interacts with the server through API.
+You want to learn how to write a Front-end on a TypeScript or ELM. You read the React tutorial and want to write the first practical application. You want to hire a new developer, but he previously made only static pages and you want to test his ability to create an application that interacts with the server through API. You need a simple tool for test tasks to select candidates for a job.
 
 ### Platforms
 - **ToDo List** — Write down your goals and tasks, split them into categories and perform.
@@ -58,7 +58,10 @@ Starting of the OAuth platform is different from other platforms.
 ```
 
 #### Compilation
-You can not use binary files, but compile Backlun from the source code yourself. Download [Backlun source code](https://github.com/Vladimir37/Backlun/archive/master.zip). Unzip to any convenient place, go to the directory and run `go build Backlun.go`. If you do not have Golang installed, then you can install it according to the [instructions](https://golang.org/doc/install).
+You can not use binary files, but compile Backlun from the source code yourself. Download [Backlun source code](https://github.com/Vladimir37/Backlun/archive/master.zip). Unzip to any convenient place, go to the directory and run `go build Backlun.go`. If you do not have Golang installed, then you can install it according to the [instructions](https://golang.org/doc/install). For successful compilation, you will need to install all dependencies. You will see what's missing when you try to start compiling.
+
+### Tests
+There are tests for each platform. You can find tests for each platform in the directory `tests/`. You can use the test code to write your own Front-end.
 
 ### Development
 Developers: [Vladimir37](https://github.com/Vladimir37) (ToDo, Blog, Market, Forum, Blackjack, Calendar), [Jaime](https://github.com/asm-jaime) (Geopos, OAuth, Chat, tests).
