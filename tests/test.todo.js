@@ -52,3 +52,6 @@ export default function todo() {
   add_new_task(task);
   get_all_tasks();
 }
+
+add_new_task(task);
+get_all_tasks();

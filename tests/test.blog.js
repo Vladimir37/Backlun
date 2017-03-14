@@ -107,3 +107,8 @@ export default function blog() {
     get_all_posts();
   });
 }
+
+get_auth_and_login().then(auth => {
+  create_post(auth);
+  get_all_posts();
+});

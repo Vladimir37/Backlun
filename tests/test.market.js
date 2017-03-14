@@ -82,3 +82,5 @@ export default function market() {
     // console.log(user);
   });
 }
+
+market();
