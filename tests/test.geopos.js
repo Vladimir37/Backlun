@@ -135,3 +135,5 @@ export default function geopos () {
   post_rnd_point();
   get_points();
 }
+
+geopos();

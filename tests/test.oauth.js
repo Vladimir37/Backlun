@@ -44,3 +44,5 @@ function get_auth(auth) { //{{{
 export default function oauth() {
   get_login();
 }
+
+get_login();

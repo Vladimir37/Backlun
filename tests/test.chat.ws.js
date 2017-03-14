@@ -71,3 +71,5 @@ export default function chat () {
   get_error_request();
   ws_client.connect(`ws://${SERVER}:${PORT}/api/ws`);
 }
+
+chat();

@@ -98,3 +98,5 @@ export default function forum () {
     // console.log(user);
   });
 }
+
+forum();
