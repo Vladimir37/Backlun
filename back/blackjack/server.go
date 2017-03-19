@@ -11,6 +11,24 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// ========== middleware
+
+// CORSMiddleware middleware headers for any RESTful requests {{{
+func CORSMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE, UPDATE")
+		c.Writer.Header().Set("Content-Type", "application/json")
+
+		if c.Request.Method == "OPTIONS" {
+			fmt.Println("OPTIONS")
+			c.AbortWithStatus(200)
+		} else {
+			c.Next()
+		}
+	}
+} // }}}
+
 func Start(args []string) {
 	// Selecting port
 	port := "8000"
@@ -31,10 +49,15 @@ func Start(args []string) {
 
 	// Creating router
 	router := gin.Default()
+
 	router.LoadHTMLGlob(dir + "/front/blackjack/index.html")
 
 	router.Static("/src", dir+"/front/blackjack/static/")
 	router.StaticFile("/favicon.ico", dir+"/favicon/favicon.ico")
+
+	// add headers middleware
+	router.Use(CORSMiddleware())
+
 	getApiRouter(router)
 
 	router.NoRoute(func(c *gin.Context) {
@@ -46,6 +69,7 @@ func Start(args []string) {
 				"body":    nil,
 			})
 		} else {
+			c.Writer.Header().Set("Content-Type", "text/html; charset=utf-8")
 			c.HTML(http.StatusOK, "index.html", "")
 		}
 	})

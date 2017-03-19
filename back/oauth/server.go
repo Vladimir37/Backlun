@@ -115,6 +115,7 @@ func noRoute(c *gin.Context) { // {{{
 	if (path[1] != "") && (path[1] == "api") {
 		c.JSON(http.StatusNotFound, msgState.Errors[http.StatusNotFound])
 	} else {
+		c.Writer.Header().Set("Content-Type", "text/html; charset=utf-8")
 		c.HTML(http.StatusOK, "index.html", "")
 	}
 } // }}}
