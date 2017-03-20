@@ -39,7 +39,6 @@ func serveHome(c *gin.Context) { // {{{
 		c.JSON(http.StatusMethodNotAllowed, msgState.Errors[http.StatusMethodNotAllowed])
 	}
 	c.Writer.Header().Set("Content-Type", "text/html; charset=utf-8")
-
 	c.HTML(http.StatusOK, "index.html", "")
 } // }}}
 
@@ -48,11 +47,12 @@ func noRoute(c *gin.Context) { // {{{
 	if (path[1] != "") && (path[1] == "api") {
 		c.JSON(http.StatusNotFound, msgState.Errors[http.StatusNotFound])
 	} else {
+		c.Writer.Header().Set("Content-Type", "text/html; charset=utf-8")
 		c.HTML(http.StatusOK, "index.html", "")
 	}
 } // }}}
 
-// CORSMiddleware middleware witch headers for any RESTful requests {{{
+// CORSMiddleware middleware headers for any RESTful requests {{{
 func CORSMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
@@ -87,13 +87,14 @@ func (server *Server) NewEngine(port string) {
 	router.Static("/src", dir+"/front/geopos/static/")
 	router.StaticFile("/favicon.ico", dir+"/favicon/favicon.ico")
 
+	// add headers middleware
+	router.Use(CORSMiddleware())
+
 	// set api/handlers
 	router.GET("/", serveHome)
 
 	api := router.Group("api")
 	{
-		// add headers middleware
-		// api.Use(CORSMiddleware())
 
 		// points
 		points := api.Group("points")
