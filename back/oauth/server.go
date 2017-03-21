@@ -1,7 +1,7 @@
 package oauth
 
 import (
-	"Backlun/back/conf"
+	"github.com/Vladimir37/Backlun/back/conf"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
