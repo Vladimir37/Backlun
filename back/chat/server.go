@@ -1,7 +1,7 @@
 package chat
 
 import (
-	"Backlun/back/conf"
+	"github.com/Vladimir37/Backlun/back/conf"
 	"fmt"
 	"log"
 	"net/http"
