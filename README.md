@@ -59,7 +59,7 @@ Starting of the OAuth platform is different from other platforms.
 ```
 
 #### Compilation
-You can not use binary files, but compile Backlun from the source code yourself. Download [Backlun source code](https://github.com/Vladimir37/Backlun/archive/master.zip). Unzip to any convenient place, go to the directory and run `go build Backlun.go`. If you do not have Golang installed, then you can install it according to the [instructions](https://golang.org/doc/install). For successful compilation, you will need to install all dependencies. You will see what's missing when you try to start compiling.
+You can not use binary files, but compile Backlun from the source code yourself. Download [Backlun source code](https://github.com/Vladimir37/Backlun/archive/master.zip). Unzip to `$GOPATH/src`, rename folder from `Backlun-master` to `Backlun`, go to the directory and run `go build Backlun.go`. If you do not have Golang installed, then you can install it according to the [instructions](https://golang.org/doc/install). For successful compilation, you will need to install all dependencies. You will see what's missing when you try to start compiling.
 
 ### Tests
 There are tests for each platform. You can find tests for each platform in the directory `tests/`. You can use the test code to write your own Front-end.
